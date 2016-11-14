@@ -21,14 +21,14 @@ public class Event {
 	private Group group;
 	
 	public Event(String title, String description, String location, LocalDate startDate, LocalDate endDate, LocalTime startHour, LocalTime endHour, Group group){
-		this.title=title;
-		this.description=description;
-		this.location=location;
-		this.startDate=startDate;
-		this.endDate=endDate;
-		this.startHour=startHour;
-		this.endHour=endHour;
-		this.group=group;
+		this.title = title;
+		this.description = description;
+		this.location = location;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.startHour = startHour;
+		this.endHour = endHour;
+		this.group = group;
 	}
 	
 	/**

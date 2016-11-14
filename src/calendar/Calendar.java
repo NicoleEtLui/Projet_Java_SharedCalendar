@@ -10,7 +10,7 @@ public class Calendar {
 	private int year;
 	private Month month;
 	
-	public Calendar(int year, Month month){
+	public Calendar(int year, Month month) {
 		this.year=year;
 		this.month=month;
 	}
