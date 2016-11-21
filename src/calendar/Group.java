@@ -2,13 +2,15 @@ package calendar;
 
 import java.util.ArrayList;
 
+import sun.applet.Main;
+
 public class Group {
 	
 	private static int defaultIdNumber = 0;
 	private int grId; /**[ Kept or not ? ]*/
 	private String grName;
 	private boolean isPublic;
-	private ArrayList<Person> members;
+	private ArrayList<Group> members;
 	private ArrayList<Event> grCalendar;
 	/**
 	 * GrId only used in constructors and toString() method(s) as of now
@@ -23,11 +25,11 @@ public class Group {
 	 * @param Members : All the members as an ArrayList of Person
 	 * @param GrCalendar : List of events as an ArrayList of Event 
 	 */
-	public Group(String GrName, boolean IsPublic, ArrayList<Person> Members, ArrayList<Event> GrCalendar) {
+	public Group(String GrName, boolean IsPublic, ArrayList<Group> Members, ArrayList<Event> GrCalendar) {
 		this.grId = getNewId();
 		this.grName = (GrName !=null && !GrName.isEmpty()) ? GrName : ("UnknownGroup" + getCurrentId());
 		this.isPublic = (!IsPublic) ? IsPublic : true;
-		this.members = new ArrayList<Person>();
+		this.members = new ArrayList<Group>();
 		if(Members != null)this.members.addAll(Members);
 		this.grCalendar = new ArrayList<Event>();
 		if(GrCalendar != null)this.grCalendar.addAll(GrCalendar);
@@ -38,7 +40,17 @@ public class Group {
 		this.grId = getNewId();
 		this.grName = grName;
 		this.isPublic = true;
-		this.members = new ArrayList<Person>();
+		this.members = new ArrayList<Group>();
+		this.grCalendar = new ArrayList<Event>();
+		System.out.println("New group created from no-arg builder :\n" + toString());
+	}
+	
+	public Group(String grName, Group FirstMember){
+		this.grId = getNewId();
+		this.grName = grName;
+		this.isPublic = true;
+		this.members = new ArrayList<Group>();
+		this.members.add(FirstMember);
 		this.grCalendar = new ArrayList<Event>();
 		System.out.println("New group created from no-arg builder :\n" + toString());
 	}
@@ -50,7 +62,7 @@ public class Group {
 		this.grId = getNewId();
 		this.grName = "UnknownGroup" + getCurrentId();
 		this.isPublic = true;
-		this.members = new ArrayList<Person>();
+		this.members = new ArrayList<Group>();
 		this.grCalendar = new ArrayList<Event>();
 		System.out.println("New group created from no-arg builder :\n" + toString());
 	}
@@ -80,7 +92,7 @@ public class Group {
 	}
 	
 	/**
-	 * [ TO DO ]
+	 * [ TODO ]
 	 * @pram Members An ArrayList of Persons to alert
 	 */
 	public void alertMembers(ArrayList<Person> Members){
@@ -103,7 +115,7 @@ public class Group {
 	 * Adds a new member
 	 * @param NewMember : A Person to be added
 	 */
-	public void addMembers(Person NewMember){
+	public void addMembers(Group NewMember){
 		members.add(NewMember);
 	}
 	
@@ -111,7 +123,7 @@ public class Group {
 	 * Returns the WHOLE ArrayList of the member's Id from the group
 	 * @return An ArrayList of member's Id
 	 */
-	public ArrayList<Person> getMembers() {
+	public ArrayList<Group> getMembers() {
 		return members;
 	}
 	
@@ -139,7 +151,7 @@ public class Group {
 	 * Sets the WHOLE ArrayList of members
 	 * @param Members : A ArrayList of Person
 	 **/
-	public void setMembers(Person p) {
+	public void setMembers(Group p) {
 		this.members.add(p);
 	}
 
