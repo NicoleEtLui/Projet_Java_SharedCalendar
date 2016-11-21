@@ -231,8 +231,4 @@ public class Group {
 	public void isPublic(boolean isPublic) {
 		this.isPublic = isPublic;
 	}
-<<<<<<< HEAD
-=======
-	
->>>>>>> 5b9e3eb2f81b65c5ce5892396e057466a300ab7a
 }
