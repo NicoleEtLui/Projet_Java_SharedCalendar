@@ -34,6 +34,15 @@ public class Group {
 		System.out.println("New group created from no-arg builder :\n" + toString());
 	}
 
+	public Group(String grName){
+		this.grId = getNewId();
+		this.grName = grName;
+		this.isPublic = true;
+		this.members = new ArrayList<Person>();
+		this.grCalendar = new ArrayList<Event>();
+		System.out.println("New group created from no-arg builder :\n" + toString());
+	}
+	
 	/**
 	 * Default empty constructor for group object
 	 */
@@ -129,14 +138,11 @@ public class Group {
 	 * [ USEFULL ? ]
 	 * Sets the WHOLE ArrayList of members
 	 * @param Members : A ArrayList of Person
-	 * 
-	public void setMembers(ArrayList Members) {
-		this.Members.removeAll();
-		this.Members.addAll(Members);
+	 **/
+	public void setMembers(Person p) {
+		this.members.add(p);
 	}
-	 *
-	 */
-	
+
 	/**
 	 * Adds a new event to the ArrayList of event of the group
 	 * @param NewEvent : A new Event
@@ -226,20 +232,4 @@ public class Group {
 		this.isPublic = isPublic;
 	}
 	
-	public static void main(String[] args) {
-		Group Group1 = new Group(null, true, null, null);
-		ArrayList<Person> Members4G1 = new ArrayList<Person>();
-		for(int i=0;i<10;i++){
-			Person NewPerson = new Person();
-			Members4G1.add(NewPerson);
-		}
-		Group1.members.addAll(Members4G1);
-		ArrayList<Event> Events4G1 = new ArrayList<Event>();
-		for(int i=0;i<10;i++){
-			Event NewEvent = new Event("Event " + Integer.toString(i));
-			Events4G1.add(NewEvent);
-		}
-		Group1.grCalendar.addAll(Events4G1);
-		DEV.splitLine();
-	}
 }

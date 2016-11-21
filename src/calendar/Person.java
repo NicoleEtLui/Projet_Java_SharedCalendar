@@ -159,8 +159,8 @@ public class Person {
 	 * set the userLevel of the person calling this method and for the group created to 2. 
 	 */
 	public int createGroup(String grName) {
-		this.group.add(new int[new Group(grName).getId()][2]);
-		Group.addMembers(this);
+		this.group.add(new int[new Group(grName).getGrId()][2]);
+		Group.setMembers(this);
 		return 0;
 	}
 	public static void main(String [] args){
