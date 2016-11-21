@@ -225,21 +225,4 @@ public class Group {
 	public void isPublic(boolean isPublic) {
 		this.isPublic = isPublic;
 	}
-	
-	public static void main(String[] args) {
-		Group Group1 = new Group(null, true, null, null);
-		ArrayList<Person> Members4G1 = new ArrayList<Person>();
-		for(int i=0;i<10;i++){
-			Person NewPerson = new Person();
-			Members4G1.add(NewPerson);
-		}
-		Group1.members.addAll(Members4G1);
-		ArrayList<Event> Events4G1 = new ArrayList<Event>();
-		for(int i=0;i<10;i++){
-			Event NewEvent = new Event("Event " + Integer.toString(i));
-			Events4G1.add(NewEvent);
-		}
-		Group1.grCalendar.addAll(Events4G1);
-		DEV.splitLine();
-	}
 }
