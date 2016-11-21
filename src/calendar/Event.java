@@ -91,6 +91,16 @@ public class Event {
 		this.endHour = LocalTime.now().plusHours(1);
 	}
 	
+	public Event(String title, String description, LocalDate startDate, LocalDate endDate){
+		this.title = title;
+		this.description = description;
+		this.location = "";
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.startHour = LocalTime.now();
+		this.endHour = LocalTime.now().plusHours(1);
+	}
+	
 	/**
 	 * constructor without date
 	 * date will automatically be set to the current date
