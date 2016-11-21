@@ -166,27 +166,11 @@ public class Event {
 	 * @return true if all attributes are the same
 	 * @return false if one attribute is different
 	 */
-	public boolean equalsPerfect(Object obj){
+	public boolean equals(Object obj){
 		if(obj != null && obj instanceof Event){
 	    	Event e = (Event) obj;
 	        return ((this.title == e.title) &&
-	        		(this.description == e.description) &&
-	        		(this.location == e.location));
-		} else {
-	        return false;
-	    }
-	}
-	
-	/**
-	 * this method checks the equality between 2 objects
-	 * the check is based on the title
-	 * @return true if titles are the same
-	 * @return false if title is different
-	 */
-	public boolean equalsTitle(Object obj){
-		if(obj != null && obj instanceof Event){
-	    	Event e = (Event) obj;
-	        return (this.title == e.title);
+	        		(this.startDate.equals(e.startDate)));
 		} else {
 	        return false;
 	    }
@@ -198,27 +182,11 @@ public class Event {
 	 * @return -1 if this is after e
 	 * else return 1
 	 */
-	public int compareToStart(Event e){
+	public int compareTo(Event e){
 	    if(this.startHour.isAfter(e.startHour))
 			return -1;
 	    if(this.startHour.isBefore(e.startHour))
 	    	return 1;
-	    return 0;
-	}
-	
-	/**
-	 * this method compare to event
-	 * the comparison is based on the end hour of the event
-	 * @param e is the event to compare to this
-	 * @return 1 if this is after e
-	 * else is this is before return -1
-	 * else if both are the same, return 0
-	 */
-	public int compareToEnd(Event e){
-	    if(this.endHour.isAfter(e.endHour))
-			return 1;
-	    if(this.endHour.isBefore(e.endHour))
-	    	return -1;
 	    return 0;
 	}
 	
