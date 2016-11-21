@@ -60,12 +60,12 @@ public class Person {
 	 * @param group
 	 * @param persoClndr
 	 */
-	public Person(String name, String firstName, String userName, LocalDate bDate, Group group, Calendar persoClndr) {
+	public Person(String name, String firstName, String userName, LocalDate bDate, Group group) {
 		this.name = name;
 		this.firstName = firstName;
 		this.userName = userName;
 		this.bDate = bDate;
-		this.group.add(new int[group.getId()][0]);
+		this.group.add(new int[group.getGrId()][0]);
 		this.persoClndr.add(new Event("Joyeux Anniversaire", "Mon anniversaire", this.bDate, this.bDate));
 	}
 	
