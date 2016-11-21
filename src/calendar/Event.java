@@ -6,7 +6,7 @@ import java.time.LocalTime;
 /**
  * this class represents a event which has an id, a title, a description ,a location,
  * a start/end date, a start/end hour and a group.
- * @author Sorn
+ * @author Sorn HULSEN
  *
  */
 public class Event {
