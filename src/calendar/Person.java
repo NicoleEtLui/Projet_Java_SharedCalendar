@@ -181,7 +181,7 @@ public class Person {
 	 * @treturn <p> true otherwise and replace former permission 
 	 * of the person p for the group grId by userlvl
 	 */
-	private boolean changePermission(Person p, int userlvl, int grId) {
+	public boolean changePermission(Person p, int userlvl, int grId) {
 		for (int[][] gr : group){
 			if (gr[0][0] == grId && gr[1][0] == 2){
 				gr[1][0] = userlvl;
