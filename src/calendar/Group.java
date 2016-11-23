@@ -43,6 +43,15 @@ public class Group {
 		System.out.println("New group created from no-arg builder :\n" + toString());
 	}
 	
+	public Group(String grName, Person p){
+		this.grId = getNewId();
+		this.grName = grName;
+		this.isPublic = true;
+		this.members.add(p);
+		this.grCalendar = new ArrayList<Event>();
+		System.out.println("New group created from no-arg builder :\n" + toString());
+	}
+	
 	/**
 	 * Default empty constructor for group object
 	 */
