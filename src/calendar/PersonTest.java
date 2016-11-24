@@ -34,12 +34,19 @@ public class PersonTest {
 		assertTrue(p.getPersoClndr().size() == 2);
 	}
 
-	/*@Test
+	@Test
 	public void testDeletePersonalEvent() {
-		fail("Not yet implemented");
+		Event e = new Event("MonEvent", "MaDescription", LocalDate.now(), LocalDate.now().plusDays(1));
+		Person p = new Person("Petit", "Martin", "NicoleEtlui", LocalDate.of(1994,9,28));
+		assertTrue(p.getPersoClndr().size() == 1);
+		p.addPersonalEvents(e);
+		p.deletePersonalEvent(e);
+		assertTrue(p.getPersoClndr().size() == 1);
+		p.deletePersonalEvent(e);
+		assertTrue(p.getPersoClndr().size() == 1);
 	}
 
-	@Test
+	/*@Test
 	public void testChangePermission() {
 		fail("Not yet implemented");
 	}

@@ -212,10 +212,12 @@ public class Person {
 	
 	public static void main(String [] args){
 		Person p = new Person("Petit", "Martin", "NicoleEtlui", LocalDate.of(1994,9,28));
-		Person p1 =  new Person("Petit", "Martin", "MartinP", LocalDate.of(1994,9,28));
-		Person p2 =  new Person("Petit", "Nicole", "NicoleEtlui", LocalDate.of(1994,9,28));
-		System.out.println(p.equals(p));
-		System.out.println(p.equals(p1));
-		System.out.println(p.equals(p2));
+		Event e = new Event("MonEvent", "MaDescription", LocalDate.now(), LocalDate.now().plusDays(1));
+		System.out.println(p.persoClndr.size());
+		p.addPersonalEvents(e);
+		System.out.println(p.persoClndr.size());
+		p.deletePersonalEvent(e);
+		System.out.println(p.persoClndr.size());
+		
 	}
 }
