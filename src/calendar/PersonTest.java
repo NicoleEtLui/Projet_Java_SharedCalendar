@@ -16,12 +16,18 @@ public class PersonTest {
 		assertEquals("Martin Petit - NicoleEtLui - 28/09/1994", p.toString());
 	}
 
-	/*@Test
+	@Test
 	public void testEqualsObject() {
-		fail("Not yet implemented");
+		Person p = new Person("Petit", "Martin", "NicoleEtlui", LocalDate.of(1994,9,28));
+		Person p1 =  new Person("Petit", "Martin", "MartinP", LocalDate.of(1994,9,28));
+		Person p2 =  new Person("Petit", "Nicole", "NicoleEtlui", LocalDate.of(1994,9,28));
+		
+		assertTrue(p.equals(p));
+		assertFalse(p.equals(p1));
+		assertTrue(p.equals(p2));
 	}
 
-	@Test
+	/*@Test
 	public void testAddPersonalEvents() {
 		fail("Not yet implemented");
 	}
