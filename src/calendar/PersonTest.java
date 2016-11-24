@@ -26,13 +26,15 @@ public class PersonTest {
 		assertFalse(p.equals(p1));
 		assertTrue(p.equals(p2));
 	}
-
-	/*@Test
+	@Test
 	public void testAddPersonalEvents() {
-		fail("Not yet implemented");
+		Person p = new Person("Petit", "Martin", "NicoleEtlui", LocalDate.of(1994,9,28));
+		assertTrue(p.getPersoClndr().size() == 1);
+		p.addPersonalEvents(new Event("MonEvent", "MaDescription", LocalDate.now(), LocalDate.now().plusDays(1)));
+		assertTrue(p.getPersoClndr().size() == 2);
 	}
 
-	@Test
+	/*@Test
 	public void testDeletePersonalEvent() {
 		fail("Not yet implemented");
 	}

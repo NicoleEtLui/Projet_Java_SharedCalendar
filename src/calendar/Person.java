@@ -44,7 +44,7 @@ public class Person {
 	 */
 	private List<Event> persoClndr = new ArrayList<Event>();
 
-	// Constructor
+	//-- CONSTRUCTOR ----------------------------------------------------------
 	/**
 	 * Constructor for a new user, with no group.
 	 * an event is automatically add, his birthday.
@@ -60,6 +60,8 @@ public class Person {
 		this.bDate = bDate;
 		this.persoClndr.add(new Event("Joyeux Anniversaire", "Mon anniversaire", this.bDate, this.bDate));
 	}
+	
+	//-- GETTERS & SETTERS ----------------------------------------------------
 	/**
 	 * get the name of the person.
 	 * @return the name of the person
@@ -121,6 +123,7 @@ public class Person {
 		return persoClndr;
 	}
 	
+	//-- METHODS --------------------------------------------------------------
 	@Override
 	/**
 	 * return a string representation of an instance of person.
