@@ -2,21 +2,21 @@ package calendar;
 
 import static org.junit.Assert.*;
 
+import java.time.LocalDate;
+
 import org.junit.Test;
 
 public class PersonTest {
 
-	@Test
-	public void testPerson() {
-		fail("Not yet implemented");
-	}
 
 	@Test
 	public void testToString() {
-		fail("Not yet implemented");
+		Person p = new Person("Petit", "Martin", "NicoleEtLui", LocalDate.of(1994,9,28));
+		
+		assertEquals("Martin Petit - NicoleEtLui - 28/09/1994", p.toString());
 	}
 
-	@Test
+	/*@Test
 	public void testEqualsObject() {
 		fail("Not yet implemented");
 	}
@@ -39,6 +39,6 @@ public class PersonTest {
 	@Test
 	public void testCreateGroup() {
 		fail("Not yet implemented");
-	}
+	}*/
 
 }

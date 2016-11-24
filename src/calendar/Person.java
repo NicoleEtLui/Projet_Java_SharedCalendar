@@ -1,6 +1,7 @@
 package calendar;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class Person {
 	 * Birthday of the persons.  
 	 */
 	private LocalDate bDate;
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	/**
 	 * All the groups the person belong and his level in those.
 	 * first array is for the groupId the person belong,
@@ -125,8 +127,7 @@ public class Person {
 	 */
 	public String toString(){
 		return (this.firstName + " " + this.name + " - " +
-				this.userName + "\n" + this.group + "\n" +
-				this.persoClndr);
+				this.userName + " - " + this.bDate.format(formatter) );
 	}
 	
 	
