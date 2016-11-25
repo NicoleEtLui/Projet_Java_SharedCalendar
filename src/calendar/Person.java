@@ -133,7 +133,13 @@ public class Person {
 				this.userName + " - " + this.bDate.format(formatter) );
 	}
 	
-	
+	public String toStringGroup(List<int[]> l){
+		String gr = "";
+		for (int[] i : this.group){
+			gr += (this.userName + "[" + i[0] + "," + i[1] + "]\n");
+		};
+		return gr;
+	}
 	@Override
 	/**
 	 * Compare the equality of two person.
@@ -190,7 +196,7 @@ public class Person {
 	 * calling this method is under 2 or if the person doesn't belong 
 	 * to the group<p>
 	 * @treturn <p> true otherwise and replace former permission 
-	 * of the person p for the group grId by userlvl
+	 * of the person p for the group grId by userlvl<p>
 	 */
 	public boolean changePermission(Person p, int grId, int userlvl) {
 		for (int[] localGr : this.group){
@@ -225,43 +231,9 @@ public class Person {
 	
 	public static void main(String [] args){
 		Person p = new Person("Petit", "Martin", "Martin1", LocalDate.of(1994,9,28));
-		Person p1 = new Person("Petit", "Martin", "Martin2", LocalDate.of(1994,9,28));
-		int[] i1 = {1,2};
-		int[] i2 = {2,1};
-		int[] i3 = {3,0};
-		p.getGroup().add(i1);
-		p.getGroup().add(i2);
-		p.getGroup().add(i3);
 		
-		int[] j1 = {1,0};
-		int[] j2 = {2,1};
-		int[] j3 = {3,2};
-		int[] j4 = {4,1};
-		int[] j5 = {5, 2};
-		p1.getGroup().add(j1);
-		p1.getGroup().add(j2);
-		p1.getGroup().add(j3);
-		p1.getGroup().add(j4);
-		p1.getGroup().add(j5);
-		
-		
-		for (int[] i : p.group){
-			System.out.println("p[" + i[0] + "," + i[1] + "]");
-			
-		}
-		for (int[] i : p1.group){
-			System.out.println("p1[" + i[0] + "," + i[1] + "]");
-			
-		}
-		System.out.println(p.changePermission(p1, 4, 2));
-		System.out.println(p1.changePermission(p, 5, 2));
-		for (int[] i : p.group){
-			System.out.println("p[" + i[0] + "," + i[1] + "]");
-			
-		}
-		for (int[] i : p1.group){
-			System.out.println("p1[" + i[0] + "," + i[1] + "]");
-			
-		}
+		p.createGroup("monGroupe");
+		p.createGroup("monGroupe2");
+		System.out.println(p.toStringGroup(p.getGroup()));
 	}
-}
+} // fin class Person

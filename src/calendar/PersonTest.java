@@ -71,9 +71,11 @@ public class PersonTest {
 		assertFalse(p.changePermission(p1, 3, 1));
 	}
 
-	/*@Test
+	@Test
 	public void testCreateGroup() {
-		fail("Not yet implemented");
-	}*/
+		Person p = new Person("Petit", "Martin", "N", LocalDate.of(1994,9,28));
+		p.createGroup("monGroupe");
+		assertEquals("N[1,2]\n", p.toStringGroup(p.getGroup()));
+	}
 
 }
