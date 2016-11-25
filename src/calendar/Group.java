@@ -108,7 +108,7 @@ public class Group {
 	 * Deletes a member of the group
 	 * @param Username : The Username of the Person to be deleted from the group
 	 */
-	public void deleteMembers(String UserName){
+	public void deleteMember(String UserName){
 		for(int i=0;i<members.size();i++){
 			if(members.get(i).getUserName().equals(UserName)){
 				members.remove(i);
