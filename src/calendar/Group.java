@@ -2,15 +2,13 @@ package calendar;
 
 import java.util.ArrayList;
 
-import sun.applet.Main;
-
 public class Group {
 	
 	private static int defaultIdNumber = 0;
 	private int grId; /**[ Kept or not ? ]*/
 	private String grName;
 	private boolean isPublic;
-	private ArrayList<Group> members;
+	private ArrayList<Person> members;
 	private ArrayList<Event> grCalendar;
 	/**
 	 * GrId only used in constructors and toString() method(s) as of now
@@ -25,44 +23,31 @@ public class Group {
 	 * @param Members : All the members as an ArrayList of Person
 	 * @param GrCalendar : List of events as an ArrayList of Event 
 	 */
-	public Group(String GrName, boolean IsPublic, ArrayList<Group> Members, ArrayList<Event> GrCalendar) {
+	public Group(String GrName, boolean IsPublic, ArrayList<Person> Members, ArrayList<Event> GrCalendar) {
 		this.grId = getNewId();
-		this.grName = (GrName !=null && !GrName.isEmpty()) ? GrName : ("UnknownGroup" + getCurrentId());
-		this.isPublic = (!IsPublic) ? IsPublic : true;
-		this.members = new ArrayList<Group>();
+		this.grName = "UnknownGroup" + getCurrentId();
+		this.isPublic = IsPublic;
+		this.members = new ArrayList<Person>();
 		if(Members != null)this.members.addAll(Members);
 		this.grCalendar = new ArrayList<Event>();
 		if(GrCalendar != null)this.grCalendar.addAll(GrCalendar);
-		System.out.println("New group created from no-arg builder :\n" + toString());
+	}
+	
+	public Group(String grName, Person FirstMember){
+		this.grId = getNewId();
+		this.grName = grName;
+		this.isPublic = true;
+		this.members = new ArrayList<Person>();
+		this.members.add(FirstMember);
+		this.grCalendar = new ArrayList<Event>();
 	}
 
 	public Group(String grName){
 		this.grId = getNewId();
 		this.grName = grName;
 		this.isPublic = true;
-		this.members = new ArrayList<Group>();
-		this.grCalendar = new ArrayList<Event>();
-		System.out.println("New group created from no-arg builder :\n" + toString());
-	}
-	
-	public Group(String grName, Group FirstMember){
-		this.grId = getNewId();
-		this.grName = grName;
-		this.isPublic = true;
-		this.members = new ArrayList<Group>();
-		this.members.add(FirstMember);
-		this.grCalendar = new ArrayList<Event>();
-		System.out.println("New group created from no-arg builder :\n" + toString());
-	}
-	
-	public Group(String grName, Person p){
-		this.grId = getNewId();
-		this.grName = grName;
-		this.isPublic = true;
 		this.members = new ArrayList<Person>();
-		this.members.add(p);
 		this.grCalendar = new ArrayList<Event>();
-		System.out.println("New group created from no-arg builder :\n" + toString());
 	}
 	
 	/**
@@ -72,17 +57,27 @@ public class Group {
 		this.grId = getNewId();
 		this.grName = "UnknownGroup" + getCurrentId();
 		this.isPublic = true;
-		this.members = new ArrayList<Group>();
+		this.members = new ArrayList<Person>();
 		this.grCalendar = new ArrayList<Event>();
-		System.out.println("New group created from no-arg builder :\n" + toString());
 	}
 	
 	/**
 	 * New default toString method
+	 * @return The representation of a group, based on its Id, name, isPublic, calendar and members
 	 */
 	@Override
 	public String toString() {
-		return "[Group] Id : \"" + this.grId + "\" Name : \"" + this.grName + "\" IsPublic : " + this.isPublic;
+		return "[Group] Id : \""
+				+ this.grId
+				+ "\" Name : \""
+				+ this.grName
+				+ "\" IsPublic : "
+				+ this.isPublic
+				+ "\n" 
+				+ "Number of members : "
+				+ this.getMembers().size() 
+				+ " | Number of events : " 
+				+ this.getGrCalendar().size();
 	}
 	
 	/**
@@ -113,9 +108,9 @@ public class Group {
 	 * Deletes a member of the group
 	 * @param Username : The Username of the Person to be deleted from the group
 	 */
-	public void deleteMembers(String Username){
+	public void deleteMembers(String UserName){
 		for(int i=0;i<members.size();i++){
-			if(members.get(i).getUserName().equals(Username)){
+			if(members.get(i).getUserName().equals(UserName)){
 				members.remove(i);
 			}
 		}
@@ -125,7 +120,7 @@ public class Group {
 	 * Adds a new member
 	 * @param NewMember : A Person to be added
 	 */
-	public void addMembers(Group NewMember){
+	public void addMember(Person NewMember){
 		members.add(NewMember);
 	}
 	
@@ -133,7 +128,7 @@ public class Group {
 	 * Returns the WHOLE ArrayList of the member's Id from the group
 	 * @return An ArrayList of member's Id
 	 */
-	public ArrayList<Group> getMembers() {
+	public ArrayList<Person> getMembers() {
 		return members;
 	}
 	
@@ -142,27 +137,18 @@ public class Group {
 	 * @param Username : The Username to be looked for as a String
 	 * @return A Person
 	 */
-	public Person getSingleMember(String Username){
+	public Person getSingleMember(String UserName){
 		int index=-1;
 		for(int i=0;i<members.size();i++){
-			if(members.get(i).getUserName().equals(Username)){
+			if(members.get(i).getUserName() == UserName){
 				index = i;
 			}
 		}
-		if(index>0){
+		if(index>=0){
 			return members.get(index);
 		}else{
 			return null;		
 		}
-	}
-	
-	/**
-	 * [ USEFULL ? ]
-	 * Sets the WHOLE ArrayList of members
-	 * @param Members : A ArrayList of Person
-	 **/
-	public void setMembers(Group p) {
-		this.members.add(p);
 	}
 
 	/**
@@ -194,33 +180,12 @@ public class Group {
 	}
 	
 	/**
-	 * [ USEFULL ? ]
-	 * Set the WHOLE ArrayList of events for the group
-	 * @param NewGrCalendar : A new ArrayList of events
-	 * 
-	public void setEvents(ArrayList NewGrCalendar) {
-		this.GrCalendar = NewGrCalendar;
-	}
-	 *
-	 */
-	
-	/**
 	 * return the current group's Id
 	 * @return the group's Id as an int
 	 */
 	public int getGrId() {
 		return grId;
 	}
-	
-	/**
-	 * [ USEFULL ? ]
-	 * Set a new Id for the group
-	 * @param NewGrId : The new int for the group's Id as an int
-	public void setGrID(int NewGrID) {
-		GrId = NewGrId;
-	}
-	 *
-	 */
 	
 	/**
 	 * Returns the group's name
@@ -242,7 +207,7 @@ public class Group {
 	 * Returns the boolean isPublic
 	 * @return Boolean value
 	 */
-	public boolean isPublic() {
+	public boolean getIsPublic() {
 		return isPublic;
 	}
 	
@@ -250,7 +215,11 @@ public class Group {
 	 * Change a group's visibility
 	 * @param isPublic : Boolean value
 	 */
-	public void isPublic(boolean isPublic) {
+	public void setIsPublic(boolean isPublic) {
 		this.isPublic = isPublic;
+	}
+	
+	public boolean equals(Group group){
+		return (this.grId == group.grId);
 	}
 }
