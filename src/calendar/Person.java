@@ -38,11 +38,11 @@ public class Person {
 	 * 				setEvent, deleteEvents, ...
 	 * 2 = super admin --> admin + upgrade/downgrade members
 	 */
-	private List<int[]> group = new ArrayList<int[]>();
+	private ArrayList<int[]> group = new ArrayList<int[]>();
 	/**
 	 * All the events the person sees.
 	 */
-	private List<Event> persoClndr = new ArrayList<Event>();
+	private ArrayList<Event> persoClndr = new ArrayList<Event>();
 
 	//-- CONSTRUCTOR ----------------------------------------------------------
 	/**
@@ -229,11 +229,4 @@ public class Person {
 		return group.getGrId();
 	}
 	
-	public static void main(String [] args){
-		Person p = new Person("Petit", "Martin", "Martin1", LocalDate.of(1994,9,28));
-		
-		p.createGroup("monGroupe");
-		p.createGroup("monGroupe2");
-		System.out.println(p.toStringGroup(p.getGroup()));
-	}
 } // fin class Person
