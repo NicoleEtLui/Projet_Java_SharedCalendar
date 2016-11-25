@@ -1,6 +1,7 @@
 package calendar;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,22 +28,23 @@ public class Person {
 	 * Birthday of the persons.  
 	 */
 	private LocalDate bDate;
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	/**
 	 * All the groups the person belong and his level in those.
-	 * first array is for the groupId the person belong,
-	 * second array is the level of authorization of this person in this group
+	 * <p>First number stands for the <code>grId<code> the person belong,
+	 * second number stands for the lvl of authorization of this person in grp <p>
 	 * 0 = regular user --> access to the groupCalendar bunt cant modify it.
 	 * 1 = admin --> access to groupCalendar + access to method that modify it
 	 * 				setEvent, deleteEvents, ...
 	 * 2 = super admin --> admin + upgrade/downgrade members
 	 */
-	private List<int[][]> group = new ArrayList<int[][]>();
+	private List<int[]> group = new ArrayList<int[]>();
 	/**
 	 * All the events the person sees.
 	 */
 	private List<Event> persoClndr = new ArrayList<Event>();
 
-	// Constructor
+	//-- CONSTRUCTOR ----------------------------------------------------------
 	/**
 	 * Constructor for a new user, with no group.
 	 * an event is automatically add, his birthday.
@@ -58,6 +60,8 @@ public class Person {
 		this.bDate = bDate;
 		this.persoClndr.add(new Event("Joyeux Anniversaire", "Mon anniversaire", this.bDate, this.bDate));
 	}
+	
+	//-- GETTERS & SETTERS ----------------------------------------------------
 	/**
 	 * get the name of the person.
 	 * @return the name of the person
@@ -108,7 +112,7 @@ public class Person {
 	 * Get a list of the group the person belong.
 	 * @return a 
 	 */
-	public List<int[][]> getGroup() {
+	public List<int[]> getGroup() {
 		return group;
 	}
 	/**
@@ -119,17 +123,23 @@ public class Person {
 		return persoClndr;
 	}
 	
+	//-- METHODS --------------------------------------------------------------
 	@Override
 	/**
 	 * return a string representation of an instance of person.
 	 */
 	public String toString(){
 		return (this.firstName + " " + this.name + " - " +
-				this.userName + "\n" + this.group + "\n" +
-				this.persoClndr);
+				this.userName + " - " + this.bDate.format(formatter) );
 	}
 	
-	
+	public String toStringGroup(List<int[]> l){
+		String gr = "";
+		for (int[] i : this.group){
+			gr += (this.userName + "[" + i[0] + "," + i[1] + "]\n");
+		};
+		return gr;
+	}
 	@Override
 	/**
 	 * Compare the equality of two person.
@@ -170,27 +180,39 @@ public class Person {
 		this.persoClndr.remove(e);
 	}
 	
+	
+	//QUESTION: would'nt it be more simple if the group posess a static list of it's members with their permission in him ?
+	// if so, the change permission would go in group Class and only one list should be updated.
+	// for now we must update two 
 	/**
 	 * this method change permissions of a user p of a group grId. 
-	 * @param x is the person to upgrade/downgrade
+	 * <p>The person calling this method must belong to the same group the 
+	 * person she want to change and have a aythorization of 2 in this group<p>
+	 * 
+	 * @param p is the person to upgrade/downgrade
 	 * @param userlvl is the new levels of permission for the person
 	 * @param grId
 	 * @return <p>false if the userLevelof for the group grId of the person 
 	 * calling this method is under 2 or if the person doesn't belong 
 	 * to the group<p>
 	 * @treturn <p> true otherwise and replace former permission 
-	 * of the person p for the group grId by userlvl
+	 * of the person p for the group grId by userlvl<p>
 	 */
-	private boolean changePermission(Person p, int userlvl, int grId) {
-		for (int[][] gr : group){
-			if (gr[0][0] == grId && gr[1][0] == 2){
-				gr[1][0] = userlvl;
+	public boolean changePermission(Person p, int grId, int userlvl) {
+		for (int[] localGr : this.group){
+			if (localGr[0] == grId && localGr[1] != 2){
+				return false;
+			} 
+		}
+		for (int[] pGr : p.group){
+			if (pGr[0] == grId && pGr[1] != 2){
+				pGr[1] = userlvl;
 				return true;
 			}
-		} 
+		
+		}
 		return false;
 	}
-	
 	/**
 	 * this method create a new Group.
 	 * <p>the person that call this method get his list of group updated and
@@ -202,16 +224,16 @@ public class Person {
 	 */
 	public int createGroup(String grName) {
 		Group group = new Group(grName, this);
-		this.group.add(new int[group.getGrId()][2]);
+		int[] localInt = {group.getGrId(), 2};
+		this.group.add(localInt);
 		return group.getGrId();
 	}
 	
 	public static void main(String [] args){
-		Person p = new Person("Petit", "Martin", "NicoleEtlui", LocalDate.of(1994,9,28));
-		Person p1 =  new Person("Petit", "Martin", "MartinP", LocalDate.of(1994,9,28));
-		Person p2 =  new Person("Petit", "Nicole", "NicoleEtlui", LocalDate.of(1994,9,28));
-		System.out.println(p.equals(p));
-		System.out.println(p.equals(p1));
-		System.out.println(p.equals(p2));
+		Person p = new Person("Petit", "Martin", "Martin1", LocalDate.of(1994,9,28));
+		
+		p.createGroup("monGroupe");
+		p.createGroup("monGroupe2");
+		System.out.println(p.toStringGroup(p.getGroup()));
 	}
-}
+} // fin class Person

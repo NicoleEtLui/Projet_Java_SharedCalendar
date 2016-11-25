@@ -59,6 +59,7 @@ public class Group {
 		this.grId = getNewId();
 		this.grName = grName;
 		this.isPublic = true;
+		this.members = new ArrayList<Person>();
 		this.members.add(p);
 		this.grCalendar = new ArrayList<Event>();
 		System.out.println("New group created from no-arg builder :\n" + toString());
