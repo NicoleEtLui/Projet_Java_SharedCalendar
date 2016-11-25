@@ -21,42 +21,42 @@ public class GroupTest {
 	
 	@Test
 	public void testAddMember() {
-		Group testGroup1 = new Group();
-		Group testGroup2 = new Group();
-		Person person = new Person(null, null, null, null);
-		testGroup1.addMember(person);
-		assertEquals((testGroup2.getMembers().size()+1),testGroup1.getMembers().size());
+		Group testGroup = new Group();
+		assertTrue(testGroup.getMembers().size() == 0);
+		Person person = new Person(null, null, "person", null);
+		testGroup.addMember(person);
+		assertTrue(testGroup.getMembers().size() == 1);
 	}
 	
 	@Test
 	public void testDeleteMember() {
-		Group testGroup1 = new Group();
-		Group testGroup2 = new Group();
+		Group testGroup = new Group();
+		assertTrue(testGroup.getMembers().size() == 0);
 		Person person = new Person(null, null, "person", null);
-		testGroup1.addMember(person);
-		assertEquals((testGroup2.getMembers().size()+1),testGroup1.getMembers().size());
-		testGroup1.deleteMember("person");
-		assertEquals(testGroup2.getMembers().size(),testGroup1.getMembers().size());
+		testGroup.addMember(person);
+		assertTrue(testGroup.getMembers().size() == 1);
+		testGroup.deleteMember("person");
+		assertTrue(testGroup.getMembers().size() == 0);
 	}
 	
 	@Test
 	public void testAddEvent() {
-		Group testGroup1 = new Group();
-		Group testGroup2 = new Group();
+		Group testGroup = new Group();
+		assertTrue(testGroup.getGrCalendar().size() == 0);
 		Event event = new Event("event");
-		testGroup1.addEvent(event);
-		assertEquals((testGroup2.getGrCalendar().size()+1),testGroup1.getGrCalendar().size());
+		testGroup.addEvent(event);
+		assertTrue(testGroup.getGrCalendar().size() == 1);
 	}
 	
 	@Test
 	public void testDeleteEvent(){
-		Group testGroup1 = new Group();
-		Group testGroup2 = new Group();
+		Group testGroup = new Group();
+		assertTrue(testGroup.getGrCalendar().size() == 0);
 		Event event = new Event("event");
-		testGroup1.addEvent(event);
-		assertEquals((testGroup2.getGrCalendar().size()+1),testGroup1.getGrCalendar().size());
-		testGroup1.deleteEvent("event");
-		assertEquals(testGroup2.getGrCalendar().size(),testGroup1.getGrCalendar().size());
+		testGroup.addEvent(event);
+		assertTrue(testGroup.getGrCalendar().size() == 1);
+		testGroup.deleteEvent("event");
+		assertTrue(testGroup.getGrCalendar().size() == 0);
 	}
 	
 	@Test
