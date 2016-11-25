@@ -31,14 +31,14 @@ public class Person {
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	/**
 	 * All the groups the person belong and his level in those.
-	 * first array is for the groupId the person belong,
-	 * second array is the level of authorization of this person in this group
+	 * <p>First number stands for the <code>grId<code> the person belong,
+	 * second number stands for the lvl of authorization of this person in grp <p>
 	 * 0 = regular user --> access to the groupCalendar bunt cant modify it.
 	 * 1 = admin --> access to groupCalendar + access to method that modify it
 	 * 				setEvent, deleteEvents, ...
 	 * 2 = super admin --> admin + upgrade/downgrade members
 	 */
-	private List<int[][]> group = new ArrayList<int[][]>();
+	private List<int[]> group = new ArrayList<int[]>();
 	/**
 	 * All the events the person sees.
 	 */
@@ -112,7 +112,7 @@ public class Person {
 	 * Get a list of the group the person belong.
 	 * @return a 
 	 */
-	public List<int[][]> getGroup() {
+	public List<int[]> getGroup() {
 		return group;
 	}
 	/**
@@ -174,9 +174,16 @@ public class Person {
 		this.persoClndr.remove(e);
 	}
 	
+	
+	//QUESTION: would'nt it be more simple if the group posess a static list of it's members with their permission in him ?
+	// if so, the change permission would go in group Class and only one list should be updated.
+	// for now we must update two 
 	/**
 	 * this method change permissions of a user p of a group grId. 
-	 * @param x is the person to upgrade/downgrade
+	 * <p>The person calling this method must belong to the same group the 
+	 * person she want to change and have a aythorization of 2 in this group<p>
+	 * 
+	 * @param p is the person to upgrade/downgrade
 	 * @param userlvl is the new levels of permission for the person
 	 * @param grId
 	 * @return <p>false if the userLevelof for the group grId of the person 
@@ -185,16 +192,21 @@ public class Person {
 	 * @treturn <p> true otherwise and replace former permission 
 	 * of the person p for the group grId by userlvl
 	 */
-	public boolean changePermission(Person p, int userlvl, int grId) {
-		for (int[][] gr : group){
-			if (gr[0][0] == grId && gr[1][0] == 2){
-				gr[1][0] = userlvl;
+	public boolean changePermission(Person p, int grId, int userlvl) {
+		for (int[] localGr : this.group){
+			if (localGr[0] == grId && localGr[1] != 2){
+				return false;
+			} 
+		}
+		for (int[] pGr : p.group){
+			if (pGr[0] == grId && pGr[1] != 2){
+				pGr[1] = userlvl;
 				return true;
 			}
-		} 
+		
+		}
 		return false;
 	}
-	
 	/**
 	 * this method create a new Group.
 	 * <p>the person that call this method get his list of group updated and
@@ -206,18 +218,50 @@ public class Person {
 	 */
 	public int createGroup(String grName) {
 		Group group = new Group(grName, this);
-		this.group.add(new int[group.getGrId()][2]);
+		int[] localInt = {group.getGrId(), 2};
+		this.group.add(localInt);
 		return group.getGrId();
 	}
 	
 	public static void main(String [] args){
-		Person p = new Person("Petit", "Martin", "NicoleEtlui", LocalDate.of(1994,9,28));
-		Event e = new Event("MonEvent", "MaDescription", LocalDate.now(), LocalDate.now().plusDays(1));
-		System.out.println(p.persoClndr.size());
-		p.addPersonalEvents(e);
-		System.out.println(p.persoClndr.size());
-		p.deletePersonalEvent(e);
-		System.out.println(p.persoClndr.size());
+		Person p = new Person("Petit", "Martin", "Martin1", LocalDate.of(1994,9,28));
+		Person p1 = new Person("Petit", "Martin", "Martin2", LocalDate.of(1994,9,28));
+		int[] i1 = {1,2};
+		int[] i2 = {2,1};
+		int[] i3 = {3,0};
+		p.getGroup().add(i1);
+		p.getGroup().add(i2);
+		p.getGroup().add(i3);
 		
+		int[] j1 = {1,0};
+		int[] j2 = {2,1};
+		int[] j3 = {3,2};
+		int[] j4 = {4,1};
+		int[] j5 = {5, 2};
+		p1.getGroup().add(j1);
+		p1.getGroup().add(j2);
+		p1.getGroup().add(j3);
+		p1.getGroup().add(j4);
+		p1.getGroup().add(j5);
+		
+		
+		for (int[] i : p.group){
+			System.out.println("p[" + i[0] + "," + i[1] + "]");
+			
+		}
+		for (int[] i : p1.group){
+			System.out.println("p1[" + i[0] + "," + i[1] + "]");
+			
+		}
+		System.out.println(p.changePermission(p1, 4, 2));
+		System.out.println(p1.changePermission(p, 5, 2));
+		for (int[] i : p.group){
+			System.out.println("p[" + i[0] + "," + i[1] + "]");
+			
+		}
+		for (int[] i : p1.group){
+			System.out.println("p1[" + i[0] + "," + i[1] + "]");
+			
+		}
 	}
 }

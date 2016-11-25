@@ -46,12 +46,32 @@ public class PersonTest {
 		assertTrue(p.getPersoClndr().size() == 1);
 	}
 
-	/*@Test
+	@Test
 	public void testChangePermission() {
-		fail("Not yet implemented");
+		Person p = new Person("Petit", "Martin", "Martin1", LocalDate.of(1994,9,28));
+		Person p1 = new Person("Petit", "Martin", "Martin2", LocalDate.of(1994,9,28));
+		int[] i1 = {1,2};
+		int[] i2 = {2,1};
+		int[] i3 = {3,0};
+		p.getGroup().add(i1);
+		p.getGroup().add(i2);
+		p.getGroup().add(i3);
+		
+		int[] j1 = {1,0};
+		int[] j2 = {2,1};
+		int[] j3 = {3,2};
+
+		p1.getGroup().add(j1);
+		p1.getGroup().add(j2);
+		p1.getGroup().add(j3);
+		
+		assertFalse(p.changePermission(p, 1, 1));
+		assertTrue(p.changePermission(p1, 1, 1));
+		assertFalse(p.changePermission(p1, 2, 0));
+		assertFalse(p.changePermission(p1, 3, 1));
 	}
 
-	@Test
+	/*@Test
 	public void testCreateGroup() {
 		fail("Not yet implemented");
 	}*/
