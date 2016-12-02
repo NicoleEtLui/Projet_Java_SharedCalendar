@@ -4,7 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 /**
- * this class represents a event which has an id, a title, a description ,a location,
+ * this class represents a event. 
+ * which has an id, a title, a description ,a location,
  * a start/end date, a start/end hour and a group.
  * @author Sorn HULSEN
  *
