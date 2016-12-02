@@ -1,4 +1,4 @@
-package calendar;
+package model;
 
 import static org.junit.Assert.*;
 
