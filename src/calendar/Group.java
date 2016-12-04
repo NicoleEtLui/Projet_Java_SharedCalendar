@@ -23,9 +23,9 @@ public class Group {
 	 * @param Members : All the members as an ArrayList of Person
 	 * @param GrCalendar : List of events as an ArrayList of Event 
 	 */
-	public Group(String GrName, boolean IsPublic, ArrayList<Person> Members, ArrayList<Event> GrCalendar) {
+	public Group(String grName, boolean IsPublic, ArrayList<Person> Members, ArrayList<Event> GrCalendar) {
 		this.grId = getNewId();
-		this.grName = "UnknownGroup" + getCurrentId();
+		this.grName = grName;
 		this.isPublic = IsPublic;
 		this.members = new ArrayList<Person>();
 		if(Members != null)this.members.addAll(Members);
