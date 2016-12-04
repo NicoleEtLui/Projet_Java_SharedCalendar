@@ -1,0 +1,52 @@
+need attribut 	workingGroup;
+		currentLevelAdmin;
+		currentDay;
+		currentMonth;
+		currentYear;
+
+_PROMPT_
+timestamp> //before any log
+timeStamp - currentUser> //after a log // personalCalendar configuration
+timeStamp - currentUser - GrName> //groupCalendar view
+timeStamp - currentUser - GrName$ //groupCalendar configuration - admin 
+timeStamp - currentUser - GrName# //groupCalendar configuration - su
+
+_PROMPT2_
+grId // access to a group options // test - does currentUser belong to this group ? 
+--> prompt3 
+--> workingGroup = grId
+--> currentLevelAdmin = the level of the currentUser in this group
+show calendar// display the lists of events depends on the working group, if working group is null, 	show the personal Calendar of the currentUser // by default all the event of the 	currentYear
+show calendar year // display the calendar of the workingGroup at the specified year
+show calendar month // display the calendar of the working group at the specified month of the 	current year
+show calendar month year // display the calendar of the workingGroup at the specified month of the 	specified year
+show calendar day //
+...
+
+exit
+---> if prompt 3/4 back to prompt 2 else exit the application
+---> workingGroup = null
+
+
+_PROMPT3_GrVIEW_
+show calendar// display the lists of events depends on the working group, if working group is null, 	show the personal Calendar of the currentUser // by default all the event of the 	currentYear
+show calendar year // display the calendar of the workingGroup at the specified year
+show calendar month // display the calendar of the working group at the specified month of the 	current year
+show calendar month year // display the calendar of the workingGroup at the specified month of the 	specified year
+show calendar day //
+...
+admin // if currentLevelAdmin for this group is 1 enter admin mode
+---> prompt 4
+sadmin grId // if currentLevelAdmin for this group is 2 enter sadmin mode
+---> prompt 5
+
+_PROMPT4_ADMIN_
+add EventId // enter addevents mode - wich bring to add an event to the workingGroup
+delete EventId
+...
+add userName // add a members to the workingGroup
+
+_PROMPT5_SADMIN_
+delete userName // delete a members of the working group
+permission members newPerm // upgrade/downgrade a members of the working group
+
