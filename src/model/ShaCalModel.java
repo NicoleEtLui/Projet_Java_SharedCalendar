@@ -14,13 +14,13 @@ import java.util.Observable;
 public class ShaCalModel extends Observable {
 	
 	//The "list" of Persons.
-	public static HashMap<String,Person> PersonHashMap;
+	public static HashMap<String,Person> AllPersons;
 	
 	//The "list" of Groups.
-	public static HashMap<Integer,Group> GroupHashMap;
+	public static HashMap<Integer,Group> AllGroups;
 	
 	//The "list" of Groups.
-	public static HashMap<String,ArrayList<Event>> EventHashMap;
+	public static HashMap<String,ArrayList<Event>> AllEvents;
 	
 	public static void main(String[] args) {
 		
@@ -49,66 +49,64 @@ public class ShaCalModel extends Observable {
 	
 	//Adds a newly created Person to the list.
 	public static void addPersonToHashmap(Person person){
-		PersonHashMap.putIfAbsent(person.getUserName(), person);
+		AllPersons.putIfAbsent(person.getUserName(), person);
 	}
 	
 	//Deletes completely a Person.
 	public static void deletePersonFromHashmap(String person){
-		PersonHashMap.remove(person);
+		AllPersons.remove(person);
 	}
 	
 	//Adds a newly created Group to the list.
 	public static void addGroupToHashmap(Group group){
-		GroupHashMap.putIfAbsent(Integer.valueOf(group.getGrId()), group); // FIXME : Crash alpha
+		AllGroups.putIfAbsent(Integer.valueOf(group.getGrId()), group); // FIXME : Crash alpha
 	}
 	
 	//Deletes completely a Group.
 	public static void deleteGroupFromHashmap(int grId){
-		GroupHashMap.remove(grId);
+		AllGroups.remove(grId);
 	}
 	
 	//Adds a newly created Event to the list.
 	public static void addEventToHashmap(String creator, Event event){
-		EventHashMap.get(creator).add(event);
+		AllEvents.get(creator).add(event);
 	}
 	
 	//Deletes completely an Event.
 	public static void deleteEventFromHashmap(String creator, Event event){
-		EventHashMap.get(creator).remove(event);
+		AllEvents.get(creator).remove(event);
 	}
 	
 	//Adds an already existing Event to an already existing Group.
-	public static void addEventToGroup(String event, int grId){
-		GroupHashMap.get(grId).addEvent(event); 		//See new "addEvent" method below.
+	public static void addEventToGroup(String grId, Event event){
+		AllEvents.get(grId).add(event);
 	}
 	
 	//Adds an already existing Event to an already existing Person.
-	public static void addEventToPerson(String event, String person){
-		PersonHashMap.get(person).addEvent(event); 	//See new "addEvent" method below.
+	public static void addEventToPerson(String person, Event event){
+		AllEvents.get(person).add(event);
 	}
 	
 	//Removes an Event from a Group and deletes it.
-	public static void removeEventFromGroup(String event, int grId){
-		GroupHashMap.get(grId).deleteEvent(event); 	//See new "deleteEvent" method below.
-		deleteEvent(event);
+	public static void removeEventFromGroup(String grId, Event event){
+		AllEvents.get(grId).remove(event);
 	}
 	
 	//Removes an Event from a Person and deletes it.
-	public static void removeEventFromPerson(String event, String person){
-		PersonHashMap.get(person).deleteEvent(event); 	//See new "deleteEvent" method below.
-		deleteEvent(event);
+	public static void removeEventFromPerson(String person, Event event){
+		AllEvents.get(person).remove(event);
 	}
 	
 	//Adds a new link between an already existing Person and an already existing Group.
 	public static void addLink(String userName, int grId){
-		PersonHashMap.get(userName).addGroup(grId);	//See new "addGroup" method below.
-		GroupHashMap.get(grId).addMember(userName); 	//See new "addMember" method below.
+		AllPersons.get(userName).addGroupToPerson(grId);	//See new "addGroupToPerson" method below.
+		AllGroups.get(grId).addMemberToGroup(userName); 	//See new "addMemberToGroup" method below.
 	}
 	
 	//Remove a link between an already existing Person and an already existing Group.
 	public static void removeLink(String userName, int grId){
-		PersonHashMap.get(userName).deleteGroup(grId);	//See new "deleteGroup" method below.
-		GroupHashMap.get(grId).deleteMember(userName);	//See new "deleteMember" method below.
+		AllPersons.get(userName).deleteGroupFromPerson(grId);	//See new "deleteGroupFromPerson" method below.
+		AllGroups.get(grId).deleteMemberFromGroup(userName);	//See new "deleteMemberFromGroup" method below.
 	}
 	
 	
@@ -135,44 +133,30 @@ public class ShaCalModel extends Observable {
 		this.firstName = firstName;
 		this.userName = userName;
 		this.bDate = bDate;
-		this.group = new ArrayList<Integer>();
+		this.group = new ArrayList<int[]>();
 	}
 	 */
 	
 	
-	/* //NEW new addGroup, deleteGroup, addEvent, deleteEvent and createGroup methods.
+	/* //NEW new addGroupToPerson, deleteGroupFromPerson and createGroup methods.
 	
-	 * New addGroup method.
-	public void addGroup(int grId){
+	 * New addGroupToPerson method.
+	public void addGroupToPerson(int grId){
 		int[] localInt = {grId, 2};
 		group.add(localInt);
 	}
 	
-	 * New deleteGroup method.
-	public void deleteGroup(int grId){
+	 * New deleteGroupFromPerson method.
+	public void deleteGroupFromPerson(int grId){
 		int[] localInt = {grId, 2};
 		group.remove(localInt); //TEST : probably doesn't work as intended. 
-	}
-	
-	 * New addEvent method.
-	public void addEvent(String event){ //TODO wut
-		persoClndr.add(event);
-	}
-	public void addEvent(Event event){
-		EventTest.put(this.getUserName(),event); //TODO wutbis
-	}	
-	
-	 * New deleteEvent method.
-	public void deleteEvent(String event){
-		persoClndr.remove(event);
 	}
 	
 	 * New createGroup method.
 	public int createGroup(String grName){
 		Group group = new Group(grName, this);
-		GroupTest.put(group.grId, group);
-		int[] localInt = {group.getGrId(), 2};
-		this.group.add(localInt);
+		addGroupToHashMap(group);
+		addGroupToPerson(group.getGrId());
 		return group.getGrId();
 	}
 	 */
@@ -197,25 +181,16 @@ public class ShaCalModel extends Observable {
 	 */
 	
 	
-	/* //NEW new addMember, deleteMember, addEvent and deleteEvent methods.
+	/* //NEW new addMember and deleteMember methods.
 	
 	 * New addMember method.
-	public void addMember(String userName){
+	public void addMemberToGroup(String userName){
 		members.add(userName);
 	}
 	
 	 * New deleteMember method.
-	public void deleteMember(String userName){
+	public void deleteMemberFromGroup(String userName){
 		members.remove(userName);
-	}
-	
-	 * New addEvent method.
-	public void addEvent(String event){
-		grCalendar.add(event);
-	}
-	 * New deleteEvent method.
-	public void deleteEvent(String event){
-		grCalendar.remove(event);
 	}
 	 */
 }
