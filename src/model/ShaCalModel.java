@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
 
-import sun.applet.Main;
-
 public class ShaCalModel extends Observable {
 	
 	//The "list" of Persons.
@@ -69,9 +67,6 @@ public class ShaCalModel extends Observable {
 		ShaCalModel.AllPersons.clear();
 		ShaCalModel.AllGroups.clear();
 		ShaCalModel.AllEvents.clear();
-	}
-	public static void main(String[] args) {
-		Group group = new Group("group");
 	}
 }
 
