@@ -2,7 +2,7 @@ package model;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -38,12 +38,8 @@ public class Person {
 	 * 				setEvent, deleteEvents, ...
 	 * 2 = super admin --> admin + upgrade/downgrade members
 	 */
-	private ArrayList<int[]> group = new ArrayList<int[]>();
-	/**
-	 * All the events the person sees.
-	 */
-	private ArrayList<Event> persoClndr = new ArrayList<Event>();
-
+	private HashMap<Integer,Integer> group = new HashMap<Integer,Integer>();
+	
 	//-- CONSTRUCTOR ----------------------------------------------------------
 	/**
 	 * Constructor for a new user, with no group.
@@ -58,7 +54,7 @@ public class Person {
 		this.firstName = firstName;
 		this.userName = userName;
 		this.bDate = bDate;
-		this.persoClndr.add(new Event("Joyeux Anniversaire", "Mon anniversaire", this.bDate, this.bDate));
+		ShaCalModel.addEvent(userName,new Event("Joyeux Anniversaire", "Mon anniversaire", this.bDate, this.bDate)); ///TODO Find how to access addEvent from here ?
 	}
 	
 	//-- GETTERS & SETTERS ----------------------------------------------------
@@ -112,15 +108,8 @@ public class Person {
 	 * Get a list of the group the person belong.
 	 * @return a 
 	 */
-	public List<int[]> getGroup() {
+	public HashMap<Integer,Integer> getGroup() {
 		return group;
-	}
-	/**
-	 * get the calendar of the person
-	 * @return the list of events the person sees
-	 */
-	public List<Event> getPersoClndr() {
-		return persoClndr;
 	}
 	
 	//-- METHODS --------------------------------------------------------------
@@ -135,8 +124,8 @@ public class Person {
 	
 	public String toStringGroup(List<int[]> l){
 		String gr = "";
-		for (int[] i : this.group){
-			gr += (this.userName + "[" + i[0] + "," + i[1] + "]\n");
+		for (int i=0;i<group.size();i++){
+			gr += (this.userName + "[" + i + "," + group.get(i) + "]\n");
 		};
 		return gr;
 	}
@@ -161,27 +150,7 @@ public class Person {
 		return true;
 	}
 	
-	/**
-	 * this method add a new event to the personal calendar.
-	 * The list <code>persoClndr<code> grow of one line
-	 * @param e is the event to add
-	 * 
-	 */
-	public void addPersonalEvents(Event e) {
-		this.persoClndr.add(e);
-	}
-	
-	/**
-	 * this method delete an event from the personal calendar.
-	 * The list <code>persoClndr<code> get shorter
-	 * @param x is the event to delete
-	 */
-	public void deletePersonalEvent(Event e) {
-		this.persoClndr.remove(e);
-	}
-	
-	
-	//QUESTION: would'nt it be more simple if the group posess a static list of it's members with their permission in him ?
+	//QUESTION: wouldn't it be more simple if the group possessed a static list of it's members with their permission in him ?
 	// if so, the change permission would go in group Class and only one list should be updated.
 	// for now we must update two 
 	/**
@@ -189,30 +158,26 @@ public class Person {
 	 * <p>The person calling this method must belong to the same group the 
 	 * person she want to change and have a aythorization of 2 in this group<p>
 	 * 
-	 * @param p is the person to upgrade/downgrade
-	 * @param userlvl is the new levels of permission for the person
-	 * @param grId
+	 * @param userName is the userName of the person to upgrade/downgrade.
+	 * @param userLvl is the new levels of permission for the person
+	 * @param grId is the Id of the group.
 	 * @return <p>false if the userLevelof for the group grId of the person 
 	 * calling this method is under 2 or if the person doesn't belong 
 	 * to the group<p>
-	 * @treturn <p> true otherwise and replace former permission 
+	 * @return <p>true otherwise and replace former permission 
 	 * of the person p for the group grId by userlvl<p>
 	 */
-	public boolean changePermission(Person p, int grId, int userlvl) {
-		for (int[] localGr : this.group){
-			if (localGr[0] == grId && localGr[1] != 2){
-				return false;
-			} 
+	public boolean changePermission(String userName, int grId, int userLvl) {
+		if(this.group.get(grId) != 2){
+			return false;
 		}
-		for (int[] pGr : p.group){
-			if (pGr[0] == grId && pGr[1] != 2){
-				pGr[1] = userlvl;
-				return true;
-			}
-		
+		if(ShaCalModel.AllPersons.get(userName).group.get(grId) != 2){
+			ShaCalModel.AllPersons.get(userName).group.put(grId,Integer.valueOf(userLvl));
+			return true;
 		}
 		return false;
 	}
+	
 	/**
 	 * this method create a new Group.
 	 * <p>the person that call this method get his list of group updated and
@@ -222,11 +187,20 @@ public class Person {
 	 * @param grName is the name of the new group
 	 * @return the identifier <code> grId <code> of the group created
 	 */
-	public int createGroup(String grName) {
-		Group group = new Group(grName, this);
-		int[] localInt = {group.getGrId(), 2};
-		this.group.add(localInt);
+	public int createGroup(String grName){
+		Group group = new Group(grName, this.getUserName());
+		ShaCalModel.addGroupToHashmap(group); //TODO Good ?
+		addGroupToPerson(group.getGrId());
 		return group.getGrId();
+	}
+	
+	//TODO Add javadoc.
+	public void addGroupToPerson(int grId){
+		group.put(grId, 2);
+	}
+	
+	public void deleteGroupFromPerson(int grId){
+		group.remove(grId);
 	}
 	
 } // fin class Person

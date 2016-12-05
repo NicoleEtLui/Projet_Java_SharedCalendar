@@ -71,7 +71,7 @@ public class Group {
 				+ "Number of members : "
 				+ this.getMembers().size() 
 				+ " | Number of events : " 
-				+ AllEvents.get(this.grId).size(); //TODO Find how to access AllEvents from here ?
+				+ ShaCalModel.AllEvents.get(this.grId).size(); //TODO Good ?
 	}
 	
 	/**
@@ -111,8 +111,8 @@ public class Group {
 	 * @param Username : The Username to be looked for as a String
 	 * @return A Person
 	 */
-	public Person getSingleMember(String UserName){
-		AllPersons.get(userName); //TODO Find how to access AllEvents from here ?
+	public Person getSingleMember(String userName){
+		return ShaCalModel.AllPersons.get(userName);
 	}
 	
 	/**
@@ -154,8 +154,15 @@ public class Group {
 	public void setIsPublic(boolean isPublic) {
 		this.isPublic = isPublic;
 	}
-	
+	//TODO Add javadoc.
 	public boolean equals(Group group){
 		return (this.grId == group.grId);
+	}
+	public void addMemberToGroup(String userName){
+		members.add(userName);
+	}
+		
+	public void deleteMemberFromGroup(String userName){
+		members.remove(userName);
 	}
 }
