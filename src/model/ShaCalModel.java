@@ -2,7 +2,6 @@ package model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Observable;
 
 public class ShaCalModel extends Observable {
@@ -14,10 +13,12 @@ public class ShaCalModel extends Observable {
 		persList.putIfAbsent(p.getUserName(), p);
 	}
 	
+	public void addCalendar(String s){
+		ArrayList<Event> test = new ArrayList<Event>();
+		calendarList.putIfAbsent(s, test);
+	}
 	public void addEvent(String s, Event e){
-		ArrayList<Event> temp = calendarList.get(s);
-		temp.add(e);
-		calendarList.replace(s, temp);
+		calendarList.get(s).add(e);
 	}
 	
 }

@@ -15,7 +15,10 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 	private String currentUser;
 	private int currentUserLevel;
 	private String workingGroup = null;
+	
+	private String arg;
 	private String help = "This is the list of command. \n";
+	
 	private String prompt = LocalDate.now().toString() + "> ";
 	private String prompt1 = LocalDate.now().toString() + " - " + currentUser + "> ";
 	private String prompt2 = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "> ";
@@ -33,6 +36,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 	
 	
 	
+	
 	private class ReadInput implements Runnable{
 		public void run() {
 			//temp: simulation de contenu existant
@@ -41,8 +45,10 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 			model.addPerson(pe.getUserName(), pe);
 			Event ev = new Event("MyPersEvent", "Mydescription", LocalDate.of(2016, 12, 04), LocalDate.of(2016, 12, 04));
 			Event ev2 = new Event("MyGroupEvent", "Mydescription", LocalDate.of(2016, 12, 04), LocalDate.of(2016, 12, 04));
-			//model.addEvent("N", ev);
-			//model.addEvent(Integer.toString(gr.getGrId()), ev2);
+			model.addCalendar(pe.getUserName());
+			model.addEvent(pe.getUserName(), ev);
+			model.addCalendar(Integer.toString(gr.getGrId()));
+			model.addEvent(Integer.toString(gr.getGrId()), ev2);
 			
 			while(currentUser == null){
 				//Login
@@ -62,7 +68,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 					}
 					System.out.println(prompt + "What's your birthday ? as yyyy-mm-dd");
 					LocalDate d = LocalDate.parse(sc.next());
-					Person nU = controller.newUser(n, p, currentUser, d);
+					controller.newUser(n, p, currentUser, d);
 				} else if (newU.equals("n")){
 					System.out.println(prompt + "Login with your userName");
 					currentUser = sc.next();
@@ -74,26 +80,43 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 					System.out.println("please answer y or n");
 				}
 			}
-			//transition
+			
+			//transition///////////////////////////////////////////////////////
 			workingGroup = currentUser;
 			prompt = LocalDate.now().toString() + " - " + currentUser + "> ";
 			System.out.println(prompt + "Welcome " + currentUser);
 			System.out.println(prompt + "Press help to get a list of all the command");
+			
+			//interaction//////////////////////////////////////////////////////
 			while(true){
-				//interaction
 				command = sc.next();
 				switch (command){
 					case "help" : System.out.println(help);
 						controller.help();
+						System.out.println(prompt);
 					break;
-					case "group" : System.out.println(prompt + "enter a group id");
-						workingGroup = sc.next();
-						//get the currentUserLevel for this group and change the attribute 
-						prompt = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "> ";
-						System.out.println(prompt + "entering group " + workingGroup);
+					
+					case "group" : //System.out.println(prompt + "enter a group id");
+						currentUserLevel = controller.getUserLevel(currentUser, Integer.parseInt(workingGroup)); //!\ à implémenter, return 0 pour l'instant
+						arg = sc.next();
+						//workingGroup = arg;
+						if(arg != null){
+							prompt = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "> ";
+							System.out.println(prompt);
+							arg = null;
+						};
 						break;
-					case "show" : System.out.println("Your calendar: \n" );
-						controller.display(workingGroup);
+						
+					case "show" : System.out.println(prompt + "Your calendar: \n" );
+						//System.out.println("Une liste d'évènements triées par mois...");
+						controller.display(workingGroup, command);
+						arg = sc.next();
+						//controller.display(workingGroup, filter);
+						if(arg != null){
+							//System.out.println("Une liste d'évènements depending on a filter");
+							controller.display(workingGroup, command);
+							arg = null;
+						};
 						break;
 					default  : System.out.println(prompt + "Unrecognized command");
 				}

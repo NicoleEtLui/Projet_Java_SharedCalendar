@@ -54,7 +54,7 @@ public class ShaCalController {
 		return false;
 	}
 	
-	public void display(String clndrOwner){
+	public void display(String clndrOwner, String filter){
 		ArrayList<Event> calList = new ArrayList<Event>(model.calendarList.get(clndrOwner));
 		for (Event e : calList){
 			System.out.println(e);
@@ -74,7 +74,10 @@ public class ShaCalController {
 		} catch (IOException e) {
 		    System.err.println("Erreur lors de la lecture du fichier");
 		}
-		
+	}
+	
+	public int getUserLevel(String userName, int grId){
+		return 0;
 	}
 	
 }
