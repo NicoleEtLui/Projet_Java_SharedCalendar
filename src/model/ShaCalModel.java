@@ -20,31 +20,6 @@ public class ShaCalModel extends Observable {
 	//The "list" of Groups.
 	public static HashMap<String,ArrayList<Event>> AllEvents;
 	
-	public static void main(String[] args) {
-		
-		// Example of a LinkedHashMap, probably what we're going to use for Groups.
-		LinkedHashMap<Integer, Group> GroupTest = new LinkedHashMap<Integer, Group>();
-		GroupTest.put(0, new Group("First Group"));
-		GroupTest.put(1, new Group("Second Group"));
-		
-		for(int i=0;i<GroupTest.size();i++){
-			System.out.println(GroupTest.get(GroupTest.keySet().toArray()[i]));
-		}
-		
-		System.out.println("----------------");
-		
-		// Example of a HashMap, probably what we're going to use for Persons.
-		HashMap<String, Person> PersonTest = new HashMap<String, Person>();
-		Person personA = new Person("jean","naymar","jean",LocalDate.now());
-		PersonTest.put(personA.getUserName(), personA);
-		Person personB = new Person("george","clooney","george",LocalDate.now());
-		addPersonToHashmap(personB); //FIXME : Crash alpha
-		
-		for(int i=0;i<PersonTest.size();i++){
-			System.out.println(PersonTest.get(PersonTest.keySet().toArray()[i]));
-		}
-	}
-	
 	//Adds a newly created Person to the list.
 	public static void addPersonToHashmap(Person person){
 		AllPersons.putIfAbsent(person.getUserName(), person);
@@ -57,6 +32,13 @@ public class ShaCalModel extends Observable {
 	
 	//Adds a newly created Group to the list.
 	public static void addGroupToHashmap(Group group){
+		System.out.println(group);
+		System.out.println("---------");
+		System.out.println(group.getGrId());
+		System.out.println("---------");
+		System.out.println(Integer.valueOf(group.getGrId()).getClass().getSimpleName());
+		System.out.println(group.getClass().getSimpleName());
+		System.out.println("---------");
 		AllGroups.putIfAbsent(Integer.valueOf(group.getGrId()), group); // FIXME : Crash alpha
 	}
 	
