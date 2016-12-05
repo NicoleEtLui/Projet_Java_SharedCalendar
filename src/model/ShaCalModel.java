@@ -67,34 +67,14 @@ public class ShaCalModel extends Observable {
 		AllGroups.remove(grId);
 	}
 	
-	//Adds a newly created Event to the list.
-	public static void addEventToHashmap(String creator, Event event){
+	//Adds an already existing Event to an already existing Group/Person.
+	public static void addEvent(String creator, Event event){
 		AllEvents.get(creator).add(event);
 	}
 	
-	//Deletes completely an Event.
-	public static void deleteEventFromHashmap(String creator, Event event){
-		AllEvents.get(creator).remove(event);
-	}
-	
-	//Adds an already existing Event to an already existing Group.
-	public static void addEventToGroup(String grId, Event event){
-		AllEvents.get(grId).add(event);
-	}
-	
-	//Adds an already existing Event to an already existing Person.
-	public static void addEventToPerson(String person, Event event){
-		AllEvents.get(person).add(event);
-	}
-	
-	//Removes an Event from a Group and deletes it.
-	public static void removeEventFromGroup(String grId, Event event){
+	//Removes an Event from a Group/Person and deletes it.
+	public static void removeEvent(String grId, Event event){
 		AllEvents.get(grId).remove(event);
-	}
-	
-	//Removes an Event from a Person and deletes it.
-	public static void removeEventFromPerson(String person, Event event){
-		AllEvents.get(person).remove(event);
 	}
 	
 	//Adds a new link between an already existing Person and an already existing Group.
