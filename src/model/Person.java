@@ -3,7 +3,6 @@ package model;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * This class represents a person.
@@ -54,7 +53,8 @@ public class Person {
 		this.firstName = firstName;
 		this.userName = userName;
 		this.bDate = bDate;
-		ShaCalModel.addEvent(userName,new Event("Joyeux Anniversaire", "Mon anniversaire", this.bDate, this.bDate)); ///TODO Find how to access addEvent from here ?
+		this.group = new HashMap<Integer,Integer>();
+		ShaCalModel.addEvent(userName,new Event("Joyeux Anniversaire", "Mon anniversaire", this.bDate, this.bDate));
 	}
 	
 	//-- GETTERS & SETTERS ----------------------------------------------------
@@ -122,12 +122,9 @@ public class Person {
 				this.userName + " - " + this.bDate.format(formatter) );
 	}
 	
-	public String toStringGroup(List<int[]> l){
-		String gr = "";
-		for (int i=0;i<group.size();i++){
-			gr += (this.userName + "[" + i + "," + group.get(i) + "]\n");
-		};
-		return gr;
+	public String toStringGroup(){
+		return "nothing";
+		//TODO
 	}
 	@Override
 	/**
@@ -189,16 +186,23 @@ public class Person {
 	 */
 	public int createGroup(String grName){
 		Group group = new Group(grName, this.getUserName());
-		ShaCalModel.addGroupToHashmap(group); //TODO Good ?
-		addGroupToPerson(group.getGrId());
+		ShaCalModel.addGroupToHashMap(group);
+		this.group.put(group.getGrId(), 2);
 		return group.getGrId();
 	}
 	
-	//TODO Add javadoc.
+	/**
+	 * Adds a grId to the list of Groups, as a regular user.
+	 * @param grId : the Group's Id as an int.
+	 */
 	public void addGroupToPerson(int grId){
-		group.put(grId, 2);
+		group.put(grId, 0);
 	}
 	
+	/**
+	 * Removes a grId from the list of Groups.
+	 * @param grId : the Group's Id as an int.
+	 */
 	public void deleteGroupFromPerson(int grId){
 		group.remove(grId);
 	}
