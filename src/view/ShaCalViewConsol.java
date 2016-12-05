@@ -5,16 +5,24 @@ import java.util.Observer;
 import java.util.Scanner;
 
 import controller.ShaCalController;
+import model.Event;
+import model.Group;
 import model.Person;
 import model.ShaCalModel;
 
 public class ShaCalViewConsol extends ShaCalView implements Observer {
 	protected Scanner sc;
 	private String currentUser;
-	private String help = "This is the list of command. \n"
-							+ "help - get the list of command";
+	private int currentUserLevel;
+	private String workingGroup = null;
+	private String help = "This is the list of command. \n";
 	private String prompt = LocalDate.now().toString() + "> ";
-	private String command = "";
+	private String prompt1 = LocalDate.now().toString() + " - " + currentUser + "> ";
+	private String prompt2 = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "> ";
+	private String prompt3 = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "$ ";
+	private String prompt4 = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "# ";
+	
+	private String command = null;
 	
 	
 	public ShaCalViewConsol(ShaCalModel model, ShaCalController controller) {
@@ -27,7 +35,17 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 	
 	private class ReadInput implements Runnable{
 		public void run() {
-			while(true){
+			//temp: simulation de contenu existant
+			Person pe = new Person("Petit", "Martin", "N", LocalDate.of(1994, 9, 28));
+			Group gr = new Group("monGroupe", pe);
+			model.addPerson(pe.getUserName(), pe);
+			Event ev = new Event("MyPersEvent", "Mydescription", LocalDate.of(2016, 12, 04), LocalDate.of(2016, 12, 04));
+			Event ev2 = new Event("MyGroupEvent", "Mydescription", LocalDate.of(2016, 12, 04), LocalDate.of(2016, 12, 04));
+			//model.addEvent("N", ev);
+			//model.addEvent(Integer.toString(gr.getGrId()), ev2);
+			
+			while(currentUser == null){
+				//Login
 				System.out.println(prompt + "Are you a new User (y/n)?");
 				String newU = sc.next();
 				if(newU.equals("y")){
@@ -45,21 +63,41 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 					System.out.println(prompt + "What's your birthday ? as yyyy-mm-dd");
 					LocalDate d = LocalDate.parse(sc.next());
 					Person nU = controller.newUser(n, p, currentUser, d);
-					System.out.println(prompt + "Welcome " + nU + "\nalias " + currentUser);
-				} else {
+				} else if (newU.equals("n")){
 					System.out.println(prompt + "Login with your userName");
-					while(!controller.alreadyExist(sc.next())){
-						System.out.println(prompt + "this username doesn't exist");
-					}
 					currentUser = sc.next();
-					System.out.println(prompt + "Welcome " + currentUser);
+					while(!controller.alreadyExist(currentUser)){
+						System.out.println(prompt + "this username doesn't exist : try again");
+						currentUser = sc.next();
+					}
+				} else {
+					System.out.println("please answer y or n");
 				}
-				System.out.println("Press help to get a list of all the command");
+			}
+			//transition
+			workingGroup = currentUser;
+			prompt = LocalDate.now().toString() + " - " + currentUser + "> ";
+			System.out.println(prompt + "Welcome " + currentUser);
+			System.out.println(prompt + "Press help to get a list of all the command");
+			while(true){
+				//interaction
+				command = sc.next();
 				switch (command){
 					case "help" : System.out.println(help);
+						controller.help();
 					break;
-					default  : System.out.println("Unrecognized command");
+					case "group" : System.out.println(prompt + "enter a group id");
+						workingGroup = sc.next();
+						//get the currentUserLevel for this group and change the attribute 
+						prompt = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "> ";
+						System.out.println(prompt + "entering group " + workingGroup);
+						break;
+					case "show" : System.out.println("Your calendar: \n" );
+						controller.display(workingGroup);
+						break;
+					default  : System.out.println(prompt + "Unrecognized command");
 				}
+			
 			}
 		}
 	}

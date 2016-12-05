@@ -1,7 +1,15 @@
 package controller;
 
+import java.awt.List;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Scanner;
 
+import model.Event;
 import model.Person;
 import model.ShaCalModel;
 import view.ShaCalView;
@@ -11,7 +19,7 @@ public class ShaCalController {
 	private ShaCalModel model;
 	private ShaCalView view = null;
 	
-
+	
 	public ShaCalController(ShaCalModel m) {
 		model = m;
 	}
@@ -31,6 +39,7 @@ public class ShaCalController {
 	 */
 	public Person newUser(String n, String p, String u, LocalDate d){
 		Person pers = new Person(n, p, u, d); 
+		model.addPerson(pers.getUserName(), pers);
 		return pers;
 	}
 	/**
@@ -44,4 +53,28 @@ public class ShaCalController {
 		}
 		return false;
 	}
+	
+	public void display(String clndrOwner){
+		ArrayList<Event> calList = new ArrayList<Event>(model.calendarList.get(clndrOwner));
+		for (Event e : calList){
+			System.out.println(e);
+		}
+	}
+
+
+	public void help() {
+		try {
+		    BufferedReader reader =
+		        new BufferedReader(new InputStreamReader(new FileInputStream("MAN_CONSOLE.txt")));
+		    String line = "";
+		    while((line = reader.readLine()) != null) {
+		        System.out.println(line);
+		    }
+		    reader.close();
+		} catch (IOException e) {
+		    System.err.println("Erreur lors de la lecture du fichier");
+		}
+		
+	}
+	
 }

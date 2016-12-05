@@ -1,9 +1,6 @@
 package test;
 
-import java.time.LocalDate;
-
 import controller.ShaCalController;
-import model.Person;
 import model.ShaCalModel;
 import view.ShaCalViewConsol;
 

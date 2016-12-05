@@ -1,21 +1,10 @@
-need attribut 	workingGroup;
-		currentLevelAdmin;
-		currentDay;
-		currentMonth;
-		currentYear;
 
-_PROMPT_
-timestamp> //before any log
-timeStamp - currentUser> //after a log // personalCalendar configuration
-timeStamp - currentUser - GrName> //groupCalendar view
-timeStamp - currentUser - GrName$ //groupCalendar configuration - admin 
-timeStamp - currentUser - GrName# //groupCalendar configuration - su
 
 _PROMPT2_
-grId // access to a group options // test - does currentUser belong to this group ? 
---> prompt3 
---> workingGroup = grId
---> currentLevelAdmin = the level of the currentUser in this group
+group [grId] 		Access to the specified group
+			Attention, for now, do it in two line, it doesn't work with argument on 			the same line
+		
+show [calendar]
 show calendar// display the lists of events depends on the working group, if working group is null, 	show the personal Calendar of the currentUser // by default all the event of the 	currentYear
 show calendar year // display the calendar of the workingGroup at the specified year
 show calendar month // display the calendar of the working group at the specified month of the 	current year
