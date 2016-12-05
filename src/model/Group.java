@@ -8,8 +8,7 @@ public class Group {
 	private int grId; /**[ Kept or not ? ]*/
 	private String grName;
 	private boolean isPublic;
-	private ArrayList<Person> members;
-	private ArrayList<Event> grCalendar;
+	private ArrayList<String> members;
 	/**
 	 * GrId only used in constructors and toString() method(s) as of now
 	 * - Mostly useful to get generic names for constructors
@@ -23,31 +22,27 @@ public class Group {
 	 * @param Members : All the members as an ArrayList of Person
 	 * @param GrCalendar : List of events as an ArrayList of Event 
 	 */
-	public Group(String GrName, boolean IsPublic, ArrayList<Person> Members, ArrayList<Event> GrCalendar) {
+	public Group(String grName, boolean IsPublic, ArrayList<String> Members) {
 		this.grId = getNewId();
-		this.grName = "UnknownGroup" + getCurrentId();
+		this.grName = grName;
 		this.isPublic = IsPublic;
-		this.members = new ArrayList<Person>();
+		this.members = new ArrayList<String>();
 		if(Members != null)this.members.addAll(Members);
-		this.grCalendar = new ArrayList<Event>();
-		if(GrCalendar != null)this.grCalendar.addAll(GrCalendar);
 	}
 	
-	public Group(String grName, Person FirstMember){
+	public Group(String grName, String FirstMember){
 		this.grId = getNewId();
 		this.grName = grName;
 		this.isPublic = true;
-		this.members = new ArrayList<Person>();
+		this.members = new ArrayList<String>();
 		this.members.add(FirstMember);
-		this.grCalendar = new ArrayList<Event>();
 	}
 
 	public Group(String grName){
 		this.grId = getNewId();
 		this.grName = grName;
 		this.isPublic = true;
-		this.members = new ArrayList<Person>();
-		this.grCalendar = new ArrayList<Event>();
+		this.members = new ArrayList<String>();
 	}
 	
 	/**
@@ -57,8 +52,7 @@ public class Group {
 		this.grId = getNewId();
 		this.grName = "UnknownGroup" + getCurrentId();
 		this.isPublic = true;
-		this.members = new ArrayList<Person>();
-		this.grCalendar = new ArrayList<Event>();
+		this.members = new ArrayList<String>();
 	}
 	
 	/**
@@ -77,7 +71,7 @@ public class Group {
 				+ "Number of members : "
 				+ this.getMembers().size() 
 				+ " | Number of events : " 
-				+ this.getGrCalendar().size();
+				+ AllEvents.get(this.grId).size(); //TODO Find how to access AllEvents from here ?
 	}
 	
 	/**
@@ -98,37 +92,17 @@ public class Group {
 	
 	/**
 	 * [ TODO ]
-	 * @pram Members An ArrayList of Persons to alert
+	 * @param Members An ArrayList of Persons to alert
 	 */
-	public void alertMembers(ArrayList<Person> Members){
+	public void alertMembers(ArrayList<String> Members){
 		// Handled elsewhere ?
-	}
-	
-	/**
-	 * Deletes a member of the group
-	 * @param Username : The Username of the Person to be deleted from the group
-	 */
-	public void deleteMember(String UserName){
-		for(int i=0;i<members.size();i++){
-			if(members.get(i).getUserName().equals(UserName)){
-				members.remove(i);
-			}
-		}
-	}
-	
-	/**
-	 * Adds a new member
-	 * @param NewMember : A Person to be added
-	 */
-	public void addMember(Person NewMember){
-		members.add(NewMember);
 	}
 	
 	/**
 	 * Returns the WHOLE ArrayList of the member's Id from the group
 	 * @return An ArrayList of member's Id
 	 */
-	public ArrayList<Person> getMembers() {
+	public ArrayList<String> getMembers() {
 		return members;
 	}
 	
@@ -138,45 +112,7 @@ public class Group {
 	 * @return A Person
 	 */
 	public Person getSingleMember(String UserName){
-		int index=-1;
-		for(int i=0;i<members.size();i++){
-			if(members.get(i).getUserName() == UserName){
-				index = i;
-			}
-		}
-		if(index>=0){
-			return members.get(index);
-		}else{
-			return null;		
-		}
-	}
-
-	/**
-	 * Adds a new event to the ArrayList of event of the group
-	 * @param NewEvent : A new Event
-	 */
-	public void addEvent(Event NewEvent){
-		grCalendar.add(NewEvent);
-	}
-	
-	/**
-	 * Deletes an event from a list of events from the group
-	 * @param title : The title of the event you want to delete
-	 */
-	public void deleteEvent(String title){
-		for(int i=0;i<grCalendar.size();i++){
-			if(grCalendar.get(i).getTitle()==title){
-				grCalendar.remove(i);
-			}
-		}
-	}
-
-	/**
-	 * Returns the WHOLE ArrayList of all the events from this group
-	 * @return An ArrayList of events
-	 */
-	public ArrayList<Event> getGrCalendar() {
-		return grCalendar;
+		AllPersons.get(userName); //TODO Find how to access AllEvents from here ?
 	}
 	
 	/**
