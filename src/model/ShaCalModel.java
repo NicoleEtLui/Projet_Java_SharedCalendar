@@ -2,7 +2,6 @@
 package model;
 
 import java.time.LocalDate;						//XXX : Used for tests.
-import java.time.format.DateTimeFormatter;		//XXX : Used for tests.
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
