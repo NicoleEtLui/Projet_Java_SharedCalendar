@@ -6,7 +6,6 @@ import java.time.format.DateTimeFormatter;		//XXX : Used for tests.
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Observable;
 
 //TODO : instancier une personne et instancier un groupe en passant la personne en param�tre
@@ -69,6 +68,7 @@ public class ShaCalModel extends Observable {
 	
 	//Adds an already existing Event to an already existing Group/Person.
 	public static void addEvent(String creator, Event event){
+		AllEvents.putIfAbsent(creator, new ArrayList<Event>());
 		AllEvents.get(creator).add(event);
 	}
 	
@@ -88,90 +88,5 @@ public class ShaCalModel extends Observable {
 		AllPersons.get(userName).deleteGroupFromPerson(grId);	//See new "deleteGroupFromPerson" method below.
 		AllGroups.get(grId).deleteMemberFromGroup(userName);	//See new "deleteMemberFromGroup" method below.
 	}
-	
-	
-	/* //NEW new values and constructor for Person.
-	
-	 * Person's new values.
-	private String name;
-	private String firstName;
-	Private String userName;
-	private LocalDate bDate;
-	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-	 * All the groups the person belong and his level in those.
-	 * <p>First number stands for the <code>grId<code> the person belong,
-	 * second number stands for the lvl of authorization of this person in grp <p>
-	 * 0 = regular user --> access to the groupCalendar bunt cant modify it.
-	 * 1 = admin --> access to groupCalendar + access to method that modify it
-	 * 				setEvent, deleteEvents, ...
-	 * 2 = super admin --> admin + upgrade/downgrade members.
-	private ArrayList<int[]> group = new ArrayList<int[]>();
-	
-	 * New Person's new constructor.
-	public Person(String name, String firstName, String userName, LocalDate bDate) {
-		this.name = name;
-		this.firstName = firstName;
-		this.userName = userName;
-		this.bDate = bDate;
-		this.group = new ArrayList<int[]>();
-	}
-	 */
-	
-	
-	/* //NEW new addGroupToPerson, deleteGroupFromPerson and createGroup methods.
-	
-	 * New addGroupToPerson method.
-	public void addGroupToPerson(int grId){
-		int[] localInt = {grId, 2};
-		group.add(localInt);
-	}
-	
-	 * New deleteGroupFromPerson method.
-	public void deleteGroupFromPerson(int grId){
-		int[] localInt = {grId, 2};
-		group.remove(localInt); //TEST : probably doesn't work as intended. 
-	}
-	
-	 * New createGroup method.
-	public int createGroup(String grName){
-		Group group = new Group(grName, this);
-		addGroupToHashMap(group);
-		addGroupToPerson(group.getGrId());
-		return group.getGrId();
-	}
-	 */
-	
-	
-	/* //NEW new values and constructor for Group.
-	
-	 * Group's new values.
-	private static int defaultIdNumber = 0;
-	private int grId; //[ Kept or not ? ]
-	private String grName;
-	private boolean isPublic;
-	private ArrayList<String> members;
-	
-	 * New Group's new constructor.
-	public Group(String GrName, boolean IsPublic) {
-		this.grId = getNewId();
-		this.grName = "UnknownGroup" + getCurrentId();
-		this.isPublic = IsPublic;
-		this.members = new ArrayList<String>();
-	}
-	 */
-	
-	
-	/* //NEW new addMember and deleteMember methods.
-	
-	 * New addMember method.
-	public void addMemberToGroup(String userName){
-		members.add(userName);
-	}
-	
-	 * New deleteMember method.
-	public void deleteMemberFromGroup(String userName){
-		members.remove(userName);
-	}
-	 */
 }
 
