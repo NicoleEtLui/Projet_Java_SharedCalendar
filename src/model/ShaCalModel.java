@@ -24,6 +24,9 @@ public class ShaCalModel extends Observable {
 	//Deletes completely a Person.
 	public static void deletePersonFromHashMap(String person){
 		AllPersons.remove(person);
+		for(int i=0;i<AllGroups.size();i++){
+			AllGroups.get(AllGroups.keySet().toArray()[i]).deleteMemberFromGroup(person);
+		}
 	}
 	
 	//Adds a newly created Group to the list.
@@ -34,6 +37,9 @@ public class ShaCalModel extends Observable {
 	//Deletes completely a Group.
 	public static void deleteGroupFromHashMap(int grId){
 		AllGroups.remove(grId);
+		for(int i=0;i<AllPersons.size();i++){
+			AllPersons.get(AllPersons.keySet().toArray()[i]).deleteGroupFromPerson(grId);
+		}
 	}
 	
 	//Adds an already existing Event to an already existing Group/Person.
