@@ -55,6 +55,7 @@ public class Person {
 		this.bDate = bDate;
 		this.group = new HashMap<Integer,Integer>();
 		ShaCalModel.addEvent(userName,new Event("Joyeux Anniversaire", "Mon anniversaire", this.bDate, this.bDate));
+		ShaCalModel.addPersonToHashMap(this);
 	}
 	
 	//-- GETTERS & SETTERS ----------------------------------------------------
@@ -123,9 +124,13 @@ public class Person {
 	}
 	
 	public String toStringGroup(){
-		return "nothing";
-		//TODO
+		String str = "UserName : " + this.getUserName() + "\n";
+		for(int i=0;i<group.size();i++){
+			str += ">[Group : " + ShaCalModel.AllGroups.get(group.keySet().toArray()[i]).getGrName() + "| Lvl : " + group.get(i) + "]\n";
+		}
+		return str;
 	}
+	
 	@Override
 	/**
 	 * Compare the equality of two person.
@@ -165,14 +170,18 @@ public class Person {
 	 * of the person p for the group grId by userlvl<p>
 	 */
 	public boolean changePermission(String userName, int grId, int userLvl) {
-		if(this.group.get(grId) != 2){
+		if((ShaCalModel.getPerson(userName).getGroup().get(grId)==null) || (this.group.get(grId) != 2)){
 			return false;
 		}
-		if(ShaCalModel.AllPersons.get(userName).group.get(grId) != 2){
-			ShaCalModel.AllPersons.get(userName).group.put(grId,Integer.valueOf(userLvl));
+		if(ShaCalModel.getPerson(userName).getPermission(grId) != 2){
+			ShaCalModel.getPerson(userName).group.put(grId,userLvl);
 			return true;
 		}
 		return false;
+	}
+	
+	public Integer getPermission(Integer grId){
+		return this.getGroup().get(grId);
 	}
 	
 	/**
@@ -186,7 +195,6 @@ public class Person {
 	 */
 	public int createGroup(String grName){
 		Group group = new Group(grName, this.getUserName());
-		ShaCalModel.addGroupToHashMap(group);
 		this.group.put(group.getGrId(), 2);
 		return group.getGrId();
 	}

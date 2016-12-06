@@ -23,6 +23,7 @@ public class Group {
 		this.members = new ArrayList<String>();
 		if(Members != null)this.members.addAll(Members);
 		ShaCalModel.addEvent(String.valueOf(grId),null);
+		ShaCalModel.addGroupToHashMap(this);
 	}
 	
 	public Group(String grName, String FirstMember){
@@ -32,6 +33,7 @@ public class Group {
 		this.members = new ArrayList<String>();
 		this.members.add(FirstMember);
 		ShaCalModel.addEvent(String.valueOf(grId),null);
+		ShaCalModel.addGroupToHashMap(this);
 	}
 
 	public Group(String grName){
@@ -40,6 +42,7 @@ public class Group {
 		this.isPublic = true;
 		this.members = new ArrayList<String>();
 		ShaCalModel.addEvent(String.valueOf(grId),null);
+		ShaCalModel.addGroupToHashMap(this);
 	}
 	
 	public Group() {
@@ -48,6 +51,7 @@ public class Group {
 		this.isPublic = true;
 		this.members = new ArrayList<String>();
 		ShaCalModel.addEvent(String.valueOf(grId),null);
+		ShaCalModel.addGroupToHashMap(this);
 	}
 	
 	/**
@@ -66,7 +70,7 @@ public class Group {
 				+ "Number of members : "
 				+ this.getMembers().size() 
 				+ " | Number of events : " 
-				+ ShaCalModel.AllEvents.get(getGrIdString()).size();
+				+ ShaCalModel.getEvent(getGrIdString()).size();
 	}
 	
 	/**
@@ -83,6 +87,10 @@ public class Group {
 	 */
 	public static int getCurrentId(){
 		return defaultIdNumber;
+	}
+	
+	public static void resetCurrentId(){
+		defaultIdNumber = -1;
 	}
 	
 	/**
