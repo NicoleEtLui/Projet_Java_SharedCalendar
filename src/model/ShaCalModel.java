@@ -28,7 +28,7 @@ public class ShaCalModel extends Observable {
 	
 	//Adds a newly created Group to the list.
 	public static void addGroupToHashMap(Group group){
-		AllGroups.putIfAbsent(Integer.valueOf(group.getGrId()), group); // FIXME : Crash alpha
+		AllGroups.putIfAbsent(Integer.valueOf(group.getGrId()), group);
 	}
 	
 	//Deletes completely a Group.
