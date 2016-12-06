@@ -12,11 +12,12 @@ import model.ShaCalModel;
 
 public class ShaCalViewConsol extends ShaCalView implements Observer {
 	protected Scanner sc;
+	
 	private String currentUser;
 	private int currentUserLevel;
 	private String workingGroup = null;
 	
-	private String arg;
+	private String arg = null;
 	private String help = "This is the list of command. \n";
 	
 	private String prompt = LocalDate.now().toString() + "> ";
@@ -25,7 +26,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 	private String prompt3 = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "$ ";
 	private String prompt4 = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "# ";
 	
-	private String command = null;
+	private String commandLine[];
 	
 	
 	public ShaCalViewConsol(ShaCalModel model, ShaCalController controller) {
@@ -50,37 +51,56 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 			model.addCalendar(Integer.toString(gr.getGrId()));
 			model.addEvent(Integer.toString(gr.getGrId()), ev2);
 			
+			
+			//Login
 			while(currentUser == null){
-				//Login
-				System.out.println(prompt + "Are you a new User (y/n)?");
-				String newU = sc.next();
-				if(newU.equals("y")){
-					System.out.println(prompt + "Welcome, let's create your account !\nWhat's your name ?");
-					String n = sc.next();
-					System.out.println(prompt + "What's your firstname ?");
-					String p = sc.next();
-					System.out.println(prompt + "What's your unique username ?");
-					currentUser = sc.next();
-					while(controller.alreadyExist(currentUser)){
-						System.out.println(prompt + "this username already exist");
-						System.out.println(prompt + "What's your unique username ?");
-						currentUser = sc.next();
-					}
-					System.out.println(prompt + "What's your birthday ? as yyyy-mm-dd");
-					LocalDate d = LocalDate.parse(sc.next());
-					controller.newUser(n, p, currentUser, d);
-				} else if (newU.equals("n")){
-					System.out.println(prompt + "Login with your userName");
-					currentUser = sc.next();
-					while(!controller.alreadyExist(currentUser)){
-						System.out.println(prompt + "this username doesn't exist : try again");
-						currentUser = sc.next();
-					}
-				} else {
-					System.out.println("please answer y or n");
+				sc.useDelimiter("\n");
+				commandLine = sc.next().split(" ");
+				for (int i = 0; i < commandLine.length; i++){
+					commandLine[i] = commandLine[i].trim();
+				}
+				/*System.out.println(commandLine[0]);
+				System.out.println(commandLine[0].toCharArray().length);
+				System.out.println(commandLine[0].trim());*/
+				switch(commandLine[0]){
+					case "login": System.out.println("try to login");
+						break;
+					case "new": 
+						if(commandLine.length == 1 ){
+							System.out.println(prompt + "Welcome, let's create your account !\nWhat's your name ?");
+							String n = sc.next();
+							System.out.println(prompt + "What's your firstname ?");
+							String p = sc.next();
+							System.out.println(prompt + "What's your unique username ?");
+							currentUser = sc.next();
+							while(controller.alreadyExist(currentUser)){
+								System.out.println(prompt + "this username already exist");
+								System.out.println(prompt + "What's your unique username ?");
+								currentUser = sc.next();
+							}
+							System.out.println(prompt + "What's your birthday ? as yyyy-mm-dd");
+							LocalDate d = LocalDate.parse(sc.next());
+							controller.newUser(n, p, currentUser, d);
+						} else {
+							
+							String n = commandLine[1];
+							String p = commandLine[2];
+							currentUser = commandLine[3];
+							LocalDate d = LocalDate.parse(commandLine[4]);
+							while (controller.alreadyExist(currentUser)){
+								System.out.println(prompt + "this username already exist, type a unique username");
+								currentUser = sc.next().trim();
+							}
+							controller.newUser(n, p, currentUser, d);
+						}
+						prompt = LocalDate.now().toString() + " - " + currentUser + "> ";
+						System.out.println(prompt + "Welcome " + currentUser);
+						break;
+					default: System.out.println("Type help to get a list of command");
 				}
 			}
 			
+			/*
 			//transition///////////////////////////////////////////////////////
 			workingGroup = currentUser;
 			prompt = LocalDate.now().toString() + " - " + currentUser + "> ";
@@ -89,39 +109,31 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 			
 			//interaction//////////////////////////////////////////////////////
 			while(true){
-				command = sc.next();
-				switch (command){
-					case "help" : System.out.println(help);
+				commandLine = sc.next().split(" ");
+				switch (commandLine[0]){
+					case "help" : 
+						System.out.println(help);
 						controller.help();
 						System.out.println(prompt);
 					break;
 					
-					case "group" : //System.out.println(prompt + "enter a group id");
-						currentUserLevel = controller.getUserLevel(currentUser, Integer.parseInt(workingGroup)); //!\ à implémenter, return 0 pour l'instant
-						arg = sc.next();
-						//workingGroup = arg;
-						if(arg != null){
-							prompt = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "> ";
-							System.out.println(prompt);
-							arg = null;
-						};
+					case "group" :
+							System.out.println("Vous avez demandé la commande groupe ? Veuillez patienter ...");
 						break;
 						
 					case "show" : System.out.println(prompt + "Your calendar: \n" );
-						//System.out.println("Une liste d'évènements triées par mois...");
-						controller.display(workingGroup, command);
+						controller.display(workingGroup, commandLine);
 						arg = sc.next();
-						//controller.display(workingGroup, filter);
 						if(arg != null){
-							//System.out.println("Une liste d'évènements depending on a filter");
-							controller.display(workingGroup, command);
+							System.out.println("Une liste d'évènements depending on a filter");
+							controller.display(workingGroup, commandLine);
 							arg = null;
 						};
 						break;
 					default  : System.out.println(prompt + "Unrecognized command");
 				}
 			
-			}
+			}*/
 		}
 	}
 }
