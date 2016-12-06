@@ -63,7 +63,17 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 				System.out.println(commandLine[0].toCharArray().length);
 				System.out.println(commandLine[0].trim());*/
 				switch(commandLine[0]){
-					case "login": System.out.println("try to login");
+					case "login": 
+						if(commandLine.length == 2 ){
+							currentUser = commandLine[1];
+							if(!controller.alreadyExist(currentUser)){
+								System.out.println("This account doesn't exist");
+							}
+							prompt = LocalDate.now().toString() + " - " + currentUser + "> ";
+							System.out.println(prompt + "Welcome " + currentUser);
+						} else {
+							System.out.println("wrong number of argument");
+						}
 						break;
 					case "new": 
 						if(commandLine.length == 1 ){
