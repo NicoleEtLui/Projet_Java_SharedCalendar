@@ -16,28 +16,29 @@ dd/mm/yyyy> -------------------------------------------------------------------
 PERSONAL MODE 
 dd/mm/yyyy - currentUser> -----------------------------------------------------
 
-	show [YEAR][MONTH][DAY][EVENT] - display the calendar specified, if no 
-		arguments, show all events of the current year.
+	show [EVENT][DAY][MONTH][YEAR] - display the calendar specified, if no 
+		arguments, show all events of the current day.
 		
-		year [YEAR]
-			specify the year to filter the calendar.
-			
-			month [MONTH]
-				specify the month to filter the calendar, default: of the current year.
-		
-				day [DAY]
+		event [EVENT]
+							display the details of this event, default: current year, 
+							current month, current day
+			day [DAY]
 					specify the day to filter the calendar, default: of the current month
 					of the current year.
 			
-						event [EVENT]
-							display the details of this event, default: current year, 
-							current month, current day
+				month [MONTH]
+					specify the month to filter the calendar, default: of the current year.
+					
+					year [YEAR]
+						specify the year to filter the calendar.
+			
+						
 			
 		EXAMPLE: 
-			>show 2014 
+			>show year 2014 
 				will display all the events of 2014 sorted by month. 
 			>show day 28
-				will display all th events of the day 28 of the current month. 
+				will display all the events of the day 28 of the current month. 
 				of current year.
 			>show month 09
 				will display all the events of september of current year.

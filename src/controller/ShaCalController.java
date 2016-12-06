@@ -35,12 +35,12 @@ public class ShaCalController {
 	 * @param p the firstname of the person, red from command line
 	 * @param u the username of the person , red from command line
 	 * @param d the birthday of the person, red from command line
-	 * @return true if it succeeded, false otherwise. It won't succeed if username already exist.
+	 * @return 
 	 */
 	public Person newUser(String n, String p, String u, LocalDate d){
-		Person pers = new Person(n, p, u, d); 
-		model.addPerson(pers.getUserName(), pers);
-		return pers;
+			Person pers = new Person(n, p, u, d); 
+			model.addPerson(pers.getUserName(), pers);
+			return pers;
 	}
 	/**
 	 * this method check if a username already exist.
@@ -48,13 +48,13 @@ public class ShaCalController {
 	 * @return
 	 */
 	public boolean alreadyExist(String userName){
-		if(model.persList.containsKey(userName)){
+		if(model.persList.containsKey(userName.trim())){
 			return true;
 		}
 		return false;
 	}
 	
-	public void display(String clndrOwner, String filter){
+	public void display(String clndrOwner, String[] filter){
 		ArrayList<Event> calList = new ArrayList<Event>(model.calendarList.get(clndrOwner));
 		for (Event e : calList){
 			System.out.println(e);
