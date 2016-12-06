@@ -53,20 +53,38 @@ public class ShaCalModel extends Observable {
 	
 	//Adds a new link between an already existing Person and an already existing Group.
 	public static void addLink(String userName, int grId){
-		AllPersons.get(userName).addGroupToPerson(grId);	//See new "addGroupToPerson" method below.
-		AllGroups.get(grId).addMemberToGroup(userName); 	//See new "addMemberToGroup" method below.
+		AllPersons.get(userName).addGroupToPerson(grId);
+		AllGroups.get(grId).addMemberToGroup(userName);
 	}
 	
 	//Remove a link between an already existing Person and an already existing Group.
 	public static void removeLink(String userName, int grId){
-		AllPersons.get(userName).deleteGroupFromPerson(grId);	//See new "deleteGroupFromPerson" method below.
-		AllGroups.get(grId).deleteMemberFromGroup(userName);	//See new "deleteMemberFromGroup" method below.
+		AllPersons.get(userName).deleteGroupFromPerson(grId);
+		AllGroups.get(grId).deleteMemberFromGroup(userName);
 	}
 	
+	//Reset all the HashMap
 	public static void resetAllHashMap() {
+		System.out.println("Cache vidé");
 		ShaCalModel.AllPersons.clear();
 		ShaCalModel.AllGroups.clear();
 		ShaCalModel.AllEvents.clear();
+		Group.resetCurrentId();
+	}
+	
+	//Returns a single Group
+	public static Group getGroup(Object grId){
+		return AllGroups.get(grId);
+	}
+	
+	//Returns a single Person
+	public static Person getPerson(Object userName){
+		return AllPersons.get(userName);
+	}
+
+	//Returns a single ArrayList of Event
+	public static ArrayList<Event> getEvent(Object creator){
+		return AllEvents.get(creator);
 	}
 }
 
