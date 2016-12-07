@@ -52,9 +52,9 @@ dd/mm/yyyy - currentUser> -----------------------------------------------------
 			access the GROUP MODE for the group specified by GRID.
 			
 			
-	create groupe [GROUPNAME] event [EVENTNAME] - trigger the creation protocol.
+	create group [GROUPNAME] event [EVENTNAME] - trigger the creation protocol.
 	
-		groupe [GROUPNAME] - directly access the group protocol creation.
+		group [GROUPNAME] - directly access the group protocol creation.
 			
 			[GROUPNAME] 
 				directly name the group to create

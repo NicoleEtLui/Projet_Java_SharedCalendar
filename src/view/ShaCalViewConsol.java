@@ -53,15 +53,13 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 			
 			
 			//Login
-			while(currentUser == null){
+			while(true){
 				sc.useDelimiter("\n");
 				commandLine = sc.next().split(" ");
 				for (int i = 0; i < commandLine.length; i++){
 					commandLine[i] = commandLine[i].trim();
 				}
-				/*System.out.println(commandLine[0]);
-				System.out.println(commandLine[0].toCharArray().length);
-				System.out.println(commandLine[0].trim());*/
+				
 				switch(commandLine[0]){
 					case "login": 
 						if(commandLine.length == 2 ){
