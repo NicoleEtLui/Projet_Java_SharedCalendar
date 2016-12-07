@@ -104,4 +104,23 @@ public class ShaCalController {
 	public ArrayList<String> getMembersOfGroup(int grId){
 		return model.getGroup(grId).getMembers();
 	}
+	
+	public ArrayList<Event> getEventPerMonth(int month, int gr){
+		ArrayList<Event> eventPerMonth = new ArrayList<Event>();
+		for (Event e : model.AllEvents.get(Integer.toString(gr))){
+			if(e.getStartDate().getMonthValue() == month){
+				eventPerMonth.add(e);
+			} 
+			return eventPerMonth;
+		}
+		return null;
+	}
+	
+	public String sortEvent(ArrayList<Event> event){
+		String s = "";
+		for (Event e : event){
+			s = "\t" + e.getStartDate() + " " +  e.getTitle() + "\n";
+		}
+		return s;
+	}
 } // fin class

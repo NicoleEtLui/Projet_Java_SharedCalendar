@@ -155,7 +155,31 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 						if (currentUser == null){
 							System.out.println("You are not allowed to run this command in this mode");
 						} else if (clLength == 1){
-							System.out.println(model.AllEvents.get(workingGroup).toString());
+							System.out.println("JANVIER");
+							controller.getEventPerMonth(1, workingGroup);
+							System.out.println("FEVRIER");
+							controller.getEventPerMonth(2, workingGroup);
+							System.out.println("MARS");
+							controller.getEventPerMonth(3, workingGroup);
+							System.out.println("AVRIL");
+							controller.getEventPerMonth(4, workingGroup);
+							System.out.println("MAI");
+							controller.getEventPerMonth(5, workingGroup);
+							System.out.println("JUIN");
+							controller.getEventPerMonth(6, workingGroup);
+							System.out.println("JUILLET");
+							controller.getEventPerMonth(7, workingGroup);
+							System.out.println("AOUT");
+							controller.getEventPerMonth(8, workingGroup);
+							System.out.println("SEPTEMBRE");
+							controller.getEventPerMonth(9, workingGroup);
+							System.out.println("OCTOBRE");
+							controller.getEventPerMonth(10, workingGroup);
+							System.out.println("NOVEMBRE");
+							controller.getEventPerMonth(11, workingGroup);
+							System.out.println("DECEMBRE ----");
+							System.out.println(controller.sortEvent(controller.getEventPerMonth(12, workingGroup)));
+							//System.out.println(controller.getEventPerMonth(12, workingGroup).toString());
 						} 
 						break;
 					///////////////////////////////////////////////////////////
