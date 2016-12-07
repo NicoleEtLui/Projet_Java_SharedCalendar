@@ -162,6 +162,7 @@ public class ShaCalModel extends Observable {
 			deleteMemberFromGroup(userName,getGroup(allGroups.keySet().toArray()[i]).getGrId());
 		}
 	}
+
 	
 	/**
 	 * Adds a grId to the list of Groups, as a regular user.
