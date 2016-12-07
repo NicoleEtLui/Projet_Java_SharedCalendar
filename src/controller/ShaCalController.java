@@ -39,7 +39,7 @@ public class ShaCalController {
 	 */
 	public Person newUser(String n, String p, String u, LocalDate d){
 			Person pers = new Person(n, p, u, d); 
-			model.addPerson(pers.getUserName(), pers);
+			model.addPersonToHashMap(pers);
 			return pers;
 	}
 	/**
@@ -47,15 +47,21 @@ public class ShaCalController {
 	 * @param s username too look for ( the key in the hashmap of ShaCalModel )
 	 * @return
 	 */
-	public boolean alreadyExist(String userName){
-		if(model.persList.containsKey(userName.trim())){
+	public boolean alreadyExistP(String userName){
+		if(model.AllPersons.containsKey(userName.trim())){
 			return true;
 		}
 		return false;
 	}
 	
+	public boolean alreadyExistGr(int grId){
+		if(model.AllGroups.containsKey(grId)){
+			return true;
+		}
+		return false;
+	}
 	public void display(String clndrOwner, String[] filter){
-		ArrayList<Event> calList = new ArrayList<Event>(model.calendarList.get(clndrOwner));
+		ArrayList<Event> calList = new ArrayList<Event>(model.AllEvents.get(clndrOwner));
 		for (Event e : calList){
 			System.out.println(e);
 		}

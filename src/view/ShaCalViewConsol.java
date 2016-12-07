@@ -15,7 +15,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 	
 	private String currentUser;
 	private int currentUserLevel;
-	private String workingGroup = null;
+	private Integer workingGroup = null;
 	
 	private String arg = null;
 	private String help = "This is the list of command. \n";
@@ -42,13 +42,11 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 		public void run() {
 			//temp: simulation de contenu existant
 			Person pe = new Person("Petit", "Martin", "N", LocalDate.of(1994, 9, 28));
-			Group gr = new Group("monGroupe", pe);
-			model.addPerson(pe.getUserName(), pe);
+			Group gr = new Group("monGroupe", pe.getUserName());
+			model.addPersonToHashMap(pe);
 			Event ev = new Event("MyPersEvent", "Mydescription", LocalDate.of(2016, 12, 04), LocalDate.of(2016, 12, 04));
 			Event ev2 = new Event("MyGroupEvent", "Mydescription", LocalDate.of(2016, 12, 04), LocalDate.of(2016, 12, 04));
-			model.addCalendar(pe.getUserName());
 			model.addEvent(pe.getUserName(), ev);
-			model.addCalendar(Integer.toString(gr.getGrId()));
 			model.addEvent(Integer.toString(gr.getGrId()), ev2);
 			
 			
@@ -56,23 +54,43 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 			while(true){
 				sc.useDelimiter("\n");
 				commandLine = sc.next().split(" ");
+				System.out.println(commandLine.length);
 				for (int i = 0; i < commandLine.length; i++){
 					commandLine[i] = commandLine[i].trim();
 				}
 				
-				switch(commandLine[0]){
+				switch(commandLine[0]) {
+					///////////////////////////////////////////////////////////
 					case "login": 
-						if(commandLine.length == 2 ){
+						if(commandLine.length == 2 ) {
 							currentUser = commandLine[1];
-							if(!controller.alreadyExist(currentUser)){
+							if(!controller.alreadyExistP(currentUser)) {
 								System.out.println("This account doesn't exist");
+								currentUser = null;
+							} else {
+								prompt = LocalDate.now().toString() + " - " + currentUser + "> ";
+								System.out.println(prompt + "Welcome " + currentUser);
 							}
-							prompt = LocalDate.now().toString() + " - " + currentUser + "> ";
-							System.out.println(prompt + "Welcome " + currentUser);
+						} else if (commandLine.length == 3) {
+							currentUser = commandLine[1];
+							if(!controller.alreadyExistP(currentUser)) {
+								System.out.println("This account doesn't exist");
+							} else {
+							workingGroup = Integer.parseInt(commandLine[2]);
+								if(!controller.alreadyExistGr(workingGroup)) {
+									System.out.println("This group doesn't exist");
+									workingGroup = null;
+								} else {
+									prompt = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "> ";
+									System.out.println(prompt + "Welcome " + currentUser);
+								}
+							}
 						} else {
-							System.out.println("wrong number of argument");
+							System.out.println(prompt + "Wrong number of argument, type help to get a list of command.");
 						}
+						
 						break;
+                    ///////////////////////////////////////////////////////////
 					case "new": 
 						if(commandLine.length == 1 ){
 							System.out.println(prompt + "Welcome, let's create your account !\nWhat's your name ?");
@@ -81,7 +99,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 							String p = sc.next();
 							System.out.println(prompt + "What's your unique username ?");
 							currentUser = sc.next();
-							while(controller.alreadyExist(currentUser)){
+							while(controller.alreadyExistP(currentUser)){
 								System.out.println(prompt + "this username already exist");
 								System.out.println(prompt + "What's your unique username ?");
 								currentUser = sc.next();
@@ -95,7 +113,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 							String p = commandLine[2];
 							currentUser = commandLine[3];
 							LocalDate d = LocalDate.parse(commandLine[4]);
-							while (controller.alreadyExist(currentUser)){
+							while (controller.alreadyExistP(currentUser)){
 								System.out.println(prompt + "this username already exist, type a unique username");
 								currentUser = sc.next().trim();
 							}
@@ -104,6 +122,8 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 						prompt = LocalDate.now().toString() + " - " + currentUser + "> ";
 						System.out.println(prompt + "Welcome " + currentUser);
 						break;
+						
+					case "" : 
 					default: System.out.println("Type help to get a list of command");
 				}
 			}

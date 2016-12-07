@@ -42,7 +42,7 @@ public class ShaCalModel extends Observable {
 		}
 	}
 	
-	//Adds an already existing Event to an already existing Group/Person.
+	//Adds an already existing Event to an already existing Group/Person calendar.
 	public static void addEvent(String creator, Event event){
 		if(event==null){
 			AllEvents.putIfAbsent(creator, new ArrayList<Event>());
