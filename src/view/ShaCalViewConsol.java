@@ -122,8 +122,18 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 						prompt = LocalDate.now().toString() + " - " + currentUser + "> ";
 						System.out.println(prompt + "Welcome " + currentUser);
 						break;
-						
-					case "" : 
+					///////////////////////////////////////////////////////////
+					case "show" : 
+						if (currentUser == null){
+							System.out.println("You are not allowed to run this command in this mode");
+						} else {
+							System.out.println("Et bim");
+						}
+					case "help" : 
+						System.out.println(help);
+						controller.help();
+						System.out.println(prompt);
+					break;
 					default: System.out.println("Type help to get a list of command");
 				}
 			}
