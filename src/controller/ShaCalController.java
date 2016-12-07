@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Set;
 
 import model.Event;
 import model.Person;
@@ -85,5 +86,18 @@ public class ShaCalController {
 	public int getUserLevel(String userName, int grId){
 		return 0;
 	}
-	
-}
+	/**
+	 * this method get all the group a person belong to.
+	 * @param userName
+	 * @return grId and the grName of the group of a person as an ArrayList 
+	 */
+	public ArrayList<String> getGroupsOfPerson(String userName){
+		ArrayList<String> grList = new ArrayList<String>(); 
+		Person tempP = model.getPerson(userName);
+		Set<Integer> setOfGr = tempP.getGroup().keySet();
+		for(int i = 0; i < setOfGr.size(); i++){
+			grList.add(ShaCalModel.getGroup(i).getGrId() + " " + ShaCalModel.getGroup(i).getGrName());
+		}
+		return grList;
+	}
+} // fin class

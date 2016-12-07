@@ -1,6 +1,7 @@
 package view;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Observer;
 import java.util.Scanner;
 
@@ -44,6 +45,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 			Person pe = new Person("Petit", "Martin", "N", LocalDate.of(1994, 9, 28));
 			Group gr = new Group("monGroupe", pe.getUserName());
 			model.addPersonToHashMap(pe);
+			model.addLink(pe.getUserName(), gr.getGrId());
 			Event ev = new Event("MyPersEvent", "Mydescription", LocalDate.of(2016, 12, 04), LocalDate.of(2016, 12, 04));
 			Event ev2 = new Event("MyGroupEvent", "Mydescription", LocalDate.of(2016, 12, 04), LocalDate.of(2016, 12, 04));
 			model.addEvent(pe.getUserName(), ev);
@@ -54,15 +56,15 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 			while(true){
 				sc.useDelimiter("\n");
 				commandLine = sc.next().split(" ");
-				System.out.println(commandLine.length);
-				for (int i = 0; i < commandLine.length; i++){
+				int clLength = commandLine.length;
+				for (int i = 0; i < clLength; i++){
 					commandLine[i] = commandLine[i].trim();
 				}
 				
 				switch(commandLine[0]) {
 					///////////////////////////////////////////////////////////
 					case "login": 
-						if(commandLine.length == 2 ) {
+						if(clLength == 2 ) {
 							currentUser = commandLine[1];
 							if(!controller.alreadyExistP(currentUser)) {
 								System.out.println("This account doesn't exist");
@@ -71,7 +73,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 								prompt = LocalDate.now().toString() + " - " + currentUser + "> ";
 								System.out.println(prompt + "Welcome " + currentUser);
 							}
-						} else if (commandLine.length == 3) {
+						} else if (clLength == 3) {
 							currentUser = commandLine[1];
 							if(!controller.alreadyExistP(currentUser)) {
 								System.out.println("This account doesn't exist");
@@ -92,7 +94,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 						break;
                     ///////////////////////////////////////////////////////////
 					case "new": 
-						if(commandLine.length == 1 ){
+						if(clLength == 1 ){
 							System.out.println(prompt + "Welcome, let's create your account !\nWhat's your name ?");
 							String n = sc.next();
 							System.out.println(prompt + "What's your firstname ?");
@@ -123,17 +125,38 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 						System.out.println(prompt + "Welcome " + currentUser);
 						break;
 					///////////////////////////////////////////////////////////
+					case "group" :
+						if (currentUser == null){
+							System.out.println("You are not allowed to run this command in this mode");
+						} else if (clLength > 2){
+							System.out.println("Wrong number of arg, type help to get a list of command");
+						} else if (clLength == 1){
+							System.out.println(controller.getGroupsOfPerson(currentUser).toString());
+						} else if (clLength == 2){
+							workingGroup = Integer.parseInt(commandLine[1]);
+							if(!controller.alreadyExistGr(workingGroup)) {
+								System.out.println("This group doesn't exist");
+								workingGroup = null;
+							} else {
+								prompt = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "> ";
+								System.out.println(prompt + "Welcome in group" + workingGroup);
+							}
+						} 
+						break;
+					///////////////////////////////////////////////////////////
 					case "show" : 
 						if (currentUser == null){
 							System.out.println("You are not allowed to run this command in this mode");
 						} else {
 							System.out.println("Et bim");
-						}
+						} 
+						break;
+					///////////////////////////////////////////////////////////
 					case "help" : 
 						System.out.println(help);
 						controller.help();
 						System.out.println(prompt);
-					break;
+						break;
 					default: System.out.println("Type help to get a list of command");
 				}
 			}
@@ -149,11 +172,6 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 			while(true){
 				commandLine = sc.next().split(" ");
 				switch (commandLine[0]){
-					case "help" : 
-						System.out.println(help);
-						controller.help();
-						System.out.println(prompt);
-					break;
 					
 					case "group" :
 							System.out.println("Vous avez demandé la commande groupe ? Veuillez patienter ...");
