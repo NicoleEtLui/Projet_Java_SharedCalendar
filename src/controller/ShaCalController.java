@@ -100,4 +100,8 @@ public class ShaCalController {
 		}
 		return grList;
 	}
+	
+	public ArrayList<String> getMembersOfGroup(int grId){
+		return model.getGroup(grId).getMembers();
+	}
 } // fin class

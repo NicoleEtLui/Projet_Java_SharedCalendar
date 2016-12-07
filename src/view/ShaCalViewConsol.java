@@ -44,6 +44,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 			//temp: simulation de contenu existant
 			Person pe = new Person("Petit", "Martin", "N", LocalDate.of(1994, 9, 28));
 			Group gr = new Group("monGroupe", pe.getUserName());
+			Group gr1 = new Group("monGroupe1");
 			model.addPersonToHashMap(pe);
 			model.addLink(pe.getUserName(), gr.getGrId());
 			Event ev = new Event("MyPersEvent", "Mydescription", LocalDate.of(2016, 12, 04), LocalDate.of(2016, 12, 04));
@@ -82,6 +83,9 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 								if(!controller.alreadyExistGr(workingGroup)) {
 									System.out.println("This group doesn't exist");
 									workingGroup = null;
+								} else if (!controller.getMembersOfGroup(workingGroup).contains(currentUser)){
+										System.out.println("You don't have access to this group");
+										workingGroup = null;
 								} else {
 									prompt = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "> ";
 									System.out.println(prompt + "Welcome " + currentUser);
@@ -137,18 +141,21 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 							if(!controller.alreadyExistGr(workingGroup)) {
 								System.out.println("This group doesn't exist");
 								workingGroup = null;
+							} else if (!controller.getMembersOfGroup(workingGroup).contains(currentUser)){
+								System.out.println("You don't have access to this group");
+								workingGroup = null;
 							} else {
-								prompt = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "> ";
-								System.out.println(prompt + "Welcome in group" + workingGroup);
+							prompt = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "> ";
+							System.out.println(prompt + "Welcome in group " + workingGroup);
 							}
-						} 
+						}
 						break;
 					///////////////////////////////////////////////////////////
 					case "show" : 
 						if (currentUser == null){
 							System.out.println("You are not allowed to run this command in this mode");
-						} else {
-							System.out.println("Et bim");
+						} else if (clLength == 1){
+							System.out.println(model.AllEvents.get(workingGroup).toString());
 						} 
 						break;
 					///////////////////////////////////////////////////////////
