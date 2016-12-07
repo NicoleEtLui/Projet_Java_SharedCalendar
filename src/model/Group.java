@@ -2,6 +2,11 @@ package model;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents a group.
+ * GrId is the unique id for a group.
+ * @author Nathan
+ */
 public class Group {
 	ShaCalModel model = new ShaCalModel();
 	/**
@@ -72,7 +77,7 @@ public class Group {
 	 * Returns a new Id for the creation of a new Group
 	 * @return Id as an int
 	 */
-	public int getNewId(){
+	private int getNewId(){
 		return ++defaultIdNumber;
 	}
 	
@@ -80,7 +85,7 @@ public class Group {
 	 * Return the current Id used in the creation of a new group
 	 * @return Id as an int
 	 */
-	public static int getCurrentId(){
+	private static int getCurrentId(){
 		return defaultIdNumber;
 	}
 	
@@ -88,7 +93,7 @@ public class Group {
 	/**
 	 * Reset the current Id to -1, to use for tests
 	 */
-	public static void resetCurrentId(){
+	protected static void resetCurrentId(){
 		defaultIdNumber = -1;
 	}
 	
@@ -98,15 +103,6 @@ public class Group {
 	 */
 	public ArrayList<String> getMembers() {
 		return members;
-	}
-	
-	/**
-	 * Returns a Person if found in the members, else return null
-	 * @param Username : The Username to be looked for as a String
-	 * @return A Person
-	 */
-	public Person getSingleMember(String userName){
-		return model.allPersons.get(userName);
 	}
 	
 	/**
@@ -156,8 +152,4 @@ public class Group {
 	public String getGrIdString(){
 		return String.valueOf(this.getGrId());
 	}
-
-	//-- METHODS -----------------------------------------------------------------------------------------
-	
-	
 }

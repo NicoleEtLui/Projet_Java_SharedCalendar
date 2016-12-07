@@ -59,6 +59,7 @@ public class Person {
 	}
 
 	//-- GETTERS & SETTERS -------------------------------------------------------------------------------
+	
 	/**
 	 * get the name of the person.
 	 * @return the name of the person
@@ -121,9 +122,4 @@ public class Person {
 	public Integer getPermission(Integer grId){
 		return this.getGroup().get(grId);
 	}
-	
-	
-	//-- METHODS -----------------------------------------------------------------------------------------
-	
-	
-} // fin class Person
+}
