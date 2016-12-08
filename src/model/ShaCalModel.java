@@ -89,7 +89,7 @@ public class ShaCalModel extends Observable {
 	 * @param userName : A String used to fetch the Person behind that userName.
 	 */
 	public void deleteMemberFromGroup(String userName, int grId){
-		getGroup(String.valueOf(grId)).getMembers().remove(userName);
+		getGroup(grId).getMembers().remove(userName);
 	}
 	
 	/**
@@ -116,9 +116,11 @@ public class ShaCalModel extends Observable {
 	 * Returns a String representation of a Person with its Groups and privileges.
 	 */
 	public String groupToStringMembers(Group group){
-		String str = "UserName : " + group.getGrName() + "\n";
+		String str = "GrName : \"" + group.getGrName() + "\"";
 		for(int i=0;i<group.getMembers().size();i++){
-			str += ">[User : " + allPersons.get(group.getMembers().get(i)).getUserName() + "| Lvl : " + allPersons.get(group.getMembers().get(i)).getPermission(group.getGrId()) + "]\n";
+			str += "\n>[User : " + allPersons.get(group.getMembers().get(i)).getUserName()
+					+ " | Lvl : " + allPersons.get(group.getMembers().get(i)).getPermission(group.getGrId())
+					+ "]";
 		}
 		return str;
 	}
@@ -191,9 +193,11 @@ public class ShaCalModel extends Observable {
 	 * Returns a String representation of a Person with its Groups and privileges.
 	 */
 	public String personToStringGroups(Person person){
-		String str = "UserName : " + person.getUserName() + "\n";
+		String str = "UserName : " + person.getUserName();
 		for(int i=0;i<person.getGroup().size();i++){
-			str += ">[Group : " + allGroups.get(person.getGroup().keySet().toArray()[i]).getGrName() + "| Lvl : " + person.getGroup().get(i) + "]\n";
+			str += "\n>[Group : " + allGroups.get(person.getGroup().keySet().toArray()[i]).getGrName()
+					+ " | Lvl : " + person.getGroup().get(i)
+					+ "]";
 		}
 		return str;
 	}
@@ -272,12 +276,20 @@ public class ShaCalModel extends Observable {
 	}
 	
 	/**
-	 * Remove an Event from the creator's list.
+	 * Removes an Event from the creator's list.
 	 * @param creator : The grId/userName to remove the Event from.
 	 * @param event : The Event to be removed from the list of the creator.
 	 */
 	public void removeEvent(String creator, Event event){
 		allEvents.get(creator).remove(event);
+	}
+	
+	/**
+	 * Removes all event from a creator.
+	 * @param creator : The grId/userName of the list to remove.
+	 */
+	public void removeAllEvent(String creator){
+		allEvents.remove(creator);
 	}
 
 	//-- GENERAL -----------------------------------------------------------------------------------------
@@ -293,7 +305,7 @@ public class ShaCalModel extends Observable {
 	}
 	
 	/**
-	 * Remove a Person from a Group, by removing the link between them.
+	 * Removes a Person from a Group, by removing the link between them.
 	 * @param userName : The userName of the Person to remove.
 	 * @param grId : The grId of the Group to get removed from.
 	 */
@@ -303,7 +315,7 @@ public class ShaCalModel extends Observable {
 	}
 	
 	/**
-	 * Reset all the HashMaps and the grId, to start full fresh.
+	 * Resets all the HashMaps and the grId, to start full fresh.
 	 */
 	public void resetAllHashMap() {
 		allPersons.clear();
