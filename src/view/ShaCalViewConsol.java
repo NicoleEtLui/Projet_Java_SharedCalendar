@@ -48,7 +48,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 			model.addPersonToHashMap(pe);
 			model.addLink(pe.getUserName(), gr.getGrId());
 			Event ev = new Event("MyPersEvent", "Mydescription", LocalDate.of(2016, 12, 04), LocalDate.of(2016, 12, 04));
-			Event ev2 = new Event("MyGroupEvent", "Mydescription", LocalDate.of(2016, 12, 04), LocalDate.of(2016, 12, 04));
+			Event ev2 = new Event("MyGroupEvent", "Mydescription", LocalDate.of(2016, 9, 04), LocalDate.of(2016, 12, 04));
 			model.addEvent(pe.getUserName(), ev);
 			model.addEvent(Integer.toString(gr.getGrId()), ev2);
 			
@@ -104,14 +104,14 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 							System.out.println(prompt + "What's your firstname ?");
 							String p = sc.next();
 							System.out.println(prompt + "What's your unique username ?");
-							currentUser = sc.next();
+							currentUser = sc.next().trim();
 							while(controller.alreadyExistP(currentUser)){
 								System.out.println(prompt + "this username already exist");
 								System.out.println(prompt + "What's your unique username ?");
-								currentUser = sc.next();
+								currentUser = sc.next().trim();
 							}
 							System.out.println(prompt + "What's your birthday ? as yyyy-mm-dd");
-							LocalDate d = LocalDate.parse(sc.next());
+							LocalDate d = LocalDate.parse(sc.next().trim());
 							controller.newUser(n, p, currentUser, d);
 						} else {
 							
@@ -151,7 +151,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 						}
 						break;
 					///////////////////////////////////////////////////////////
-					case "show" : 
+					/*case "show" : 
 						if (currentUser == null){
 							System.out.println("You are not allowed to run this command in this mode");
 						} else if (clLength == 1){
@@ -173,15 +173,16 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 							controller.getEventPerMonth(8, workingGroup);
 							System.out.println("SEPTEMBRE");
 							controller.getEventPerMonth(9, workingGroup);
+							System.out.println(controller.getEventPerYear(LocalDate.now().getYear(), workingGroup));
 							System.out.println("OCTOBRE");
 							controller.getEventPerMonth(10, workingGroup);
 							System.out.println("NOVEMBRE");
 							controller.getEventPerMonth(11, workingGroup);
 							System.out.println("DECEMBRE ----");
-							System.out.println(controller.sortEvent(controller.getEventPerMonth(12, workingGroup)));
+							System.out.println(controller.getEventPerYear(LocalDate.now().getYear(), workingGroup));
 							//System.out.println(controller.getEventPerMonth(12, workingGroup).toString());
 						} 
-						break;
+						break;*/
 					///////////////////////////////////////////////////////////
 					case "help" : 
 						System.out.println(help);
