@@ -48,8 +48,9 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 			model.addPersonToHashMap(pe);
 			model.addLink(pe.getUserName(), gr.getGrId());
 			Event ev = new Event("MyPersEvent", "Mydescription", LocalDate.of(2016, 12, 04), LocalDate.of(2016, 12, 04));
-			Event ev2 = new Event("MyGroupEvent", "Mydescription", LocalDate.of(2016, 9, 04), LocalDate.of(2016, 12, 04));
+			Event ev2 = new Event("MyGroupEvent", "Mydescription", LocalDate.of(2017, 9, 04), LocalDate.of(2016, 12, 04));
 			model.addEvent(pe.getUserName(), ev);
+			model.addEvent(pe.getUserName(), ev2);
 			model.addEvent(Integer.toString(gr.getGrId()), ev2);
 			
 			
@@ -151,38 +152,13 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 						}
 						break;
 					///////////////////////////////////////////////////////////
-					/*case "show" : 
+					case "show" : 
 						if (currentUser == null){
 							System.out.println("You are not allowed to run this command in this mode");
 						} else if (clLength == 1){
-							System.out.println("JANVIER");
-							controller.getEventPerMonth(1, workingGroup);
-							System.out.println("FEVRIER");
-							controller.getEventPerMonth(2, workingGroup);
-							System.out.println("MARS");
-							controller.getEventPerMonth(3, workingGroup);
-							System.out.println("AVRIL");
-							controller.getEventPerMonth(4, workingGroup);
-							System.out.println("MAI");
-							controller.getEventPerMonth(5, workingGroup);
-							System.out.println("JUIN");
-							controller.getEventPerMonth(6, workingGroup);
-							System.out.println("JUILLET");
-							controller.getEventPerMonth(7, workingGroup);
-							System.out.println("AOUT");
-							controller.getEventPerMonth(8, workingGroup);
-							System.out.println("SEPTEMBRE");
-							controller.getEventPerMonth(9, workingGroup);
-							System.out.println(controller.getEventPerYear(LocalDate.now().getYear(), workingGroup));
-							System.out.println("OCTOBRE");
-							controller.getEventPerMonth(10, workingGroup);
-							System.out.println("NOVEMBRE");
-							controller.getEventPerMonth(11, workingGroup);
-							System.out.println("DECEMBRE ----");
-							System.out.println(controller.getEventPerYear(LocalDate.now().getYear(), workingGroup));
-							//System.out.println(controller.getEventPerMonth(12, workingGroup).toString());
+							System.out.println(controller.getEventsByFilter(LocalDate.now().getYear(), 12, "month", Integer.toString(workingGroup)));
 						} 
-						break;*/
+						break;
 					///////////////////////////////////////////////////////////
 					case "help" : 
 						System.out.println(help);

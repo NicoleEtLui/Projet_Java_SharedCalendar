@@ -105,12 +105,17 @@ public class ShaCalController {
 		return model.getGroup(grId).getMembers();
 	}
 	
-	public String getEventsByFilter(int a, int b, String filter, String id) {
+	public ArrayList<Event> getEventsByFilter(int a, int b, String filter, String id) {
 		ArrayList<Event> eventsByFilter = new ArrayList<Event>();
-		for (Event e : model.AllEvents.get(id)){
-			if(e.getStartDate().getMonthValue() == a){
-				eventsByFilter.add(e);
-			} 
+		switch(filter){
+			case "month" :
+				for (Event e : model.AllEvents.get(id)){
+					if(e.getStartDate().getMonthValue() == b){
+						eventsByFilter.add(e);
+					} 
+				return eventsByFilter;
+		}
+		
 			
 		}
 		return null;
