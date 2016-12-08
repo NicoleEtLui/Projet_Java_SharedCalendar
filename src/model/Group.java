@@ -2,13 +2,35 @@ package model;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents a group.
+ * GrId is the unique id for a group.
+ * @author Nathan
+ */
 public class Group {
-	
+	ShaCalModel model = new ShaCalModel();
+	/**
+	 * The value used in the Id creator.
+	 */
 	private static int defaultIdNumber = -1;
+	/**
+	 * The Id of the group.
+	 */
 	private int grId;
+	/**
+	 * The name of the group.
+	 */
 	private String grName;
+	/**
+	 * The visibility of the group.
+	 */
 	private boolean isPublic;
+	/**
+	 * The list of members as an ArrayList of String of userName.
+	 */
 	private ArrayList<String> members;
+
+	//-- CONSTRUCTOR -------------------------------------------------------------------------------------
 	
 	/**
 	 * Default constructor for group object
@@ -22,8 +44,7 @@ public class Group {
 		this.isPublic = IsPublic;
 		this.members = new ArrayList<String>();
 		if(Members != null)this.members.addAll(Members);
-		ShaCalModel.addEvent(String.valueOf(grId),null);
-		ShaCalModel.addGroupToHashMap(this);
+		model.addGroupToHashMap(this);
 	}
 	
 	public Group(String grName, String FirstMember){
@@ -32,8 +53,7 @@ public class Group {
 		this.isPublic = true;
 		this.members = new ArrayList<String>();
 		this.members.add(FirstMember);
-		ShaCalModel.addEvent(String.valueOf(grId),null);
-		ShaCalModel.addGroupToHashMap(this);
+		model.addGroupToHashMap(this);
 	}
 
 	public Group(String grName){
@@ -41,8 +61,6 @@ public class Group {
 		this.grName = grName;
 		this.isPublic = true;
 		this.members = new ArrayList<String>();
-		ShaCalModel.addEvent(String.valueOf(grId),null);
-		ShaCalModel.addGroupToHashMap(this);
 	}
 	
 	public Group() {
@@ -50,34 +68,16 @@ public class Group {
 		this.grName = "UnknownGroup" + getCurrentId();
 		this.isPublic = true;
 		this.members = new ArrayList<String>();
-		ShaCalModel.addEvent(String.valueOf(grId),null);
-		ShaCalModel.addGroupToHashMap(this);
+		model.addGroupToHashMap(this);
 	}
-	
-	/**
-	 * New default toString method
-	 * @return The representation of a group, based on its Id, name, isPublic, calendar and members
-	 */
-	@Override
-	public String toString() {
-		return "[Group] Id : \""
-				+ this.grId
-				+ "\" Name : \""
-				+ this.grName
-				+ "\" IsPublic : "
-				+ this.isPublic
-				+ "\n" 
-				+ "Number of members : "
-				+ this.getMembers().size() 
-				+ " | Number of events : " 
-				+ ShaCalModel.getEvent(getGrIdString()).size();
-	}
+
+	//-- GETTERS & SETTERS -------------------------------------------------------------------------------
 	
 	/**
 	 * Returns a new Id for the creation of a new Group
 	 * @return Id as an int
 	 */
-	public int getNewId(){
+	private int getNewId(){
 		return ++defaultIdNumber;
 	}
 	
@@ -85,20 +85,16 @@ public class Group {
 	 * Return the current Id used in the creation of a new group
 	 * @return Id as an int
 	 */
-	public static int getCurrentId(){
+	private static int getCurrentId(){
 		return defaultIdNumber;
 	}
 	
-	public static void resetCurrentId(){
-		defaultIdNumber = -1;
-	}
 	
 	/**
-	 * [ TODO ]
-	 * @param Members An ArrayList of Persons to alert
+	 * Reset the current Id to -1, to use for tests
 	 */
-	public void alertMembers(ArrayList<String> Members){
-		// Handled elsewhere ?
+	protected static void resetCurrentId(){
+		defaultIdNumber = -1;
 	}
 	
 	/**
@@ -107,15 +103,6 @@ public class Group {
 	 */
 	public ArrayList<String> getMembers() {
 		return members;
-	}
-	
-	/**
-	 * Returns a Person if found in the members, else return null
-	 * @param Username : The Username to be looked for as a String
-	 * @return A Person
-	 */
-	public Person getSingleMember(String userName){
-		return ShaCalModel.AllPersons.get(userName);
 	}
 	
 	/**
@@ -156,30 +143,6 @@ public class Group {
 	 */
 	public void setIsPublic(boolean isPublic) {
 		this.isPublic = isPublic;
-	}
-	
-	/**
-	 * Compare a Group to another on the basis of their unique grId.
-	 * @param group : A Group to be compared to.
-	 * @return The equality between two Groups as a boolean.
-	 */
-	public boolean equals(Group group){
-		return (this.grId == group.grId);
-	}
-	/**
-	 * Adds an userName to the list of members.
-	 * @param userName : A String used to fetch the Person behind that userName.
-	 */
-	public void addMemberToGroup(String userName){
-		members.add(userName);
-	}
-	
-	/**
-	 * Removes an userName from the list of members.
-	 * @param userName : A String used to fetch the Person behind that userName.
-	 */
-	public void deleteMemberFromGroup(String userName){
-		members.remove(userName);
 	}
 	
 	/**
