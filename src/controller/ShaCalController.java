@@ -1,13 +1,12 @@
 package controller;
 
-import java.awt.List;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.Set;
 
 import model.Event;
@@ -49,20 +48,20 @@ public class ShaCalController {
 	 * @return
 	 */
 	public boolean alreadyExistP(String userName){
-		if(model.AllPersons.containsKey(userName.trim())){
+		if(model.allPersons.containsKey(userName.trim())){
 			return true;
 		}
 		return false;
 	}
 	
 	public boolean alreadyExistGr(int grId){
-		if(model.AllGroups.containsKey(grId)){
+		if(model.allGroups.containsKey(grId)){
 			return true;
 		}
 		return false;
 	}
 	public void display(String clndrOwner, String[] filter){
-		ArrayList<Event> calList = new ArrayList<Event>(model.AllEvents.get(clndrOwner));
+		ArrayList<Event> calList = new ArrayList<Event>(model.allEvents.get(clndrOwner));
 		for (Event e : calList){
 			System.out.println(e);
 		}
@@ -96,7 +95,7 @@ public class ShaCalController {
 		Person tempP = model.getPerson(userName);
 		Set<Integer> setOfGr = tempP.getGroup().keySet();
 		for(int i = 0; i < setOfGr.size(); i++){
-			grList.add(ShaCalModel.getGroup(i).getGrId() + " " + ShaCalModel.getGroup(i).getGrName());
+			grList.add(model.getGroup(i).getGrId() + " " + model.getGroup(i).getGrName());
 		}
 		return grList;
 	}
@@ -105,38 +104,22 @@ public class ShaCalController {
 		return model.getGroup(grId).getMembers();
 	}
 	
-	public ArrayList<Event> getEventsByFilter(int a, int b, String filter, String id) {
-		ArrayList<Event> eventsByFilter = new ArrayList<Event>();
-		switch(filter){
-			case "month" :
-				for (Event e : model.AllEvents.get(id)){
-					if(e.getStartDate().getMonthValue() == b){
-						eventsByFilter.add(e);
-					} 
-				return eventsByFilter;
-		}
+	public void getEventsOfDay(int year, int month, int day, String filter){
+	
+		for (Event e : model.allEvents.get(filter)){
+			if (e.getStartDate().getDayOfMonth() == day && e.getStartDate().getMonthValue() == month && e.getStartDate().getYear() == year){
+				System.out.println(e.getStartHour() + "\n"
+						+ "\t" + e.getTitle() + " " + e.getDescription());
+			}
+		};
+	}
+	public void getEventsOfMonth(int year, int month, String filter){
 		
-			
+		for (Event e : model.allEvents.get(filter)){
+			if (e.getStartDate().getMonthValue() == month && e.getStartDate().getYear() == year ){
+				System.out.println(e.getStartDate() + "\n"
+						+ "\t" + e.getTitle() + " " + e.getDescription());
+			}
 		}
-		return null;
-	}
-	
-	public ArrayList<Event> getEventPerDay(int month, int gr) {
-		ArrayList<Event> eventPerMonth = new ArrayList<Event>();
-		for (Event e : model.AllEvents.get(Integer.toString(gr))){
-			if(e.getStartDate().getMonthValue() == month){
-				eventPerMonth.add(e);
-			} 
-			return eventPerMonth;
-		}
-		return null;
-	}
-	
-	public String sortEventPerMonth(ArrayList<Event> event, int month) {
-		String s = "";
-		for (Event e : event){
-			s = "\t" + e.getStartDate() + " " +  e.getTitle() + "\n";
-		}
-		return s;
 	}
 } // fin class

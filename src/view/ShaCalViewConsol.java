@@ -1,6 +1,8 @@
 package view;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.Month;
 import java.util.HashMap;
 import java.util.Observer;
 import java.util.Scanner;
@@ -27,9 +29,25 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 	private String prompt3 = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "$ ";
 	private String prompt4 = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "# ";
 	
+	private int currentYear = LocalDate.now().getYear();
+	private int currentMonth = LocalDate.now().getMonthValue();
+	private int currentDay = LocalDate.now().getDayOfMonth();
+	
 	private String commandLine[];
+	private String filter = null;
 	
-	
+	public String getCurrentUser() {
+		return currentUser;
+	}
+
+	public int getCurrentUserLevel() {
+		return currentUserLevel;
+	}
+
+	public Integer getWorkingGroup() {
+		return workingGroup;
+	}
+
 	public ShaCalViewConsol(ShaCalModel model, ShaCalController controller) {
 		super(model, controller);
 		sc = new Scanner(System.in);
@@ -46,12 +64,22 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 			Group gr = new Group("monGroupe", pe.getUserName());
 			Group gr1 = new Group("monGroupe1");
 			model.addPersonToHashMap(pe);
+			model.addGroupToHashMap(gr);
+			model.addGroupToHashMap(gr1);
 			model.addLink(pe.getUserName(), gr.getGrId());
-			Event ev = new Event("MyPersEvent", "Mydescription", LocalDate.of(2016, 12, 04), LocalDate.of(2016, 12, 04));
-			Event ev2 = new Event("MyGroupEvent", "Mydescription", LocalDate.of(2017, 9, 04), LocalDate.of(2016, 12, 04));
+			Event ev = new Event("MyPersEvent", "Mydescription", "Ma maison", LocalDate.now(), LocalDate.now(), "11:00:00", "12:00:00");
+			Event ev1 = new Event("MyPersEvent1", "Mydescription", "Ma maison", LocalDate.now(), LocalDate.now(), "12:15:00", "13:00:00");
+			Event ev2 = new Event("MyGroup&PersEvent", "Mydescription", "Dans la rue",  LocalDate.of(2017, 9, 04), LocalDate.of(2017, 9, 04), "10:15:00", "19:00:00");
+			Event ev3 = new Event("MyGroup&PersEvent1", "Mydescription", "Ma maison", LocalDate.now(), LocalDate.now(), "17:15:00", "18:00:00");
 			model.addEvent(pe.getUserName(), ev);
 			model.addEvent(pe.getUserName(), ev2);
+			model.addEvent(pe.getUserName(), ev1);
 			model.addEvent(Integer.toString(gr.getGrId()), ev2);
+			model.addEvent(Integer.toString(gr.getGrId()), ev3);
+			
+			/*System.out.println(model.allEvents.toString());
+			System.out.println(model.allGroups.toString());
+			System.out.println(model.allPersons.toString());*/
 			
 			
 			//Login
@@ -74,6 +102,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 							} else {
 								prompt = LocalDate.now().toString() + " - " + currentUser + "> ";
 								System.out.println(prompt + "Welcome " + currentUser);
+								filter = currentUser;
 							}
 						} else if (clLength == 3) {
 							currentUser = commandLine[1];
@@ -90,6 +119,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 								} else {
 									prompt = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "> ";
 									System.out.println(prompt + "Welcome " + currentUser);
+									filter = workingGroup.toString();
 								}
 							}
 						} else {
@@ -128,6 +158,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 						}
 						prompt = LocalDate.now().toString() + " - " + currentUser + "> ";
 						System.out.println(prompt + "Welcome " + currentUser);
+						filter = currentUser;
 						break;
 					///////////////////////////////////////////////////////////
 					case "group" :
@@ -148,6 +179,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 							} else {
 							prompt = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "> ";
 							System.out.println(prompt + "Welcome in group " + workingGroup);
+							filter = workingGroup.toString();
 							}
 						}
 						break;
@@ -156,8 +188,55 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 						if (currentUser == null){
 							System.out.println("You are not allowed to run this command in this mode");
 						} else if (clLength == 1){
-							System.out.println(controller.getEventsByFilter(LocalDate.now().getYear(), 12, "month", Integer.toString(workingGroup)));
-						} 
+							controller.getEventsOfDay(currentYear, currentMonth, currentDay, filter);
+						} else {
+							switch(commandLine[1]){
+							case "month" :
+								if(clLength == 2){ // show month
+									LocalDate workingDate = LocalDate.of(currentYear, currentMonth, 1);
+									Month workingMonth = Month.of(currentMonth);
+									int nbDaysOfMonth = workingMonth.length(workingDate.isLeapYear());
+									for (int i = 1; i <= nbDaysOfMonth ; i++){
+										System.out.println("DAY " + i +"\n\t");
+										controller.getEventsOfDay(currentYear, currentMonth, i, filter);
+									}
+								} else if (clLength == 3){ // show month [month]
+									LocalDate workingDate = LocalDate.of(currentYear, 1, 1);
+									Month workingMonth = Month.of(Integer.parseInt(commandLine[2]));
+									int nbDaysOfMonth = workingMonth.length(workingDate.isLeapYear());
+									for (int i = 1; i <= nbDaysOfMonth; i++){
+										System.out.println("DAY " + i +"\n\t");
+										controller.getEventsOfDay(currentYear, Integer.parseInt(commandLine[2]), i, filter);
+									}
+									
+								} else if (clLength == 4){
+									System.out.println("You typed show month" + commandLine[2] + commandLine[3]);
+								} else {
+									System.out.println("Wrong number of arguments");
+								}
+								break;
+							case "year" : 
+								if(clLength == 2){
+									System.out.println("You typed show year");
+								} else if (clLength == 3){
+									System.out.println("You typed show year" + commandLine[2]);
+								}  else {
+									System.out.println("Wrong number of arguments");
+								}
+								break;
+							default: 
+								//miss a method to check if it is well an int that as been wrote
+								if(clLength == 2){
+									System.out.println("You typed show" + commandLine[1]);
+								} else if (clLength == 3 ){
+									System.out.println("You typed show" + commandLine[1] + commandLine[2]);
+								} else if (clLength == 4 ){
+									System.out.println("You typed show" + commandLine[1] + commandLine[2] + commandLine[4]);
+								} else {
+									System.out.println("wrong number of arguments");
+								}
+							}
+						}
 						break;
 					///////////////////////////////////////////////////////////
 					case "help" : 
@@ -168,36 +247,6 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 					default: System.out.println("Type help to get a list of command");
 				}
 			}
-			
-			/*
-			//transition///////////////////////////////////////////////////////
-			workingGroup = currentUser;
-			prompt = LocalDate.now().toString() + " - " + currentUser + "> ";
-			System.out.println(prompt + "Welcome " + currentUser);
-			System.out.println(prompt + "Press help to get a list of all the command");
-			
-			//interaction//////////////////////////////////////////////////////
-			while(true){
-				commandLine = sc.next().split(" ");
-				switch (commandLine[0]){
-					
-					case "group" :
-							System.out.println("Vous avez demandé la commande groupe ? Veuillez patienter ...");
-						break;
-						
-					case "show" : System.out.println(prompt + "Your calendar: \n" );
-						controller.display(workingGroup, commandLine);
-						arg = sc.next();
-						if(arg != null){
-							System.out.println("Une liste d'évènements depending on a filter");
-							controller.display(workingGroup, commandLine);
-							arg = null;
-						};
-						break;
-					default  : System.out.println(prompt + "Unrecognized command");
-				}
-			
-			}*/
 		}
 	}
 }
