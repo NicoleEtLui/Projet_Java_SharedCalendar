@@ -104,22 +104,34 @@ public class ShaCalController {
 		return model.getGroup(grId).getMembers();
 	}
 	
-	public void getEventsOfDay(int year, int month, int day, String filter){
-	
+	public ArrayList<Event> getEventsOfDay(int year, int month, int day, String filter){
+		ArrayList<Event> eventsOfDay = new ArrayList<Event>();
 		for (Event e : model.allEvents.get(filter)){
-			if (e.getStartDate().getDayOfMonth() == day && e.getStartDate().getMonthValue() == month && e.getStartDate().getYear() == year){
-				System.out.println(e.getStartHour() + "\n"
-						+ "\t" + e.getTitle() + " " + e.getDescription());
-			}
-		};
-	}
-	public void getEventsOfMonth(int year, int month, String filter){
-		
-		for (Event e : model.allEvents.get(filter)){
-			if (e.getStartDate().getMonthValue() == month && e.getStartDate().getYear() == year ){
-				System.out.println(e.getStartDate() + "\n"
-						+ "\t" + e.getTitle() + " " + e.getDescription());
+			if ((e.getStartDate().getDayOfMonth() == day) && (e.getStartDate().getMonthValue() == month) && (e.getStartDate().getYear() == year)){
+				eventsOfDay.add(e);
 			}
 		}
+		return eventsOfDay;
+	}
+	public ArrayList<Event> getEventsOfMonth(int year, int month, String filter){
+		ArrayList<Event> eventsOfMonth = new ArrayList<Event>();
+		for (Event e : model.allEvents.get(filter)){
+			if (e.getStartDate().getMonthValue() == month && e.getStartDate().getYear() == year ){
+				eventsOfMonth.add(e);
+			}
+		}
+		return eventsOfMonth;
+	}
+	
+	public String EventToStringBrief(ArrayList<Event> E){
+		String eventBrief = "";
+		for (Event e : E){
+			eventBrief += e.getStartHour()+ "\t" + e.getTitle() + " " + e.getDescription() + "\n  " + e.getEndHour() + "\n";
+		}
+		return eventBrief;
+	}
+	
+	public String EventToStringDetail(){
+		return "not yet implemented";
 	}
 } // fin class

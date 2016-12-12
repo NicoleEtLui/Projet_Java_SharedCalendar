@@ -2,6 +2,8 @@ package view;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.format.TextStyle;
+import java.util.Locale;
 import java.util.Observer;
 import java.util.Scanner;
 
@@ -30,6 +32,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 	private int currentYear = LocalDate.now().getYear();
 	private int currentMonth = LocalDate.now().getMonthValue();
 	private int currentDay = LocalDate.now().getDayOfMonth();
+	private Locale locale = new Locale("en");
 	
 	private String commandLine[];
 	private String filter = null;
@@ -186,7 +189,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 						if (currentUser == null){
 							System.out.println("You are not allowed to run this command in this mode");
 						} else if (clLength == 1){
-							controller.getEventsOfDay(currentYear, currentMonth, currentDay, filter);
+							System.out.println(controller.EventToStringBrief(controller.getEventsOfDay(currentYear, currentMonth, currentDay, filter)));
 						} else {
 							switch(commandLine[1]){
 							case "month" :
@@ -195,46 +198,62 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 									Month workingMonth = Month.of(currentMonth);
 									int nbDaysOfMonth = workingMonth.length(workingDate.isLeapYear());
 									for (int i = 1; i <= nbDaysOfMonth ; i++){
-										System.out.println("DAY " + i +"\n\t");
-										controller.getEventsOfDay(currentYear, currentMonth, i, filter);
+										if(!controller.getEventsOfDay(currentYear,currentMonth,  i, filter).isEmpty()){
+											System.out.println("DAY " + i );
+											System.out.println(controller.EventToStringBrief(controller.getEventsOfDay(currentYear, currentMonth, i, filter)));
+										} 
 									}
 								} else if (clLength == 3){ // show month [month]
 									LocalDate workingDate = LocalDate.of(currentYear, 1, 1);
 									Month workingMonth = Month.of(Integer.parseInt(commandLine[2]));
 									int nbDaysOfMonth = workingMonth.length(workingDate.isLeapYear());
 									for (int i = 1; i <= nbDaysOfMonth; i++){
-										System.out.println("DAY " + i +"\n\t");
-										controller.getEventsOfDay(currentYear, Integer.parseInt(commandLine[2]), i, filter);
+										if(!controller.getEventsOfDay(currentYear,Integer.parseInt(commandLine[2]),  i, filter).isEmpty()){
+											System.out.println("DAY " + i);
+											System.out.println(controller.EventToStringBrief(controller.getEventsOfDay(currentYear, Integer.parseInt(commandLine[2]), i, filter)));
+										} 
 									}
 								} else if (clLength == 4){//show month [month] [year]
 									LocalDate workingDate = LocalDate.of(Integer.parseInt(commandLine[3]), 1, 1);
 									Month workingMonth = Month.of(Integer.parseInt(commandLine[2]));
 									int nbDaysOfMonth = workingMonth.length(workingDate.isLeapYear());
 									for (int i = 1; i <= nbDaysOfMonth; i++){
-										System.out.println("DAY " + i +"\n\t");
-										controller.getEventsOfDay(currentYear, Integer.parseInt(commandLine[2]), i, filter);
+										if(!controller.getEventsOfDay(Integer.parseInt(commandLine[3]), Integer.parseInt(commandLine[2]),  i, filter).isEmpty()){
+											System.out.println("DAY " + i );
+											System.out.println(controller.EventToStringBrief(controller.getEventsOfDay(Integer.parseInt(commandLine[3]), Integer.parseInt(commandLine[2]), i, filter)));
+										}
 									}
 								} else {
 									System.out.println("Wrong number of arguments");
 								}
 								break;
 							case "year" : 
-								if(clLength == 2){
-									System.out.println("You typed show year");
-								} else if (clLength == 3){
+								if(clLength == 2){// show year
+									for (int i = 1; i <= 12; i++){
+										if(!controller.getEventsOfMonth(currentYear, i, filter).isEmpty()){
+											System.out.println(Month.of(i));
+											System.out.println(controller.getEventsOfMonth(currentYear, i, filter).size() + " events");
+										} 
+									}
+								} else if (clLength == 3){ // show year [year]
 									System.out.println("You typed show year" + commandLine[2]);
+									for (int i = 1; i <= 12; i++){
+										if(!controller.getEventsOfMonth(Integer.parseInt(commandLine[2]), i, filter).isEmpty()){
+											System.out.println(Month.of(i));
+											System.out.println(controller.getEventsOfMonth(Integer.parseInt(commandLine[2]), i, filter).size() + " events");
+										} 
+									}
 								}  else {
 									System.out.println("Wrong number of arguments");
 								}
 								break;
 							default: 
-								//miss a method to check if it is well an int that as been wrote
-								if(clLength == 2){
-									System.out.println("You typed show" + commandLine[1]);
-								} else if (clLength == 3 ){
-									System.out.println("You typed show" + commandLine[1] + commandLine[2]);
-								} else if (clLength == 4 ){
-									System.out.println("You typed show" + commandLine[1] + commandLine[2] + commandLine[4]);
+								if(clLength == 2){//show [day]
+									System.out.println(controller.EventToStringBrief(controller.getEventsOfDay(currentYear, currentMonth, Integer.parseInt(commandLine[1]), filter)));
+								} else if (clLength == 3){//show [day] [month]
+									System.out.println(controller.EventToStringBrief(controller.getEventsOfDay(currentYear, Integer.parseInt(commandLine[2]), Integer.parseInt(commandLine[1]), filter)));
+								} else if (clLength == 4){//show [day] [month] [year]
+									System.out.println(controller.EventToStringBrief(controller.getEventsOfDay(Integer.parseInt(commandLine[3]), Integer.parseInt(commandLine[2]), Integer.parseInt(commandLine[1]), filter)));
 								} else {
 									System.out.println("wrong number of arguments");
 								}
