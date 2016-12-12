@@ -1,9 +1,7 @@
 package view;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.Month;
-import java.util.HashMap;
 import java.util.Observer;
 import java.util.Scanner;
 
@@ -208,9 +206,14 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 										System.out.println("DAY " + i +"\n\t");
 										controller.getEventsOfDay(currentYear, Integer.parseInt(commandLine[2]), i, filter);
 									}
-									
-								} else if (clLength == 4){
-									System.out.println("You typed show month" + commandLine[2] + commandLine[3]);
+								} else if (clLength == 4){//show month [month] [year]
+									LocalDate workingDate = LocalDate.of(Integer.parseInt(commandLine[3]), 1, 1);
+									Month workingMonth = Month.of(Integer.parseInt(commandLine[2]));
+									int nbDaysOfMonth = workingMonth.length(workingDate.isLeapYear());
+									for (int i = 1; i <= nbDaysOfMonth; i++){
+										System.out.println("DAY " + i +"\n\t");
+										controller.getEventsOfDay(currentYear, Integer.parseInt(commandLine[2]), i, filter);
+									}
 								} else {
 									System.out.println("Wrong number of arguments");
 								}
