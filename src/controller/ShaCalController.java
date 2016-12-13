@@ -10,10 +10,13 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import model.Event;
+import model.Group;
 import model.Person;
 import model.ShaCalModel;
 import view.ShaCalView;
 import view.ShaCalViewConsol;
+import view.press;
+import view.to;
 
 public class ShaCalController {
 	private ShaCalModel model;
@@ -42,6 +45,12 @@ public class ShaCalController {
 			model.addPersonToHashMap(pers);
 			return pers;
 	}
+	
+	//Event(String title, String description, String location, LocalDate startDate, LocalDate endDate, String startHour, String endHour, Group group)
+	public Event newEvent(String t, String d, String l, LocalDate sD, LocalDate eD, String sH, String eH, Group g){
+		Event e = new Event(t, d, l, sD, eD, sH, eH, g);
+		model.addEvent(g.getGrIdString(), e);
+	}
 	/**
 	 * this method check if a username already exist.
 	 * @param s username too look for ( the key in the hashmap of ShaCalModel )
@@ -60,13 +69,6 @@ public class ShaCalController {
 		}
 		return false;
 	}
-	public void display(String clndrOwner, String[] filter){
-		ArrayList<Event> calList = new ArrayList<Event>(model.allEvents.get(clndrOwner));
-		for (Event e : calList){
-			System.out.println(e);
-		}
-	}
-
 
 	public void help() {
 		try {
@@ -82,9 +84,6 @@ public class ShaCalController {
 		}
 	}
 	
-	public int getUserLevel(String userName, int grId){
-		return 0;
-	}
 	/**
 	 * this method get all the group a person belong to.
 	 * @param userName
@@ -133,5 +132,11 @@ public class ShaCalController {
 	
 	public String EventToStringDetail(){
 		return "not yet implemented";
+	}
+	
+	public int getUserPermission(String username, int grId){
+		Person tempPers = model.allPersons.get(username);
+		tempPers.getPermission(grId);
+		return 0;
 	}
 } // fin class
