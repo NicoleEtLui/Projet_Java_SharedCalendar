@@ -22,9 +22,21 @@ public class Event {
 	private LocalTime startHour;
 	private LocalTime endHour;
 	private Group group;
+	private String creator;
 	
 	
 	// CONSTRUCTORS -----------------------------------------------------------
+	
+	public Event(String title, String description, String location, LocalDate startDate, LocalDate endDate, String startHour, String endHour, String creator){
+		this.title = title;
+		this.description = description;
+		this.location = location;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.startHour = LocalTime.parse(startHour);
+		this.endHour = LocalTime.parse(endHour);
+		this.creator = creator;
+	}
 	
 	/**
 	 * constructor with all attributes.
@@ -332,4 +344,9 @@ public class Event {
 	public void setGroup(Group group) {
 		this.group = group;
 	}
+
+	public String getCreator() {
+		return creator;
+	}
+	
 }

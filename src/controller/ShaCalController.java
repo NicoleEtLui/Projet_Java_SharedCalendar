@@ -15,8 +15,6 @@ import model.Person;
 import model.ShaCalModel;
 import view.ShaCalView;
 import view.ShaCalViewConsol;
-import view.press;
-import view.to;
 
 public class ShaCalController {
 	private ShaCalModel model;
@@ -46,10 +44,17 @@ public class ShaCalController {
 			return pers;
 	}
 	
-	//Event(String title, String description, String location, LocalDate startDate, LocalDate endDate, String startHour, String endHour, Group group)
-	public Event newEvent(String t, String d, String l, LocalDate sD, LocalDate eD, String sH, String eH, Group g){
-		Event e = new Event(t, d, l, sD, eD, sH, eH, g);
-		model.addEvent(g.getGrIdString(), e);
+	public Event newEvent(String t, String d, String l, LocalDate sD, LocalDate eD, String sH, String eH, String c){
+		Event e = new Event(t, d, l, sD, eD, sH, eH, c);
+		model.addEvent(c, e);
+		return e;
+	}
+	
+	public Group newGroup(String n, String p){
+		Group gr = new Group(n, p);
+		model.addGroupToHashMap(gr);
+		model.addGroupToPerson(p, gr.getGrId(), 2);
+		return gr;
 	}
 	/**
 	 * this method check if a username already exist.
@@ -105,10 +110,25 @@ public class ShaCalController {
 	
 	public ArrayList<Event> getEventsOfDay(int year, int month, int day, String filter){
 		ArrayList<Event> eventsOfDay = new ArrayList<Event>();
-		for (Event e : model.allEvents.get(filter)){
-			if ((e.getStartDate().getDayOfMonth() == day) && (e.getStartDate().getMonthValue() == month) && (e.getStartDate().getYear() == year)){
-				eventsOfDay.add(e);
+		try {
+			for (Event e : model.allEvents.get(filter)){
+				if ((e.getStartDate().getDayOfMonth() == day) && (e.getStartDate().getMonthValue() == month) && (e.getStartDate().getYear() == year)){
+					eventsOfDay.add(e);
+				}
 			}
+				Person tempP = model.getPerson(filter);
+				if(tempP != null){
+					System.out.println(tempP.getGroup().keySet());
+					for(Integer i : tempP.getGroup().keySet()){
+						for (Event ev : model.allEvents.get(Integer.toString(i))){
+							if ((ev.getStartDate().getDayOfMonth() == day) && (ev.getStartDate().getMonthValue() == month) && (ev.getStartDate().getYear() == year)){
+								eventsOfDay.add(ev);
+							}
+						}
+					}
+				}
+		} catch(Exception e){
+			return null;
 		}
 		return eventsOfDay;
 	}
@@ -124,8 +144,12 @@ public class ShaCalController {
 	
 	public String EventToStringBrief(ArrayList<Event> E){
 		String eventBrief = "";
-		for (Event e : E){
-			eventBrief += e.getStartHour()+ "\t" + e.getTitle() + " " + e.getDescription() + "\n  " + e.getEndHour() + "\n";
+		try {
+			for (Event e : E){
+				eventBrief += e.getCreator() + "\n" + e.getStartHour()+ "\t" + e.getTitle() + " " + e.getDescription() + "\n  " + e.getEndHour() + "\n";
+			}
+		} catch(NullPointerException e){
+			eventBrief += "No event yet.";
 		}
 		return eventBrief;
 	}
@@ -136,7 +160,6 @@ public class ShaCalController {
 	
 	public int getUserPermission(String username, int grId){
 		Person tempPers = model.allPersons.get(username);
-		tempPers.getPermission(grId);
-		return 0;
+		return tempPers.getPermission(grId);
 	}
 } // fin class

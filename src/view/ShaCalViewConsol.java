@@ -3,6 +3,7 @@ package view;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.TextStyle;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Observer;
 import java.util.Scanner;
@@ -65,17 +66,16 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 			//temp: simulation de contenu existant
 			Person pe = new Person("Petit", "Martin", "N", LocalDate.of(1994, 9, 28));
 			Group gr = new Group("monGroupe", pe.getUserName());
-			Group gr1 = new Group("monGroupe1");
 			model.addPersonToHashMap(pe);
 			model.addGroupToHashMap(gr);
-			model.addGroupToHashMap(gr1);
 			model.addLink(pe.getUserName(), gr.getGrId());
-			Event ev = new Event("MyPersEvent", "Mydescription", "Ma maison", LocalDate.now(), LocalDate.now(), "11:00:00", "12:00:00");
-			Event ev1 = new Event("MyPersEvent1", "Mydescription", "Ma maison", LocalDate.now(), LocalDate.now(), "12:15:00", "13:00:00");
-			Event ev2 = new Event("MyGroup&PersEvent", "Mydescription", "Dans la rue",  LocalDate.of(2017, 9, 04), LocalDate.of(2017, 9, 04), "10:15:00", "19:00:00");
-			Event ev3 = new Event("MyGroup&PersEvent1", "Mydescription", "Ma maison", LocalDate.now(), LocalDate.now(), "17:15:00", "18:00:00");
+			Event ev = new Event("MyPersEvent", "Mydescription", "Ma maison", LocalDate.now(), LocalDate.now(), "11:00:00", "12:00:00", "N");
+			Event ev1 = new Event("MyPersEvent1", "Mydescription", "Ma maison", LocalDate.now(), LocalDate.now(), "12:15:00", "13:00:00", "N");
+			Event ev2 = new Event("MyGroup&PersEvent", "Mydescription", "Dans la rue",  LocalDate.of(2017, 9, 04), LocalDate.of(2017, 9, 04), "10:15:00", "19:00:00", "0");
+			Event ev3 = new Event("MyGroup&PersEvent1", "Mydescription", "Ma maison", LocalDate.now(), LocalDate.now(), "17:15:00", "18:00:00", "0");
 			model.addEvent(pe.getUserName(), ev);
 			model.addEvent(pe.getUserName(), ev2);
+			//model.addEvent(pe.getUserName(), ev3);
 			model.addEvent(pe.getUserName(), ev1);
 			model.addEvent(Integer.toString(gr.getGrId()), ev2);
 			model.addEvent(Integer.toString(gr.getGrId()), ev3);
@@ -90,6 +90,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 				sc.useDelimiter("\n");
 				commandLine = sc.next().split(" ");
 				int clLength = commandLine.length;
+				//System.out.println(clLength);
 				for (int i = 0; i < clLength; i++){
 					commandLine[i] = commandLine[i].trim();
 				}
@@ -154,22 +155,26 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 							filter = currentUser;
 							currentUserLevel = 0;
 						} else {
-							
-							String n = commandLine[1];
-							String p = commandLine[2];
-							currentUser = commandLine[3];
-							LocalDate d = LocalDate.parse(commandLine[4]);
-							while (controller.alreadyExistP(currentUser)){
-								System.out.println(prompt + "this username already exist, type a unique username");
-								currentUser = sc.next().trim();
+							try{
+								String n = commandLine[1];
+								String p = commandLine[2];
+								currentUser = commandLine[3];
+								LocalDate d = LocalDate.parse(commandLine[4]);
+								while (controller.alreadyExistP(currentUser)){
+									System.out.println(prompt + "this username already exist, type a unique username");
+									currentUser = sc.next().trim();
+								}
+								controller.newUser(n, p, currentUser, d);
+								prompt = LocalDate.now().toString() + " - " + currentUser + "> ";
+								System.out.println(prompt + "Welcome " + currentUser);
+								filter = currentUser;
+								workingGroup = null;
+								currentUserLevel = 0;
 							}
-							controller.newUser(n, p, currentUser, d);
+							catch(Exception e){
+								System.out.println("Wrong number of arguments");
+							}
 						}
-						prompt = LocalDate.now().toString() + " - " + currentUser + "> ";
-						System.out.println(prompt + "Welcome " + currentUser);
-						filter = currentUser;
-						workingGroup = null;
-						currentUserLevel = 0;
 						break;
 					///////////////////////////////////////////////////////////
 					case "group" :
@@ -306,31 +311,47 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 						switch(commandLine[1]){
 							case "event" : 
 								System.out.println("Entering event creation protocol");
-								//Event(String title, String description, String location, LocalDate startDate, LocalDate endDate, String startHour, String endHour, Group group)
 								System.out.println("What is the title of your event ?");
-								String t = sc.nextLine();
+								String t = sc.next().trim();
 								System.out.println("Give a description of your event. Press enter to finish");
-								String d = sc.nextLine();
+								String d = sc.next().trim();
 								System.out.println("Where will it take part ?");
-								String l = sc.nextLine();
+								String l = sc.next().trim();
 								System.out.println("When will it start ? as yyyy-mm-dd");
 								LocalDate sD = LocalDate.parse(sc.next().trim());
 								System.out.println("when will it end ? as yyyy-mm-dd");
 								LocalDate eD = LocalDate.parse(sc.next().trim());
 								System.out.println("At which hour will it start ? as hh:mm");
-								String sH = sc.next();
+								String sH = sc.next().trim();
 								System.out.println("At wich hour will it end ? as hh:mm");
-								String eH = sc.next();
+								String eH = sc.next().trim();
 								if (admin){
-									controller.newEvent(t, d, l, sD, eD, sH, eH, model.getGroup(workingGroup));
+									controller.newEvent(t, d, l, sD, eD, sH, eH, workingGroup.toString());
+									System.out.println(prompt + "You have created a group event");
 								}else {
-									//controller.newEvent(t, d, l, sD, eD, sH, eH, currentUser);
+									controller.newEvent(t, d, l, sD, eD, sH, eH, currentUser);
+									System.out.println(prompt + "You have create a personal event");
 								}
 								break;
-							case "group" : 
-								System.out.println("Entering group creation protocol");
+							case "group" :
+								String n = "";
+								if(clLength == 1){
+									System.out.println("Entering group creation protocol");
+									//public Group(String grName, boolean IsPublic, ArrayList<String> Members)
+									System.out.println("What is the name of your group ?");
+									n = sc.next().trim();
+								} else if (clLength == 3){
+									n = commandLine[2].trim();
+								} else {
+									System.out.println("Wrong number of arguments");
+								}
+								controller.newGroup(n, currentUser);
+								System.out.println("You have created a group, you're the sadmin of this group");
+								
 								break;
 							default : 
+								System.out.println("wrong command, try again");
+						}
 							break;
 					case "delete" : 
 						System.out.println("Trying to delete an event or a group");
