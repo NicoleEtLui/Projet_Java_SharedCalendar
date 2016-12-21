@@ -6,4 +6,4 @@
  * @author Nathan
  * @author Sorn
  */
-package calendar;
+package model;
