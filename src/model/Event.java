@@ -189,9 +189,10 @@ public class Event {
 	
 	/**
 	 * this method compares 2 events.
-	 * the comparison is based to the start hour of the event
-	 * @return -1 if this is after e
-	 * else return 1
+	 * the comparison is based on the start hour of the event.
+	 * @return -1 if the calling event starts after the event it's compared to.
+	 * 1 if the calling event starts before the event it's compared to.
+	 * 0 if they start at the same time.
 	 */
 	public int compareTo(Event e){
 	    if(this.startHour.isAfter(e.startHour))

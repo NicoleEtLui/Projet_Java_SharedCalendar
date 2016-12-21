@@ -17,8 +17,6 @@ public class EventTest {
 				+ "\nlocation : LLN"
 				+ "\nfrom : "+LocalDate.now()+" at : 10:30"
 				+ "\nto : "+LocalDate.now()+" at : 11:00", x.toString());
-		// test ok
-		// !!!! CE TEST DOIT ETRE MODIFIE CHAQUE JOUR PUISQU IL SE REFERE A LA DATE DU JOUR QUI CHANGE LOL
 	}
 
 	@Test
@@ -30,7 +28,6 @@ public class EventTest {
 		assertTrue(x.equals(y));
 		assertFalse(y.equals(z));
 		assertFalse(z.equals(x));
-		// test 
 	}
 
 	@Test
@@ -42,7 +39,6 @@ public class EventTest {
 		assertEquals(0, x.compareTo(y), 0);
 		assertEquals(1, x.compareTo(z), 0);
 		assertEquals(-1, z.compareTo(x), 0);
-		// test ok
 	}
 
 }

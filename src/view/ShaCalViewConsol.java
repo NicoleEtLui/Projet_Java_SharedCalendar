@@ -1,7 +1,9 @@
 package view;
 
 import java.time.LocalDate;
-import java.util.HashMap;
+import java.time.Month;
+import java.time.format.TextStyle;
+import java.util.Locale;
 import java.util.Observer;
 import java.util.Scanner;
 
@@ -15,8 +17,10 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 	protected Scanner sc;
 	
 	private String currentUser;
-	private int currentUserLevel;
+	private int currentUserLevel = 0;
 	private Integer workingGroup = null;
+	private boolean admin = false;
+	private boolean sadmin = false;
 	
 	private String arg = null;
 	private String help = "This is the list of command. \n";
@@ -27,9 +31,26 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 	private String prompt3 = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "$ ";
 	private String prompt4 = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "# ";
 	
+	private int currentYear = LocalDate.now().getYear();
+	private int currentMonth = LocalDate.now().getMonthValue();
+	private int currentDay = LocalDate.now().getDayOfMonth();
+	private Locale locale = new Locale("en");
+	
 	private String commandLine[];
+	private String filter = null;
 	
-	
+	public String getCurrentUser() {
+		return currentUser;
+	}
+
+	public int getCurrentUserLevel() {
+		return currentUserLevel;
+	}
+
+	public Integer getWorkingGroup() {
+		return workingGroup;
+	}
+
 	public ShaCalViewConsol(ShaCalModel model, ShaCalController controller) {
 		super(model, controller);
 		sc = new Scanner(System.in);
@@ -46,12 +67,22 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 			Group gr = new Group("monGroupe", pe.getUserName());
 			Group gr1 = new Group("monGroupe1");
 			model.addPersonToHashMap(pe);
+			model.addGroupToHashMap(gr);
+			model.addGroupToHashMap(gr1);
 			model.addLink(pe.getUserName(), gr.getGrId());
-			Event ev = new Event("MyPersEvent", "Mydescription", LocalDate.of(2016, 12, 04), LocalDate.of(2016, 12, 04));
-			Event ev2 = new Event("MyGroupEvent", "Mydescription", LocalDate.of(2017, 9, 04), LocalDate.of(2016, 12, 04));
+			Event ev = new Event("MyPersEvent", "Mydescription", "Ma maison", LocalDate.now(), LocalDate.now(), "11:00:00", "12:00:00");
+			Event ev1 = new Event("MyPersEvent1", "Mydescription", "Ma maison", LocalDate.now(), LocalDate.now(), "12:15:00", "13:00:00");
+			Event ev2 = new Event("MyGroup&PersEvent", "Mydescription", "Dans la rue",  LocalDate.of(2017, 9, 04), LocalDate.of(2017, 9, 04), "10:15:00", "19:00:00");
+			Event ev3 = new Event("MyGroup&PersEvent1", "Mydescription", "Ma maison", LocalDate.now(), LocalDate.now(), "17:15:00", "18:00:00");
 			model.addEvent(pe.getUserName(), ev);
 			model.addEvent(pe.getUserName(), ev2);
+			model.addEvent(pe.getUserName(), ev1);
 			model.addEvent(Integer.toString(gr.getGrId()), ev2);
+			model.addEvent(Integer.toString(gr.getGrId()), ev3);
+			
+			/*System.out.println(model.allEvents.toString());
+			System.out.println(model.allGroups.toString());
+			System.out.println(model.allPersons.toString());*/
 			
 			
 			//Login
@@ -69,27 +100,32 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 						if(clLength == 2 ) {
 							currentUser = commandLine[1];
 							if(!controller.alreadyExistP(currentUser)) {
-								System.out.println("This account doesn't exist");
+								System.out.println(prompt + "This account doesn't exist");
 								currentUser = null;
 							} else {
 								prompt = LocalDate.now().toString() + " - " + currentUser + "> ";
 								System.out.println(prompt + "Welcome " + currentUser);
+								filter = currentUser;
+								currentUserLevel = 0;
+								workingGroup = null;
 							}
 						} else if (clLength == 3) {
 							currentUser = commandLine[1];
 							if(!controller.alreadyExistP(currentUser)) {
-								System.out.println("This account doesn't exist");
+								System.out.println(prompt + "This account doesn't exist");
 							} else {
 							workingGroup = Integer.parseInt(commandLine[2]);
 								if(!controller.alreadyExistGr(workingGroup)) {
-									System.out.println("This group doesn't exist");
+									System.out.println(prompt + "This group doesn't exist");
 									workingGroup = null;
 								} else if (!controller.getMembersOfGroup(workingGroup).contains(currentUser)){
-										System.out.println("You don't have access to this group");
+										System.out.println(prompt + "You don't have access to this group");
 										workingGroup = null;
 								} else {
 									prompt = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "> ";
 									System.out.println(prompt + "Welcome " + currentUser);
+									filter = workingGroup.toString();
+									currentUserLevel = controller.getUserPermission(currentUser, workingGroup);
 								}
 							}
 						} else {
@@ -99,7 +135,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 						break;
                     ///////////////////////////////////////////////////////////
 					case "new": 
-						if(clLength == 1 ){
+						if(clLength == 1 ) {
 							System.out.println(prompt + "Welcome, let's create your account !\nWhat's your name ?");
 							String n = sc.next();
 							System.out.println(prompt + "What's your firstname ?");
@@ -114,6 +150,9 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 							System.out.println(prompt + "What's your birthday ? as yyyy-mm-dd");
 							LocalDate d = LocalDate.parse(sc.next().trim());
 							controller.newUser(n, p, currentUser, d);
+							workingGroup = null;
+							filter = currentUser;
+							currentUserLevel = 0;
 						} else {
 							
 							String n = commandLine[1];
@@ -128,38 +167,177 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 						}
 						prompt = LocalDate.now().toString() + " - " + currentUser + "> ";
 						System.out.println(prompt + "Welcome " + currentUser);
+						filter = currentUser;
+						workingGroup = null;
+						currentUserLevel = 0;
 						break;
 					///////////////////////////////////////////////////////////
 					case "group" :
 						if (currentUser == null){
-							System.out.println("You are not allowed to run this command in this mode");
+							System.out.println(prompt + "You are not allowed to run this command in this mode");
 						} else if (clLength > 2){
-							System.out.println("Wrong number of arg, type help to get a list of command");
+							System.out.println(prompt + "Wrong number of arg, type help to get a list of command");
 						} else if (clLength == 1){
 							System.out.println(controller.getGroupsOfPerson(currentUser).toString());
 						} else if (clLength == 2){
 							workingGroup = Integer.parseInt(commandLine[1]);
 							if(!controller.alreadyExistGr(workingGroup)) {
-								System.out.println("This group doesn't exist");
+								System.out.println(prompt + "This group doesn't exist");
 								workingGroup = null;
 							} else if (!controller.getMembersOfGroup(workingGroup).contains(currentUser)){
-								System.out.println("You don't have access to this group");
+								System.out.println(prompt + "You don't have access to this group");
 								workingGroup = null;
 							} else {
 							prompt = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "> ";
 							System.out.println(prompt + "Welcome in group " + workingGroup);
+							filter = workingGroup.toString();
+							currentUserLevel = controller.getUserPermission(currentUser, workingGroup);
 							}
 						}
 						break;
 					///////////////////////////////////////////////////////////
 					case "show" : 
 						if (currentUser == null){
-							System.out.println("You are not allowed to run this command in this mode");
+							System.out.println(prompt + "You are not allowed to run this command in this mode");
 						} else if (clLength == 1){
-							System.out.println(controller.getEventsByFilter(LocalDate.now().getYear(), 12, "month", Integer.toString(workingGroup)));
-						} 
+							System.out.println(controller.EventToStringBrief(controller.getEventsOfDay(currentYear, currentMonth, currentDay, filter)));
+						} else {
+							switch(commandLine[1]){
+							case "month" :
+								if(clLength == 2){ // show month
+									LocalDate workingDate = LocalDate.of(currentYear, currentMonth, 1);
+									Month workingMonth = Month.of(currentMonth);
+									int nbDaysOfMonth = workingMonth.length(workingDate.isLeapYear());
+									for (int i = 1; i <= nbDaysOfMonth ; i++){
+										if(!controller.getEventsOfDay(currentYear,currentMonth,  i, filter).isEmpty()){
+											System.out.println("DAY " + i );
+											System.out.println(controller.EventToStringBrief(controller.getEventsOfDay(currentYear, currentMonth, i, filter)));
+										} 
+									}
+								} else if (clLength == 3){ // show month [month]
+									LocalDate workingDate = LocalDate.of(currentYear, 1, 1);
+									Month workingMonth = Month.of(Integer.parseInt(commandLine[2]));
+									int nbDaysOfMonth = workingMonth.length(workingDate.isLeapYear());
+									for (int i = 1; i <= nbDaysOfMonth; i++){
+										if(!controller.getEventsOfDay(currentYear,Integer.parseInt(commandLine[2]),  i, filter).isEmpty()){
+											System.out.println("DAY " + i);
+											System.out.println(controller.EventToStringBrief(controller.getEventsOfDay(currentYear, Integer.parseInt(commandLine[2]), i, filter)));
+										} 
+									}
+								} else if (clLength == 4){//show month [month] [year]
+									LocalDate workingDate = LocalDate.of(Integer.parseInt(commandLine[3]), 1, 1);
+									Month workingMonth = Month.of(Integer.parseInt(commandLine[2]));
+									int nbDaysOfMonth = workingMonth.length(workingDate.isLeapYear());
+									for (int i = 1; i <= nbDaysOfMonth; i++){
+										if(!controller.getEventsOfDay(Integer.parseInt(commandLine[3]), Integer.parseInt(commandLine[2]),  i, filter).isEmpty()){
+											System.out.println("DAY " + i );
+											System.out.println(controller.EventToStringBrief(controller.getEventsOfDay(Integer.parseInt(commandLine[3]), Integer.parseInt(commandLine[2]), i, filter)));
+										}
+									}
+								} else {
+									System.out.println(prompt + "Wrong number of arguments");
+								}
+								break;
+							case "year" : 
+								if(clLength == 2){// show year
+									for (int i = 1; i <= 12; i++){
+										if(!controller.getEventsOfMonth(currentYear, i, filter).isEmpty()){
+											System.out.println(Month.of(i));
+											System.out.println(controller.getEventsOfMonth(currentYear, i, filter).size() + " events");
+										} 
+									}
+								} else if (clLength == 3){ // show year [year]
+									for (int i = 1; i <= 12; i++){
+										if(!controller.getEventsOfMonth(Integer.parseInt(commandLine[2]), i, filter).isEmpty()){
+											System.out.println(Month.of(i));
+											System.out.println(controller.getEventsOfMonth(Integer.parseInt(commandLine[2]), i, filter).size() + " events");
+										} 
+									}
+								}  else {
+									System.out.println(prompt + "Wrong number of arguments");
+								}
+								break;
+							default: 
+								if(clLength == 2){//show [day]
+									System.out.println(controller.EventToStringBrief(controller.getEventsOfDay(currentYear, currentMonth, Integer.parseInt(commandLine[1]), filter)));
+								} else if (clLength == 3){//show [day] [month]
+									System.out.println(controller.EventToStringBrief(controller.getEventsOfDay(currentYear, Integer.parseInt(commandLine[2]), Integer.parseInt(commandLine[1]), filter)));
+								} else if (clLength == 4){//show [day] [month] [year]
+									System.out.println(controller.EventToStringBrief(controller.getEventsOfDay(Integer.parseInt(commandLine[3]), Integer.parseInt(commandLine[2]), Integer.parseInt(commandLine[1]), filter)));
+								} else {
+									System.out.println(prompt + "wrong number of arguments");
+								}
+							}
+						}
 						break;
 					///////////////////////////////////////////////////////////
+					case "admin" : 
+						if (currentUserLevel >= 1){
+							admin = true;
+							prompt = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "$ ";
+							System.out.println(prompt + "Welcome in admin mode");
+						} else {
+							System.out.println(prompt + "You don't have the permission to run this command in that group");
+						}
+						break;
+					///////////////////////////////////////////////////////////
+					case "sadmin" : 
+						if (currentUserLevel == 2){
+							sadmin = true;
+							prompt = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "# ";
+							System.out.println(prompt + "Welcome in super admin mode");
+						} else {
+							System.out.println(prompt + "You don't have the permission to run this command in that group");
+						}
+						break;
+					///////////////////////////////////////////////////////////
+					case "add" : 
+						if (admin){ 
+							if(clLength == 2){
+								model.addMemberToGroup(commandLine[1], workingGroup);
+							} else {
+								System.out.println(prompt + "Wrong number of arguments");
+							}
+						} else {
+							System.out.println(prompt + "You don't have the permission to run this command");
+						}
+						break;
+					case "create" : 
+						switch(commandLine[1]){
+							case "event" : 
+								System.out.println("Entering event creation protocol");
+								//Event(String title, String description, String location, LocalDate startDate, LocalDate endDate, String startHour, String endHour, Group group)
+								System.out.println("What is the title of your event ?");
+								String t = sc.nextLine();
+								System.out.println("Give a description of your event. Press enter to finish");
+								String d = sc.nextLine();
+								System.out.println("Where will it take part ?");
+								String l = sc.nextLine();
+								System.out.println("When will it start ? as yyyy-mm-dd");
+								LocalDate sD = LocalDate.parse(sc.next().trim());
+								System.out.println("when will it end ? as yyyy-mm-dd");
+								LocalDate eD = LocalDate.parse(sc.next().trim());
+								System.out.println("At which hour will it start ? as hh:mm");
+								String sH = sc.next();
+								System.out.println("At wich hour will it end ? as hh:mm");
+								String eH = sc.next();
+								if (admin){
+									controller.newEvent(t, d, l, sD, eD, sH, eH, model.getGroup(workingGroup));
+								}else {
+									//controller.newEvent(t, d, l, sD, eD, sH, eH, currentUser);
+								}
+								break;
+							case "group" : 
+								System.out.println("Entering group creation protocol");
+								break;
+							default : 
+							break;
+					case "delete" : 
+						System.out.println("Trying to delete an event or a group");
+						break;
+					case "permission" : 
+						System.out.println("Trying to change permission of a person");
+						break;
 					case "help" : 
 						System.out.println(help);
 						controller.help();
@@ -168,36 +346,6 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 					default: System.out.println("Type help to get a list of command");
 				}
 			}
-			
-			/*
-			//transition///////////////////////////////////////////////////////
-			workingGroup = currentUser;
-			prompt = LocalDate.now().toString() + " - " + currentUser + "> ";
-			System.out.println(prompt + "Welcome " + currentUser);
-			System.out.println(prompt + "Press help to get a list of all the command");
-			
-			//interaction//////////////////////////////////////////////////////
-			while(true){
-				commandLine = sc.next().split(" ");
-				switch (commandLine[0]){
-					
-					case "group" :
-							System.out.println("Vous avez demandé la commande groupe ? Veuillez patienter ...");
-						break;
-						
-					case "show" : System.out.println(prompt + "Your calendar: \n" );
-						controller.display(workingGroup, commandLine);
-						arg = sc.next();
-						if(arg != null){
-							System.out.println("Une liste d'évènements depending on a filter");
-							controller.display(workingGroup, commandLine);
-							arg = null;
-						};
-						break;
-					default  : System.out.println(prompt + "Unrecognized command");
-				}
-			
-			}*/
 		}
 	}
 }
