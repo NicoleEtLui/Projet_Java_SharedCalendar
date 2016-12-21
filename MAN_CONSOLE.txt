@@ -114,5 +114,5 @@ dd/mm/yyyy - currentUser - workingGroup# --------------------------------------
 			[PERSON] 
 				the person to delete of the group based on her userName.
 
-		permission [PERSON][PERMISSION] - change the permission of a member. 
+	permission [PERSON][PERMISSION] - change the permission of a member. 
 
