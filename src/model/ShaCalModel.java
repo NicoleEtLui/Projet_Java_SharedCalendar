@@ -59,9 +59,6 @@ public class ShaCalModel extends Observable {
 	 * @param group : The Group to be added.
 	 */
 	public void addGroupToHashMap(Group group){
-		if(allGroups.get(group.getGrId())!=null){
-			System.out.println("Key \"" + group.getGrId() + "\" already in use."); //TODO Handle exception
-		}
 		allGroups.putIfAbsent(Integer.valueOf(group.getGrId()), group);
 	}
 	
@@ -170,8 +167,8 @@ public class ShaCalModel extends Observable {
 	 * Adds a grId to the list of Groups, as a regular user.
 	 * @param grId : the Group's Id as an int.
 	 */
-	public void addGroupToPerson(String person, int grId){
-		getPerson(person).getGroup().put(grId, 0);
+	public void addGroupToPerson(String person, int grId, int level){
+		getPerson(person).getGroup().put(grId, level);
 	}
 	
 	/**
@@ -300,7 +297,7 @@ public class ShaCalModel extends Observable {
 	 * @param grId : The grId of the Group to link.
 	 */
 	public void addLink(String userName, int grId){
-		this.addGroupToPerson(userName, grId);
+		this.addGroupToPerson(userName, grId, 0);
 		this.addMemberToGroup(userName, grId);
 	}
 	
