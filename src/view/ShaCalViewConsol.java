@@ -81,15 +81,10 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 			model.addEvent(Integer.toString(gr.getGrId()), ev2);
 			model.addEvent(Integer.toString(gr.getGrId()), ev3);
 			*/
-			/*System.out.println(model.allEvents.toString());
-			System.out.println(model.allGroups.toString());
-			System.out.println(model.allPersons.toString());*/
-			
-			
 			//Login
 			while(true){
 				sc.useDelimiter("\n");
-				commandLine = sc.next().split(" ");
+				commandLine = sc.next().split(" ", 0);
 				int clLength = commandLine.length;
 				//System.out.println(clLength);
 				for (int i = 0; i < clLength; i++){
