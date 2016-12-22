@@ -150,7 +150,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 								LocalDate d = LocalDate.parse(sc.next().trim());
 								controller.newUser(n, p, currentUser, d);
 							} catch (DateTimeParseException e){
-								System.out.println("Wrong date format try new again");
+								System.out.println("Wrong date format try NEW again");
 							}
 							workingGroup = null;
 							filter = currentUser;
@@ -206,7 +206,11 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 						if (currentUser == null){
 							System.out.println(prompt + "You are not allowed to run this command in this mode");
 						} else if (clLength == 1){
-							System.out.println(controller.EventToStringBrief(controller.getEventsOfDay(currentYear, currentMonth, currentDay, filter)));
+							try {
+								System.out.println(controller.EventToStringBrief(controller.getEventsOfDay(currentYear, currentMonth, currentDay, filter)));
+							} catch (NumberFormatException e){
+								System.out.println("Wrong arguments, it should be a number (for the day to show) or 'month'");
+							}
 						} else {
 							switch(commandLine[1]){
 							case "month" :
