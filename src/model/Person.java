@@ -57,6 +57,18 @@ public class Person {
 		this.group = new HashMap<Integer,Integer>();
 		model.addEvent(userName,new Event("Joyeux Anniversaire", "Mon anniversaire", this.bDate, this.bDate));
 	}
+	
+	public Person(String name, String firstName, String userName, String groupString, LocalDate bDate) {
+		this.name = name;
+		this.firstName = firstName;
+		this.userName = userName;
+		this.bDate = bDate;
+		for(int i=0;i<groupString.split(";").length;i++){
+			this.group.put(Integer.parseInt(groupString.split(";")[i].split("-")[0]),
+					Integer.parseInt(groupString.split(";")[i].split("-")[1]));
+		}
+		model.addEvent(userName,new Event("Joyeux Anniversaire", "Mon anniversaire", this.bDate, this.bDate));
+	}
 
 	//-- GETTERS & SETTERS -------------------------------------------------------------------------------
 	
@@ -121,5 +133,17 @@ public class Person {
 	 */
 	public Integer getPermission(Integer grId){
 		return this.getGroup().get(grId);
+	}
+	/**
+	 * 
+	 * @param hm
+	 * @return
+	 */
+	public String toStringGroup(HashMap<Integer,Integer> hm){
+		String groups = "";
+		for(int i=0;i<hm.size();i++){
+			groups += hm.keySet().toArray()[i] + "-" + hm.get(hm.keySet().toArray()[i]) + ";";
+		}
+		return groups;
 	}
 }

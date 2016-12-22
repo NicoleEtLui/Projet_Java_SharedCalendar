@@ -1,5 +1,7 @@
 package test;
 
+import DAO.PersonDAO;
+import DAO.Singleton;
 import controller.ShaCalController;
 import model.ShaCalModel;
 import view.ShaCalViewConsol;
@@ -8,6 +10,8 @@ public class SharedCalendar {
 	public SharedCalendar(){
 		//création du modèle
 		ShaCalModel shacalmod = new ShaCalModel();
+		PersonDAO pDAO = new PersonDAO(Singleton.getInstance());
+		pDAO.findAll();
 		//création des controlleurs un pour chaque vue
 		//chaque controlleur doit avoir une référence vers le modèle pour pouvoir le commander
 		ShaCalController shacalcontrolConsol = new ShaCalController(shacalmod);

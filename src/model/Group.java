@@ -47,6 +47,16 @@ public class Group {
 		model.addGroupToHashMap(this);
 	}
 	
+	public Group(int grId, String grName, boolean IsPublic, String groups) {
+		this.grId = grId;
+		this.grName = grName;
+		this.isPublic = IsPublic;
+		for(int i=0;i<groups.split(";").length;i++){
+			this.members.add(groups.split(";")[i]);
+		}
+		model.addGroupToHashMap(this);
+	}
+	
 	public Group(String grName, String FirstMember){
 		this.grId = getNewId();
 		this.grName = grName;

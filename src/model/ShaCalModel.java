@@ -9,15 +9,15 @@ public class ShaCalModel extends Observable {
 	/**
 	 * The main "list" of all Persons.
 	 */
-	public HashMap<String,Person> allPersons = new HashMap<String,Person>();
+	public static HashMap<String,Person> allPersons = new HashMap<String,Person>();
 	/**
 	 * The main "list" of all Groups.
 	 */
-	public HashMap<Integer,Group> allGroups = new HashMap<Integer,Group>();
+	public static HashMap<Integer,Group> allGroups = new HashMap<Integer,Group>();
 	/**
 	 * The main "list" of all Events.
 	 */
-	public HashMap<String,ArrayList<Event>> allEvents = new HashMap<String,ArrayList<Event>>();
+	public static HashMap<String,ArrayList<Event>> allEvents = new HashMap<String,ArrayList<Event>>();
 
 	
 	//-- GETTERS & SETTERS -------------------------------------------------------------------------------
