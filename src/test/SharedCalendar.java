@@ -15,9 +15,6 @@ public class SharedCalendar {
 		pDAO.findAll();
 		GroupDAO gDAO = new GroupDAO(Singleton.getInstance());
 		gDAO.findAll();
-		for(int i = 0; i < shacalmod.allPersons.size(); i++){
-			System.out.println(shacalmod.allPersons.get(shacalmod.allPersons.keySet().toArray()[i]));
-		}
 		//création des controlleurs un pour chaque vue
 		//chaque controlleur doit avoir une référence vers le modèle pour pouvoir le commander
 		ShaCalController shacalcontrolConsol = new ShaCalController(shacalmod);
