@@ -26,7 +26,7 @@ public class GroupDAO {
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_UPDATABLE
 				).executeQuery(
-					"SELECT * FROM tbGroups WHERE grId = '"+GrId+"'"	
+					"SELECT * FROM tbGroups WHERE grId = '"+GrId+"';"	
 				);
 				
 				if(rs.first()){
@@ -50,7 +50,7 @@ public class GroupDAO {
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_UPDATABLE
 				).executeQuery(
-					"SELECT * FROM tbGroups"	
+					"SELECT * FROM tbGroups;"	
 				);
 				
 				ResultSetMetaData md = (ResultSetMetaData) rs.getMetaData();
@@ -75,13 +75,13 @@ public class GroupDAO {
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_UPDATABLE
 				).executeQuery(
-					"SELECT grId FROM tbGroups"	
+					"SELECT grId FROM tbGroups;"	
 				);
 				
 				if(rs.first()){
 					PreparedStatement ps = this.connect.prepareStatement(
 						"INSERT INTO tbGroups "
-						+ "VALUES (?, ?, ?, ?)"
+						+ "VALUES (?, ?, ?, ?);"
 					);
 					
 					ps.setInt(1, x.getGrId());
@@ -109,11 +109,10 @@ public class GroupDAO {
 					ResultSet.TYPE_SCROLL_INSENSITIVE, 
 					ResultSet.CONCUR_UPDATABLE
 				).executeUpdate(
-					"UPDATE tbPersons SET "+
+					"UPDATE tbGroups SET "+
 						"grName = '"+x.getGrName()+"', "+
-						"isPublic= '"+x.getIsPublic()+"', "+
-						"members = '"+x.getMembersString(x.getMembers())+"', "+
-					"WHERE grId = '"+x.getGrId()+"'"
+						"members = '"+x.getMembersString(x.getMembers())+"' "+
+					"WHERE grId = "+x.getGrId()+";"
 				);
 			} catch(SQLException e){
 				e.printStackTrace();
@@ -128,7 +127,7 @@ public class GroupDAO {
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_UPDATABLE
 				).executeUpdate(
-					"delete from tbGroups where grId = '"+x+"'"
+					"delete from tbGroups where grId = '"+x+"';"
 				);		
 			} catch(SQLException e){
 				e.printStackTrace();
@@ -142,7 +141,7 @@ public class GroupDAO {
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_UPDATABLE
 				).executeQuery(
-					"SELECT MAX(grId) as grId FROM tbGroups"	
+					"SELECT MAX(grId) as grId FROM tbGroups;"	
 				);
 				
 				if(rs.first()){

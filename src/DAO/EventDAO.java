@@ -29,7 +29,7 @@ public class EventDAO {
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_UPDATABLE
 				).executeQuery(
-					"SELECT * FROM tbEvents WHERE eventTitle = '"+eventTitle+"'"	
+					"SELECT * FROM tbEvents WHERE eventTitle = '"+eventTitle+"';"	
 				);
 				
 				if(rs.first()){
@@ -57,7 +57,7 @@ public class EventDAO {
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_UPDATABLE
 				).executeQuery(
-					"SELECT * FROM tbEvents"	
+					"SELECT * FROM tbEvents;"	
 				);
 				
 				ResultSetMetaData md = (ResultSetMetaData) rs.getMetaData();
@@ -88,13 +88,13 @@ public class EventDAO {
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_UPDATABLE
 				).executeQuery(
-					"SELECT eventTitle FROM tbEvents"	
+					"SELECT eventTitle FROM tbEvents;"	
 				);
 				
 				if(rs.first()){
 					PreparedStatement ps = this.connect.prepareStatement(
 						"INSERT INTO tbEvents "
-						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?);"
 					);
 					ps.setString(1, x.getTitle());
 					ps.setString(2, x.getCreator());
@@ -134,7 +134,7 @@ public class EventDAO {
 						"eventEndDate = '"+x.getEndDate()+"' "+
 						"eventStartHour = '"+x.getStartHour()+"' "+
 						"eventEndHour = '"+x.getEndHour()+"' "+
-					"WHERE eventTitle = '"+x.getTitle()+"'"
+					"WHERE eventTitle = '"+x.getTitle()+"';"
 				);
 			} catch(SQLException e){
 				e.printStackTrace();
@@ -149,7 +149,7 @@ public class EventDAO {
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_UPDATABLE
 				).executeUpdate(
-					"delete from tbEvents where eventTitle = '"+x+"'"
+					"delete from tbEvents where eventTitle = '"+x+"';"
 				);		
 			} catch(SQLException e){
 				e.printStackTrace();

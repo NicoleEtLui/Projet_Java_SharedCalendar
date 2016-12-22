@@ -105,7 +105,7 @@ public class ShaCalModel extends Observable {
 	 */
 	public void addMemberToGroup(String userName, int grId){
 		getGroup(grId).getMembers().add(userName);
-		System.out.println("You succesfully add" + userName + "in group : " + grId);
+		System.out.println("You succesfully added '" + userName + "' in group " + grId);
 		Group g = getGroup(grId);
 		groupDAO.update(g);
 	}
@@ -268,15 +268,30 @@ public class ShaCalModel extends Observable {
 	 * @return <p>true otherwise and replace former permission 
 	 * of the person p for the group grId by userlvl<p>
 	 */
-	public boolean changePermission(String userName, int grId, int userLvl) {
+	public void changePermission(String userName, Integer grId, Integer userLvl) {
 		if((getPerson(userName).getGroup().get(grId)==null)){
 			System.out.println("This person doesn't belong to the group");
-			return false;
+		} else if (userLvl==2) {
+			System.out.println("You can't upgrade someone else to sadmin");
+		} else if((userLvl!=0) && (userLvl!=1) && (userLvl!=2)) {
+			System.out.println("This level of permission doesn't exist");
 		} else {
 			getPerson(userName).getGroup().put(grId,userLvl);
 			Person p = getPerson(userName);
 			personDAO.update(p);
-			return true;
+			String permission = "";
+			switch(userLvl){
+				case 0 :
+					permission = "simple user";
+					break;
+				case 1 :
+					permission = "admin";
+					break;
+				case 2 :
+					permission = "sadmin";
+					break;
+			}
+			System.out.println("Updated '" + userName + "' to permission " + permission + " in group " + grId);
 		}
 	}
 	

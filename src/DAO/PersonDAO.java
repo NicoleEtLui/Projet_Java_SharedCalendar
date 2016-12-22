@@ -30,7 +30,7 @@ public class PersonDAO {
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_UPDATABLE
 				).executeQuery(
-					"SELECT * FROM tbPersons WHERE personUserName = '"+username+"'"	
+					"SELECT * FROM tbPersons WHERE personUserName = '"+username+"';"	
 				);
 				
 				if(rs.first()){
@@ -55,7 +55,7 @@ public class PersonDAO {
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_UPDATABLE
 				).executeQuery(
-					"SELECT * FROM tbPersons"	
+					"SELECT * FROM tbPersons;"	
 				);
 				
 				ResultSetMetaData md = (ResultSetMetaData) rs.getMetaData();
@@ -82,13 +82,13 @@ public class PersonDAO {
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_UPDATABLE
 				).executeQuery(
-					"SELECT personUserName FROM tbPersons"	
+					"SELECT personUserName FROM tbPersons;"	
 				);
 				
 				if(rs.first()){
 					PreparedStatement ps = this.connect.prepareStatement(
 						"INSERT INTO tbPersons "
-						+ "VALUES (?, ?, ?, ?, ?)"
+						+ "VALUES (?, ?, ?, ?, ?);"
 					);
 					
 					ps.setString(1, x.getName());
@@ -123,7 +123,7 @@ public class PersonDAO {
 						"personUserName = '"+x.getUserName()+"', "+
 						"groups = '"+x.getGroupString(x.getGroup())+"',"+
 						"personBirthday = '"+x.getbDate()+"' "+
-					"WHERE personUserName = '"+x.getUserName()+"'"
+					"WHERE personUserName = '"+x.getUserName()+"';"
 				);
 			} catch(SQLException e){
 				e.printStackTrace();
@@ -138,7 +138,7 @@ public class PersonDAO {
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_UPDATABLE
 				).executeUpdate(
-					"delete from tbPersons where personUserName = '"+x+"'"
+					"delete from tbPersons where personUserName = '"+x+"';"
 				);		
 			} catch(SQLException e){
 				e.printStackTrace();

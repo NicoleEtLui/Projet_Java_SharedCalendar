@@ -276,6 +276,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 					case "admin" : 
 						if (currentUserLevel >= 1){
 							admin = true;
+							sadmin = false;
 							prompt = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "$ ";
 							System.out.println(prompt + "Welcome in admin mode");
 						} else {
@@ -286,6 +287,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 					case "sadmin" : 
 						if (currentUserLevel == 2){
 							sadmin = true;
+							admin = true;
 							prompt = LocalDate.now().toString() + " - " + currentUser + " - " + workingGroup + "# ";
 							System.out.println(prompt + "Welcome in super admin mode");
 						} else {
@@ -299,8 +301,12 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 								switch(commandLine[1]){
 									case "member" : 
 										model.addLink(commandLine[2], workingGroup);
+										break;
 									case "event" :
 										model.addEvent(workingGroup.toString(), model.getSingleEvent(commandLine[2]));
+										break;
+									default :
+										System.out.println("Please retype your command");
 								}
 							} else {
 								System.out.println(prompt + "Wrong number of arguments");
@@ -352,18 +358,15 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 									break;
 								case "group" :
 									String n = "";
-									if(clLength == 1){
+									if(clLength == 2){
 										System.out.println(prompt + "Entering group creation protocol");
 										System.out.println(prompt + "What is the name of your group ?");
 										n = sc.next().trim();
-									} else if (clLength == 3){
-										n = commandLine[2].trim();
+										controller.newGroup(n, currentUser);
+										System.out.println(prompt + "You have created a group, you're the sadmin of this group");
 									} else {
 										System.out.println(prompt + "Wrong number of arguments");
 									}
-									controller.newGroup(n, currentUser);
-									System.out.println(prompt + "You have created a group, you're the sadmin of this group");
-									
 									break;
 								default : 
 									System.out.println(prompt + "wrong command, try again");
@@ -371,32 +374,46 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 						}
 						break;
 					case "delete" : 
-						if (admin){ 
+						if (!(sadmin) && (admin)){ 
 							if(clLength == 3){
 								switch(commandLine[1]){
 									case "member" : 
 										model.removeLink(commandLine[2], workingGroup);
+										break;
 									case "event" :
 										model.removeEvent(workingGroup.toString(), model.getSingleEvent(commandLine[2]));
+										break;
+									default :
+										System.out.println("Wrong arguments to command delete");
 								}
-							} else {
-								System.out.println(prompt + "Wrong number of arguments");
 							}
 						} else if (sadmin) {
 							if(clLength == 3){
 								switch(commandLine[1]){
 									case "member" : 
 										model.removeLink(commandLine[2], workingGroup);
+										break;
 									case "event" :
 										model.removeEvent(workingGroup.toString(), model.getSingleEvent(commandLine[2]));
-									case "group" :
+										break;
+									default : 
+										System.out.println(prompt + "Wrong command !");	
+								} 
+							} else if (clLength == 2){
+								System.out.println(clLength);
+								switch (commandLine[1]){
+									case "group" : 
 										model.deleteGroupFromHashMap(workingGroup);
 										prompt = LocalDate.now().toString() + " - " + currentUser + "> ";
+										System.out.println(prompt + "Group " + workingGroup + " erased");
+										workingGroup = null;
 										filter = currentUser;
 										currentUserLevel = 0;
 										admin = false;
 										sadmin = false;
-										
+										break;
+									default : 
+										System.out.println(prompt + "Wrong command");
 								}
 							} else {
 								System.out.println(prompt + "Wrong number of arguments");
@@ -406,12 +423,17 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 						}
 						break;
 					case "permission" : 
-						if (clLength == 3){
-							model.changePermission(commandLine[2], workingGroup, Integer.parseInt(commandLine[3]));
+						if(admin){
+							if (clLength == 3){
+								model.changePermission(commandLine[1], workingGroup, Integer.parseInt(commandLine[2]));
+							} else {
+								System.out.println(prompt + "Wrong number of arguments");
+							}
+							break;
 						} else {
-							System.out.println(prompt + "Wrong number of arguments");
+							System.out.println(prompt + "You don't have the permission to run this command");
+							break;
 						}
-						break;
 					case "exit" : 
 						prompt = LocalDate.now().toString() + " - " + currentUser + "> ";
 						System.out.println(prompt + "Welcome " + currentUser);
@@ -420,6 +442,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 						currentUserLevel = 0;
 						admin = false;
 						sadmin = false;
+						break;
 					case "help" : 
 						System.out.println(help);
 						controller.help();
