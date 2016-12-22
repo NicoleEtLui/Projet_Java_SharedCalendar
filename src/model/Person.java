@@ -63,9 +63,9 @@ public class Person {
 		this.firstName = firstName;
 		this.userName = userName;
 		this.bDate = bDate;
-		for(int i=0;i<groupString.split(";").length;i++){
-			this.group.put(Integer.parseInt(groupString.split(";")[i].split("-")[0]),
-					Integer.parseInt(groupString.split(";")[i].split("-")[1]));
+		for(int i=0;i<groupString.split(";",0).length;i++){
+			this.group.put(Integer.parseInt(groupString.split(";",0)[i].split("-")[0]),
+					Integer.parseInt(groupString.split(";",0)[i].split("-")[1]));
 		}
 		model.addEvent(userName,new Event("Joyeux Anniversaire", "Mon anniversaire", this.bDate, this.bDate));
 	}

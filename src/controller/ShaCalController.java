@@ -96,12 +96,16 @@ public class ShaCalController {
 	 */
 	public ArrayList<String> getGroupsOfPerson(String userName){
 		ArrayList<String> grList = new ArrayList<String>(); 
-		Person tempP = model.getPerson(userName);
-		Set<Integer> setOfGr = tempP.getGroup().keySet();
-		for(int i = 0; i < setOfGr.size(); i++){
-			grList.add(model.getGroup(i).getGrId() + " " + model.getGroup(i).getGrName());
+		try {
+			Person tempP = model.getPerson(userName);
+			for(int i = 0; i < tempP.getGroup().keySet().toArray().length; i++){
+				grList.add(tempP.getGroup().keySet().toArray()[i] + " " + model.getGroup(tempP.getGroup().keySet().toArray()[i]).getGrName());
+			}
+		} catch (Exception e) {
+			System.out.println("erreur est ici coucou");
 		}
 		return grList;
+		
 	}
 	
 	public ArrayList<String> getMembersOfGroup(int grId){

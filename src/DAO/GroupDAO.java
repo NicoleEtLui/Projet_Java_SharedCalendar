@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import com.mysql.jdbc.ResultSetMetaData;
 
 import model.Group;
@@ -59,7 +57,7 @@ public class GroupDAO {
 				
 				while(rs.next()){
 					for(int i=1; i<= md.getColumnCount(); i++){
-						ShaCalModel.allGroups.put(rs.getInt("grId"), 
+						ShaCalModel.allGroups.put(Integer.valueOf(rs.getInt("grId")), 
 								new Group(rs.getInt("grId"),
 										rs.getString("grName"),
 										rs.getBoolean("isPublic"),
@@ -85,7 +83,7 @@ public class GroupDAO {
 				
 				if(rs.first()){
 					PreparedStatement ps = this.connect.prepareStatement(
-						"INSERT INTO tbPersons "
+						"INSERT INTO tbGroups "
 						+ "VALUES (?, ?, ?, ?)"
 					);
 					
@@ -96,7 +94,7 @@ public class GroupDAO {
 					
 					ps.executeUpdate();
 					
-					x = this.find(x.getUserName());
+					x = this.find(x.getGrId());
 				}
 				
 			} catch(SQLException e){
@@ -107,7 +105,7 @@ public class GroupDAO {
 			
 		}
 		
-		public Person update(Person x, String y){
+		public Group update(Group x, int y){
 			
 			try{
 				this.connect.createStatement(
@@ -115,11 +113,10 @@ public class GroupDAO {
 					ResultSet.CONCUR_UPDATABLE
 				).executeUpdate(
 					"UPDATE tbPersons SET "+
-						"personName = '"+x.getName()+"', "+
-						"personFirstName = '"+x.getFirstName()+"', "+
-						"personUserName = '"+x.getUserName()+"', "+
-						"personBirthday = '"+x.getbDate()+"' "+
-					"WHERE personUserName = '"+y+"'"
+						"grName = '"+x.getGrName()+"', "+
+						"isPublic= '"+x.getIsPublic()+"', "+
+						"members = '"+x.getMembersString(x.getMembers())+"', "+
+					"WHERE grId = '"+y+"'"
 				);
 			} catch(SQLException e){
 				e.printStackTrace();
@@ -128,13 +125,13 @@ public class GroupDAO {
 			return x;
 		}
 		
-		public void delete(String x){
+		public void delete(int x){
 			try {
 				this.connect.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_UPDATABLE
 				).executeUpdate(
-					"delete from tbPersons where personUserName = '"+x+"'"
+					"delete from tbGroups where grId = '"+x+"'"
 				);		
 			} catch(SQLException e){
 				e.printStackTrace();
