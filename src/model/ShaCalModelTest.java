@@ -157,7 +157,7 @@ public class ShaCalModelTest {
 		model.addPersonToHashMap(person);
 		model.addGroupToHashMap(group);
 		assertTrue(model.getPerson(person.getUserName()).getGroup().size()==0);
-		model.addGroupToPerson(person.getUserName(), group.getGrId());
+		model.addGroupToPerson(person.getUserName(), group.getGrId(), 0);
 		assertTrue(model.getPerson(person.getUserName()).getGroup().size()==1);
 	}
 	
@@ -168,7 +168,7 @@ public class ShaCalModelTest {
 		Group group = new Group();
 		model.addPersonToHashMap(person);
 		model.addGroupToHashMap(group);
-		model.addGroupToPerson(person.getUserName(), group.getGrId());
+		model.addGroupToPerson(person.getUserName(), group.getGrId(), 0);
 		assertTrue(model.getPerson(person.getUserName()).getGroup().size()==1);
 		model.deleteGroupFromPerson(person.getUserName(), group.getGrId());
 		assertTrue(model.getPerson(person.getUserName()).getGroup().size()==0);

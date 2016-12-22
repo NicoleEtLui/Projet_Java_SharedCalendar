@@ -17,7 +17,7 @@ public class ShaCalModel extends Observable {
 	/**
 	 * The main "list" of all Events.
 	 */
-	public HashMap<String,ArrayList<Event>> allEvents = new HashMap<String,ArrayList<Event>>();
+	public static HashMap<String,ArrayList<Event>> allEvents = new HashMap<String,ArrayList<Event>>();
 
 	
 	//-- GETTERS & SETTERS -------------------------------------------------------------------------------
@@ -144,7 +144,7 @@ public class ShaCalModel extends Observable {
 	 * Adds a newly created Person to the HashMap.
 	 * @param person : The Person to be added.
 	 */
-	public void addPersonToHashMap(Person person){
+	public static void addPersonToHashMap(Person person){
 		if(allPersons.get(person.getUserName())!=null){
 			System.out.println("Key \"" + person.getUserName() + "\" already in use."); //TODO Handle exception
 		}
@@ -267,7 +267,7 @@ public class ShaCalModel extends Observable {
 	 * @param creator : The grId/userName to add the Event to.
 	 * @param event : A newly created event to be associated with a creator.
 	 */
-	public void addEvent(String creator, Event event){
+	public static void addEvent(String creator, Event event){
 		allEvents.putIfAbsent(creator, new ArrayList<Event>());
 		allEvents.get(creator).add(event);
 	}
