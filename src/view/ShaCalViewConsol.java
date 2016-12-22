@@ -64,24 +64,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 	
 	private class ReadInput implements Runnable {
 		public void run() {
-			//temp: simulation de contenu existant
-			/*
-			Person pe = new Person("Petit", "Martin", "N", LocalDate.of(1994, 9, 28));
-			Group gr = new Group("monGroupe", pe.getUserName());
-			model.addPersonToHashMap(pe);
-			model.addGroupToHashMap(gr);
-			model.addLink(pe.getUserName(), gr.getGrId());
-			Event ev = new Event("MyPersEvent", "Mydescription", "Ma maison", LocalDate.now(), LocalDate.now(), "11:00:00", "12:00:00", "N");
-			Event ev1 = new Event("MyPersEvent1", "Mydescription", "Ma maison", LocalDate.now(), LocalDate.now(), "12:15:00", "13:00:00", "N");
-			Event ev2 = new Event("MyGroup&PersEvent", "Mydescription", "Dans la rue",  LocalDate.of(2017, 9, 04), LocalDate.of(2017, 9, 04), "10:15:00", "19:00:00", "0");
-			Event ev3 = new Event("MyGroup&PersEvent1", "Mydescription", "Ma maison", LocalDate.now(), LocalDate.now(), "17:15:00", "18:00:00", "0");
-			model.addEvent(pe.getUserName(), ev);
-			model.addEvent(pe.getUserName(), ev2);
-			//model.addEvent(pe.getUserName(), ev3);
-			model.addEvent(pe.getUserName(), ev1);
-			model.addEvent(Integer.toString(gr.getGrId()), ev2);
-			model.addEvent(Integer.toString(gr.getGrId()), ev3);
-			*/
+			
 			//Login
 			while(true){
 				sc.useDelimiter("\n");
@@ -106,6 +89,8 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 								filter = currentUser;
 								currentUserLevel = 0;
 								workingGroup = null;
+								admin = false;
+								sadmin = false;
 							}
 						} else if (clLength == 3) {
 							currentUser = commandLine[1];
@@ -124,6 +109,8 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 									System.out.println(prompt + "Welcome " + currentUser);
 									filter = workingGroup.toString();
 									currentUserLevel = controller.getUserPermission(currentUser, workingGroup);
+									admin = false;
+									sadmin = false;
 								}
 							}
 						} else {
@@ -149,12 +136,17 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 							try {
 								LocalDate d = LocalDate.parse(sc.next().trim());
 								controller.newUser(n, p, currentUser, d);
+								prompt = LocalDate.now().toString() + " - " + currentUser + "> ";
+								System.out.println(prompt + "Welcome " + currentUser);
 							} catch (DateTimeParseException e){
-								System.out.println("Wrong date format try NEW again");
+								System.out.println(prompt + "Wrong date format try NEW again");
 							}
 							workingGroup = null;
 							filter = currentUser;
 							currentUserLevel = 0;
+							filter = currentUser;
+							admin = false;
+							sadmin = false;
 						} else {
 							try{
 								String n = commandLine[1];
@@ -171,9 +163,11 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 								filter = currentUser;
 								workingGroup = null;
 								currentUserLevel = 0;
+								admin = false;
+								sadmin = false;
 							}
 							catch(Exception e){
-								System.out.println("Wrong number of arguments");
+								System.out.println(prompt + "Wrong number of arguments");
 							}
 						}
 						break;
@@ -198,6 +192,8 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 							System.out.println(prompt + "Welcome in group " + workingGroup);
 							filter = workingGroup.toString();
 							currentUserLevel = controller.getUserPermission(currentUser, workingGroup);
+							admin = false;
+							sadmin = false;
 							}
 						}
 						break;
@@ -206,11 +202,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 						if (currentUser == null){
 							System.out.println(prompt + "You are not allowed to run this command in this mode");
 						} else if (clLength == 1){
-							try {
-								System.out.println(controller.EventToStringBrief(controller.getEventsOfDay(currentYear, currentMonth, currentDay, filter)));
-							} catch (NumberFormatException e){
-								System.out.println("Wrong arguments, it should be a number (for the day to show) or 'month'");
-							}
+							System.out.println(controller.EventToStringBrief(controller.getEventsOfDay(currentYear, currentMonth, currentDay, filter)));
 						} else {
 							switch(commandLine[1]){
 							case "month" :
@@ -247,6 +239,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 								} else {
 									System.out.println(prompt + "Wrong number of arguments");
 								}
+			
 								break;
 							case "year" : 
 								if(clLength == 2){// show year
@@ -303,8 +296,13 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 					///////////////////////////////////////////////////////////
 					case "add" : 
 						if (admin){ 
-							if(clLength == 2){
-								model.addMemberToGroup(commandLine[1], workingGroup);
+							if(clLength == 3){
+								switch(commandLine[1]){
+									case "member" : 
+										model.addMemberToGroup(commandLine[2], workingGroup);
+									case "event" :
+										model.addEvent(workingGroup.toString(), model.getSingleEvent(commandLine[2]));
+								}
 							} else {
 								System.out.println(prompt + "Wrong number of arguments");
 							}
@@ -315,20 +313,20 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 					case "create" : 
 						switch(commandLine[1]){
 							case "event" : 
-								System.out.println("Entering event creation protocol");
+								System.out.println(prompt + "Entering event creation protocol");
 								System.out.println("What is the title of your event ?");
 								String t = sc.next().trim();
-								System.out.println("Give a description of your event. Press enter to finish");
+								System.out.println(prompt + "Give a description of your event. Press enter to finish");
 								String d = sc.next().trim();
-								System.out.println("Where will it take part ?");
+								System.out.println(prompt + "Where will it take part ?");
 								String l = sc.next().trim();
-								System.out.println("When will it start ? as yyyy-mm-dd");
+								System.out.println(prompt + "When will it start ? as yyyy-mm-dd");
 								LocalDate sD = LocalDate.parse(sc.next().trim());
-								System.out.println("when will it end ? as yyyy-mm-dd");
+								System.out.println(prompt + "when will it end ? as yyyy-mm-dd");
 								LocalDate eD = LocalDate.parse(sc.next().trim());
-								System.out.println("At which hour will it start ? as hh:mm");
+								System.out.println(prompt + "At which hour will it start ? as hh:mm");
 								String sH = sc.next().trim();
-								System.out.println("At wich hour will it end ? as hh:mm");
+								System.out.println(prompt + "At wich hour will it end ? as hh:mm");
 								String eH = sc.next().trim();
 								if (admin){
 									controller.newEvent(t, d, l, sD, eD, sH, eH, workingGroup.toString());
@@ -341,35 +339,78 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 							case "group" :
 								String n = "";
 								if(clLength == 1){
-									System.out.println("Entering group creation protocol");
-									//public Group(String grName, boolean IsPublic, ArrayList<String> Members)
-									System.out.println("What is the name of your group ?");
+									System.out.println(prompt + "Entering group creation protocol");
+									System.out.println(prompt + "What is the name of your group ?");
 									n = sc.next().trim();
 								} else if (clLength == 3){
 									n = commandLine[2].trim();
 								} else {
-									System.out.println("Wrong number of arguments");
+									System.out.println(prompt + "Wrong number of arguments");
 								}
 								controller.newGroup(n, currentUser);
-								System.out.println("You have created a group, you're the sadmin of this group");
+								System.out.println(prompt + "You have created a group, you're the sadmin of this group");
 								
 								break;
 							default : 
-								System.out.println("wrong command, try again");
+								System.out.println(prompt + "wrong command, try again");
 						}
 							break;
 					case "delete" : 
-						System.out.println("Trying to delete an event or a group");
+						if (admin){ 
+							if(clLength == 3){
+								switch(commandLine[1]){
+									case "member" : 
+										model.deleteMemberFromGroup(commandLine[2], workingGroup);
+									case "event" :
+										model.removeEvent(workingGroup.toString(), model.getSingleEvent(commandLine[2]));
+								}
+							} else {
+								System.out.println(prompt + "Wrong number of arguments");
+							}
+						} else if (sadmin) {
+							if(clLength == 3){
+								switch(commandLine[1]){
+									case "member" : 
+										model.deleteMemberFromGroup(commandLine[2], workingGroup);
+									case "event" :
+										model.removeEvent(workingGroup.toString(), model.getSingleEvent(commandLine[2]));
+									case "group" :
+										model.deleteGroupFromHashMap(workingGroup);
+										prompt = LocalDate.now().toString() + " - " + currentUser + "> ";
+										filter = currentUser;
+										currentUserLevel = 0;
+										admin = false;
+										sadmin = false;
+										
+								}
+							} else {
+								System.out.println(prompt + "Wrong number of arguments");
+							}
+						} else {
+							System.out.println(prompt + "You don't have the permission to run this command");
+						}
 						break;
 					case "permission" : 
-						System.out.println("Trying to change permission of a person");
+						if (clLength == 3){
+							model.changePermission(commandLine[2], workingGroup, Integer.parseInt(commandLine[3]));
+						} else {
+							System.out.println(prompt + "Wrong number of arguments");
+						}
 						break;
+					case "exit" : 
+						prompt = LocalDate.now().toString() + " - " + currentUser + "> ";
+						System.out.println(prompt + "Welcome " + currentUser);
+						filter = currentUser;
+						workingGroup = null;
+						currentUserLevel = 0;
+						admin = false;
+						sadmin = false;
 					case "help" : 
 						System.out.println(help);
 						controller.help();
 						System.out.println(prompt);
 						break;
-					default: System.out.println("Type help to get a list of command");
+					default: System.out.println(prompt + "Type help to get a list of command");
 				}
 			}
 		}
