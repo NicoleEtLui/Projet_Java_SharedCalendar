@@ -2,6 +2,7 @@ package view;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.format.DateTimeParseException;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -145,8 +146,12 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 								currentUser = sc.next().trim();
 							}
 							System.out.println(prompt + "What's your birthday ? as yyyy-mm-dd");
-							LocalDate d = LocalDate.parse(sc.next().trim());
-							controller.newUser(n, p, currentUser, d);
+							try {
+								LocalDate d = LocalDate.parse(sc.next().trim());
+								controller.newUser(n, p, currentUser, d);
+							} catch (DateTimeParseException e){
+								System.out.println("Wrong date format try new again");
+							}
 							workingGroup = null;
 							filter = currentUser;
 							currentUserLevel = 0;
