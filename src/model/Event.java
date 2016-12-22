@@ -21,7 +21,6 @@ public class Event {
 	private LocalDate endDate;
 	private LocalTime startHour;
 	private LocalTime endHour;
-	private Group group;
 	private String creator;
 	
 	
@@ -39,30 +38,6 @@ public class Event {
 	}
 	
 	/**
-	 * constructor with all attributes.
-	 * the input type of startHour and endHour is a string which will be parse on a LocalTime, it's easier.
-	 * the id is automatically incremented
-	 * @param title is the name of the event
-	 * @param description is a brief description of the event
-	 * @param location is the place where the event is 
-	 * @param startDate is the date when the event begins
-	 * @param endDate is the date when the event stops
-	 * @param startHour is the hour when the event begins
-	 * @param endHour is the hour when the event stops
-	 * @param group is the group the event belongs to
-	 */
-	public Event(String title, String description, String location, LocalDate startDate, LocalDate endDate, String startHour, String endHour, Group group){
-		this.title = title;
-		this.description = description;
-		this.location = location;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.startHour = LocalTime.parse(startHour);
-		this.endHour = LocalTime.parse(endHour);
-		this.group = group;
-	}
-	
-	/**
 	 * constructor without the  group.
 	 */
 	public Event(String title, String description, String location, LocalDate startDate, LocalDate endDate, String startHour, String endHour){
@@ -75,22 +50,7 @@ public class Event {
 		this.endHour = LocalTime.parse(endHour);
 	}
 	
-	/**
-	 * constructor without location.
-	 * the input type of startHour and endHour is a string which will be parse on a LocalTime, it's easier
-	 */
-	public Event(String title, String description, LocalDate startDate, LocalDate endDate, String startHour, String endHour, Group group){
-		this.title = title;
-		this.description = description;
-		this.location = "";
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.startHour = LocalTime.parse(startHour);
-		this.endHour = LocalTime.parse(endHour);
-		this.group = group;
-	}
-	
-	
+
 	/**
 	 * constructor without the  group and hours
 	 */
@@ -327,22 +287,6 @@ public class Event {
 	 */
 	public void setEndHour(LocalTime endHour) {
 		this.endHour = endHour;
-	}
-
-	/**
-	 * this method gets the group the event belongs to
-	 * @return the group 
-	 */
-	public Group getGroup() {
-		return group;
-	}
-
-	/**
-	 * this method sets the group
-	 * @param id is the group of the event
-	 */
-	public void setGroup(Group group) {
-		this.group = group;
 	}
 
 	public String getCreator() {
