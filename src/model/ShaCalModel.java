@@ -337,8 +337,12 @@ public class ShaCalModel extends Observable {
 	 * @param grId : The grId of the Group to link.
 	 */
 	public void addLink(String userName, int grId){
-		this.addGroupToPerson(userName, grId, 0);
-		this.addMemberToGroup(userName, grId);
+		if(getPerson(userName)==null){
+			System.out.println("This person doesn't exist.");
+		}else{
+			this.addGroupToPerson(userName, grId, 0);
+			this.addMemberToGroup(userName, grId);
+		}
 	}
 	
 	/**

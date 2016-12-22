@@ -57,7 +57,7 @@ public class Person {
 		this.bDate = bDate;
 		this.group = new HashMap<Integer,Integer>();
 		model.addEvent(userName, 
-				new Event("Joyeux Anniversaire",
+				new Event("Joyeux Anniversaire " + userName,
 						"Mon anniversaire",
 						"",
 						this.bDate,
@@ -156,5 +156,16 @@ public class Person {
 			groups += hm.keySet().toArray()[i] + "-" + hm.get(hm.keySet().toArray()[i]) + ";";
 		}
 		return groups;
+	}
+	
+	public String getGroupString(HashMap<Integer, Integer> groups){
+		String groupString = "";
+		for(int i=0;i<groups.size();i++){
+			groupString += groups.keySet().toArray()[i] +
+					"-" +
+					groups.get(groups.keySet().toArray()[i]) +
+					";";
+		}
+		return groupString;
 	}
 }

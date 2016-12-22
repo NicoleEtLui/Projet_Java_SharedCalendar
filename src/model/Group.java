@@ -46,7 +46,6 @@ public class Group {
 		this.isPublic = IsPublic;
 		this.members = new ArrayList<String>();
 		if(Members != null)this.members.addAll(Members);
-		model.addGroupToHashMap(this);
 	}
 	
 	public Group(int grId, String grName, boolean IsPublic, String memberString) {
@@ -64,7 +63,6 @@ public class Group {
 		this.isPublic = true;
 		this.members = new ArrayList<String>();
 		this.members.add(FirstMember);
-		model.addGroupToHashMap(this);
 	}
 
 	//-- GETTERS & SETTERS -------------------------------------------------------------------------------

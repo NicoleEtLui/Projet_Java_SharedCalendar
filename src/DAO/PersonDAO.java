@@ -121,6 +121,7 @@ public class PersonDAO {
 						"personName = '"+x.getName()+"', "+
 						"personFirstName = '"+x.getFirstName()+"', "+
 						"personUserName = '"+x.getUserName()+"', "+
+						"groups = '"+x.getGroupString(x.getGroup())+"',"+
 						"personBirthday = '"+x.getbDate()+"' "+
 					"WHERE personUserName = '"+x.getUserName()+"'"
 				);

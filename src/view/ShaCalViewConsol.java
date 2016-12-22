@@ -298,7 +298,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 							if(clLength == 3){
 								switch(commandLine[1]){
 									case "member" : 
-										model.addMemberToGroup(commandLine[2], workingGroup);
+										model.addLink(commandLine[2], workingGroup);
 									case "event" :
 										model.addEvent(workingGroup.toString(), model.getSingleEvent(commandLine[2]));
 								}
@@ -375,7 +375,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 							if(clLength == 3){
 								switch(commandLine[1]){
 									case "member" : 
-										model.deleteMemberFromGroup(commandLine[2], workingGroup);
+										model.removeLink(commandLine[2], workingGroup);
 									case "event" :
 										model.removeEvent(workingGroup.toString(), model.getSingleEvent(commandLine[2]));
 								}
@@ -386,7 +386,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 							if(clLength == 3){
 								switch(commandLine[1]){
 									case "member" : 
-										model.deleteMemberFromGroup(commandLine[2], workingGroup);
+										model.removeLink(commandLine[2], workingGroup);
 									case "event" :
 										model.removeEvent(workingGroup.toString(), model.getSingleEvent(commandLine[2]));
 									case "group" :
