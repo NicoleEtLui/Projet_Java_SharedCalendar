@@ -64,6 +64,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 	private class ReadInput implements Runnable {
 		public void run() {
 			//temp: simulation de contenu existant
+			/*
 			Person pe = new Person("Petit", "Martin", "N", LocalDate.of(1994, 9, 28));
 			Group gr = new Group("monGroupe", pe.getUserName());
 			model.addPersonToHashMap(pe);
@@ -79,7 +80,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 			model.addEvent(pe.getUserName(), ev1);
 			model.addEvent(Integer.toString(gr.getGrId()), ev2);
 			model.addEvent(Integer.toString(gr.getGrId()), ev3);
-			
+			*/
 			/*System.out.println(model.allEvents.toString());
 			System.out.println(model.allGroups.toString());
 			System.out.println(model.allPersons.toString());*/
