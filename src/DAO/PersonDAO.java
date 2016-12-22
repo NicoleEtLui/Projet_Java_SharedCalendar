@@ -61,15 +61,13 @@ public class PersonDAO {
 				ResultSetMetaData md = (ResultSetMetaData) rs.getMetaData();
 				
 				while(rs.next()){
-					for(int i=1; i<= md.getColumnCount(); i++){
-						ShaCalModel.allPersons.put(rs.getString("personUserName"), 
-								new Person(rs.getString("personName"), // hm -> model.allPersons 
-								rs.getString("personFirstName"),
-								rs.getString("personUserName"),
-								rs.getString("groups"),
-								LocalDate.parse(rs.getString("personBirthday")))
-						);
-					}
+					ShaCalModel.allPersons.put(rs.getString("personUserName"), 
+							new Person(rs.getString("personName"),
+							rs.getString("personFirstName"),
+							rs.getString("personUserName"),
+							rs.getString("groups"),
+							LocalDate.parse(rs.getString("personBirthday")))
+					);
 				}
 				
 			} catch(SQLException e){
@@ -97,7 +95,7 @@ public class PersonDAO {
 					ps.setString(2, x.getFirstName());
 					ps.setString(3, x.getUserName());
 					ps.setString(4, x.toStringGroup(x.getGroup()));
-					ps.setString(5, x.getbDate().toString());
+					ps.setString(5, x.getbDate());
 					
 					ps.executeUpdate();
 					
@@ -112,7 +110,7 @@ public class PersonDAO {
 			
 		}
 		
-		public Person update(Person x, String y){
+		public Person update(Person x){
 			
 			try{
 				this.connect.createStatement(
@@ -124,7 +122,7 @@ public class PersonDAO {
 						"personFirstName = '"+x.getFirstName()+"', "+
 						"personUserName = '"+x.getUserName()+"', "+
 						"personBirthday = '"+x.getbDate()+"' "+
-					"WHERE personUserName = '"+y+"'"
+					"WHERE personUserName = '"+x.getUserName()+"'"
 				);
 			} catch(SQLException e){
 				e.printStackTrace();

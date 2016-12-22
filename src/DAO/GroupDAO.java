@@ -56,16 +56,13 @@ public class GroupDAO {
 				ResultSetMetaData md = (ResultSetMetaData) rs.getMetaData();
 				
 				while(rs.next()){
-					for(int i=1; i<= md.getColumnCount(); i++){
-						ShaCalModel.allGroups.put(Integer.valueOf(rs.getInt("grId")), 
-								new Group(rs.getInt("grId"),
-										rs.getString("grName"),
-										rs.getBoolean("isPublic"),
-										rs.getString("members"))
-						);
-					}
+					ShaCalModel.allGroups.put(Integer.valueOf(rs.getInt("grId")), 
+							new Group(rs.getInt("grId"),
+									rs.getString("grName"),
+									rs.getBoolean("isPublic"),
+									rs.getString("members"))
+					);
 				}
-				
 			} catch(SQLException e){
 				e.printStackTrace();
 			}
@@ -105,7 +102,7 @@ public class GroupDAO {
 			
 		}
 		
-		public Group update(Group x, int y){
+		public Group update(Group x){
 			
 			try{
 				this.connect.createStatement(
@@ -116,7 +113,7 @@ public class GroupDAO {
 						"grName = '"+x.getGrName()+"', "+
 						"isPublic= '"+x.getIsPublic()+"', "+
 						"members = '"+x.getMembersString(x.getMembers())+"', "+
-					"WHERE grId = '"+y+"'"
+					"WHERE grId = '"+x.getGrId()+"'"
 				);
 			} catch(SQLException e){
 				e.printStackTrace();
@@ -137,5 +134,26 @@ public class GroupDAO {
 				e.printStackTrace();
 			}
 		}
+		
+		public void findMax(){
+			
+			try {
+				ResultSet rs = this.connect.createStatement(
+					ResultSet.TYPE_SCROLL_INSENSITIVE,
+					ResultSet.CONCUR_UPDATABLE
+				).executeQuery(
+					"SELECT MAX(grId) as grId FROM tbGroups"	
+				);
+				
+				if(rs.first()){
+					Group.setCurrentId(rs.getInt("grId")+1);
+				}
+				
+			} catch(SQLException e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
 		
 	}

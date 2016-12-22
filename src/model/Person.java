@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
@@ -28,7 +29,7 @@ public class Person {
 	 * Birthday of the persons.  
 	 */
 	private LocalDate bDate;
-	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	/**
 	 * All the groups the person belong and his level in those.
 	 * <p>First number stands for the <code>grId<code> the person belong,
@@ -55,7 +56,15 @@ public class Person {
 		this.userName = userName;
 		this.bDate = bDate;
 		this.group = new HashMap<Integer,Integer>();
-		model.addEvent(userName,new Event("Joyeux Anniversaire", "Mon anniversaire", this.bDate, this.bDate));
+		model.addEvent(userName, 
+				new Event("Joyeux Anniversaire",
+						"Mon anniversaire",
+						"",
+						this.bDate,
+						this.bDate,
+						LocalTime.now().toString(),
+						LocalTime.now().plusHours(1).toString(),
+						userName));
 	}
 	
 	public Person(String name, String firstName, String userName, String groupString, LocalDate bDate) {
@@ -63,11 +72,13 @@ public class Person {
 		this.firstName = firstName;
 		this.userName = userName;
 		this.bDate = bDate;
-		for(int i=0;i<groupString.split(";",0).length;i++){
-			this.group.put(Integer.parseInt(groupString.split(";",0)[i].split("-")[0]),
-					Integer.parseInt(groupString.split(";",0)[i].split("-")[1]));
+		if(groupString.length()!=0){
+			for(int i=0;i<groupString.split(";",0).length;i++){
+				this.group.put(Integer.parseInt(groupString.split(";",0)[i].split("-")[0]),
+						Integer.parseInt(groupString.split(";",0)[i].split("-")[1]));
+			}
 		}
-		model.addEvent(userName,new Event("Joyeux Anniversaire", "Mon anniversaire", this.bDate, this.bDate));
+		//model.addEvent(userName,new Event("Joyeux Anniversaire", "Mon anniversaire", this.bDate, this.bDate));
 	}
 
 	//-- GETTERS & SETTERS -------------------------------------------------------------------------------

@@ -119,19 +119,17 @@ public class ShaCalController {
 					eventsOfDay.add(e);
 				}
 			}
-				Person tempP = model.getPerson(filter);
-				if(tempP != null){
-					System.out.println(tempP.getGroup().keySet());
-					for(Integer i : tempP.getGroup().keySet()){
-						for (Event ev : model.allEvents.get(Integer.toString(i))){
-							if ((ev.getStartDate().getDayOfMonth() == day) && (ev.getStartDate().getMonthValue() == month) && (ev.getStartDate().getYear() == year)){
-								eventsOfDay.add(ev);
-							}
+			Person tempP = model.getPerson(filter);
+			if(tempP != null){
+				for(Integer i : tempP.getGroup().keySet()){
+					for (Event ev : model.allEvents.get(Integer.toString(i))){
+						if ((ev.getStartDate().getDayOfMonth() == day) && (ev.getStartDate().getMonthValue() == month) && (ev.getStartDate().getYear() == year)){
+							eventsOfDay.add(ev);
 						}
 					}
 				}
-		} catch(Exception e){
-			return null;
+			}
+		} catch(NullPointerException e){
 		}
 		return eventsOfDay;
 	}
@@ -152,7 +150,8 @@ public class ShaCalController {
 				eventBrief += e.getCreator() + "\n" + e.getStartHour()+ "\t" + e.getTitle() + " " + e.getDescription() + "\n  " + e.getEndHour() + "\n";
 			}
 		} catch(NullPointerException e){
-			eventBrief = "No event yet.";
+			eventBrief = "No event yet";
+			return null;
 		}
 		return eventBrief;
 	}

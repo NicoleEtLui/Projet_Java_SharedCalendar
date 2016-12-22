@@ -1,5 +1,6 @@
 package test;
 
+import DAO.EventDAO;
 import DAO.GroupDAO;
 import DAO.PersonDAO;
 import DAO.Singleton;
@@ -15,6 +16,9 @@ public class SharedCalendar {
 		pDAO.findAll();
 		GroupDAO gDAO = new GroupDAO(Singleton.getInstance());
 		gDAO.findAll();
+		gDAO.findMax();
+		EventDAO eDAO = new EventDAO(Singleton.getInstance());
+		eDAO.findAll();
 		//création des controlleurs un pour chaque vue
 		//chaque controlleur doit avoir une référence vers le modèle pour pouvoir le commander
 		ShaCalController shacalcontrolConsol = new ShaCalController(shacalmod);

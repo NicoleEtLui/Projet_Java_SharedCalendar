@@ -1,6 +1,8 @@
 package model;
 
 import java.util.ArrayList;
+import DAO.GroupDAO;
+import DAO.Singleton;
 
 /**
  * This class represents a group.
@@ -12,7 +14,7 @@ public class Group {
 	/**
 	 * The value used in the Id creator.
 	 */
-	private static int defaultIdNumber = -1;
+	private static int defaultIdNumber = 0;
 	/**
 	 * The Id of the group.
 	 */
@@ -65,21 +67,6 @@ public class Group {
 		model.addGroupToHashMap(this);
 	}
 
-	public Group(String grName){
-		this.grId = getNewId();
-		this.grName = grName;
-		this.isPublic = true;
-		this.members = new ArrayList<String>();
-	}
-	
-	public Group() {
-		this.grId = getNewId();
-		this.grName = "UnknownGroup" + getCurrentId();
-		this.isPublic = true;
-		this.members = new ArrayList<String>();
-		model.addGroupToHashMap(this);
-	}
-
 	//-- GETTERS & SETTERS -------------------------------------------------------------------------------
 	
 	/**
@@ -87,23 +74,15 @@ public class Group {
 	 * @return Id as an int
 	 */
 	private int getNewId(){
-		return ++defaultIdNumber;
-	}
-	
-	/**
-	 * Return the current Id used in the creation of a new group
-	 * @return Id as an int
-	 */
-	private static int getCurrentId(){
-		return defaultIdNumber;
+		return defaultIdNumber++;
 	}
 	
 	
 	/**
 	 * Reset the current Id to -1, to use for tests
 	 */
-	protected static void resetCurrentId(){
-		defaultIdNumber = -1;
+	public static void setCurrentId(int currentId){
+		defaultIdNumber = currentId;
 	}
 	
 	/**

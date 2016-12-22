@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
 
+import DAO.*;
+
 public class ShaCalModel extends Observable {
 	/**
 	 * The main "list" of all Persons.
@@ -18,6 +20,11 @@ public class ShaCalModel extends Observable {
 	 * The main "list" of all Events.
 	 */
 	public static HashMap<String,ArrayList<Event>> allEvents = new HashMap<String,ArrayList<Event>>();
+	
+	
+	public GroupDAO groupDAO = new GroupDAO(Singleton.getInstance());
+	public PersonDAO personDAO = new PersonDAO(Singleton.getInstance());
+	public EventDAO eventDAO = new EventDAO(Singleton.getInstance());
 
 	
 	//-- GETTERS & SETTERS -------------------------------------------------------------------------------
@@ -60,6 +67,7 @@ public class ShaCalModel extends Observable {
 	 */
 	public void addGroupToHashMap(Group group){
 		allGroups.putIfAbsent(Integer.valueOf(group.getGrId()), group);
+		groupDAO.create(group);
 	}
 	
 	/**
@@ -71,6 +79,8 @@ public class ShaCalModel extends Observable {
 		for(int i=0;i<allPersons.size();i++){
 			deleteGroupFromPerson(getPerson(allPersons.keySet().toArray()[i]).getUserName(), grId);
 		}
+		removeAllEvent(String.valueOf(grId));
+		groupDAO.delete(grId);
 	}
 	
 	/**
@@ -79,6 +89,8 @@ public class ShaCalModel extends Observable {
 	 */
 	public void addMemberToGroup(String userName, int grId){
 		getGroup(grId).getMembers().add(userName);
+		Group g = getGroup(grId);
+		groupDAO.update(g);
 	}
 	
 	/**
@@ -87,6 +99,8 @@ public class ShaCalModel extends Observable {
 	 */
 	public void deleteMemberFromGroup(String userName, int grId){
 		getGroup(grId).getMembers().remove(userName);
+		Group g = getGroup(grId);
+		groupDAO.update(g);
 	}
 	
 	/**
@@ -144,11 +158,9 @@ public class ShaCalModel extends Observable {
 	 * Adds a newly created Person to the HashMap.
 	 * @param person : The Person to be added.
 	 */
-	public static void addPersonToHashMap(Person person){
-		if(allPersons.get(person.getUserName())!=null){
-			System.out.println("Key \"" + person.getUserName() + "\" already in use."); //TODO Handle exception
-		}
+	public void addPersonToHashMap(Person person){
 		allPersons.putIfAbsent(person.getUserName(), person);
+		personDAO.create(person);
 	}
 	
 	/**
@@ -160,6 +172,8 @@ public class ShaCalModel extends Observable {
 		for(int i=0;i<allGroups.size();i++){
 			deleteMemberFromGroup(userName,getGroup(allGroups.keySet().toArray()[i]).getGrId());
 		}
+		removeAllEvent(userName);
+		personDAO.delete(userName);
 	}
 
 	
@@ -169,6 +183,8 @@ public class ShaCalModel extends Observable {
 	 */
 	public void addGroupToPerson(String person, int grId, int level){
 		getPerson(person).getGroup().put(grId, level);
+		Person p = getPerson(person);
+		personDAO.update(p);
 	}
 	
 	/**
@@ -177,6 +193,8 @@ public class ShaCalModel extends Observable {
 	 */
 	public void deleteGroupFromPerson(String person, int grId){
 		getPerson(person).getGroup().remove(grId);
+		Person p = getPerson(person);
+		personDAO.update(p);
 	}
 	/**
 	 * Returns a String representation of a Person.
@@ -239,6 +257,8 @@ public class ShaCalModel extends Observable {
 		}
 		if(getPerson(userName).getPermission(grId) != 2){
 			getPerson(userName).getGroup().put(grId,userLvl);
+			Person p = getPerson(userName);
+			personDAO.update(p);
 			return true;
 		}
 		return false;
@@ -257,6 +277,8 @@ public class ShaCalModel extends Observable {
 		Group group = new Group(grName, getPerson(person).getUserName());
 		addGroupToHashMap(group);
 		getPerson(person).getGroup().put(group.getGrId(), 2);
+		Person p = getPerson(person);
+		personDAO.update(p);
 		return group.getGrId();
 	}
 	
@@ -267,9 +289,10 @@ public class ShaCalModel extends Observable {
 	 * @param creator : The grId/userName to add the Event to.
 	 * @param event : A newly created event to be associated with a creator.
 	 */
-	public static void addEvent(String creator, Event event){
+	public void addEvent(String creator, Event event){
 		allEvents.putIfAbsent(creator, new ArrayList<Event>());
 		allEvents.get(creator).add(event);
+		eventDAO.create(event);
 	}
 	
 	/**
@@ -279,6 +302,7 @@ public class ShaCalModel extends Observable {
 	 */
 	public void removeEvent(String creator, Event event){
 		allEvents.get(creator).remove(event);
+		eventDAO.delete(event.getTitle());
 	}
 	
 	/**
@@ -318,19 +342,8 @@ public class ShaCalModel extends Observable {
 		allPersons.clear();
 		allGroups.clear();
 		allEvents.clear();
-		Group.resetCurrentId();
-		System.out.println("Cache vidÃ©");
+		Group.setCurrentId(0);
+		System.out.println("Cache vidé.");
 	}
-	
-	//-- UNCHECKED ---------------------------------------------------------------------------------------
-
-	/** [ TODO ]
-	 * Alerts a member.
-	 * @param Members An ArrayList of Persons to alert.
-	 */
-	public boolean alertMembers(String Members){
-		return false;
-	}
-	
 }
 

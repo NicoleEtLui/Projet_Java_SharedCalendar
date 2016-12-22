@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import com.mysql.jdbc.ResultSetMetaData;
 
@@ -62,17 +63,17 @@ public class EventDAO {
 				ResultSetMetaData md = (ResultSetMetaData) rs.getMetaData();
 				
 				while(rs.next()){
-					for(int i=1; i<= md.getColumnCount(); i++){
-						ShaCalModel.allEvents.get(rs.getString("eventCreator")).add(new Event(rs.getString("eventTitle"),
-										rs.getString("eventDescription"),
-										rs.getString("eventLocation"),
-										LocalDate.parse(rs.getString("eventStartDate")),
-										LocalDate.parse(rs.getString("eventEndDate")),
-										rs.getString("eventStartHour"),
-										rs.getString("eventEndHour"),
-										rs.getString("eventCreator"))
-						);
-					}
+					ShaCalModel.allEvents.putIfAbsent(rs.getString("eventCreator"), new ArrayList<Event>());
+					ShaCalModel.allEvents.get(rs.getString("eventCreator")).add(
+						new Event(rs.getString("eventTitle"),
+							rs.getString("eventDescription"),
+							rs.getString("eventLocation"),
+							LocalDate.parse(rs.getString("eventStartDate")),
+							LocalDate.parse(rs.getString("eventEndDate")),
+							rs.getString("eventStartHour"),
+							rs.getString("eventEndHour"),
+							rs.getString("eventCreator"))
+					);
 				}
 				
 			} catch(SQLException e){
@@ -95,7 +96,6 @@ public class EventDAO {
 						"INSERT INTO tbEvents "
 						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 					);
-					
 					ps.setString(1, x.getTitle());
 					ps.setString(2, x.getCreator());
 					ps.setString(3, x.getDescription());

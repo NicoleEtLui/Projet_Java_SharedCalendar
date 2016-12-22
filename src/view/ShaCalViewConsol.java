@@ -10,9 +10,6 @@ import java.util.Observer;
 import java.util.Scanner;
 
 import controller.ShaCalController;
-import model.Event;
-import model.Group;
-import model.Person;
 import model.ShaCalModel;
 
 public class ShaCalViewConsol extends ShaCalView implements Observer {
@@ -87,7 +84,6 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 				sc.useDelimiter("\n");
 				commandLine = sc.next().split(" ");
 				int clLength = commandLine.length;
-				//System.out.println(clLength);
 				for (int i = 0; i < clLength; i++){
 					commandLine[i] = commandLine[i].trim();
 				}
@@ -207,7 +203,8 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 						if (currentUser == null){
 							System.out.println(prompt + "You are not allowed to run this command in this mode");
 						} else if (clLength == 1){
-							System.out.println("BIIIIIIIIITE");
+							/*System.out.println(model.allEvents.get(currentUser));
+							System.out.println(model.allEvents.get(filter));*/
 							System.out.println(controller.EventToStringBrief(controller.getEventsOfDay(currentYear, currentMonth, currentDay, filter)));
 						} else {
 							switch(commandLine[1]){
@@ -245,7 +242,6 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 								} else {
 									System.out.println(prompt + "Wrong number of arguments");
 								}
-								break;
 							case "year" : 
 								if(clLength == 2){// show year
 									for (int i = 1; i <= 12; i++){
@@ -266,14 +262,18 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 								}
 								break;
 							default: 
-								if(clLength == 2){//show [day]
-									System.out.println(controller.EventToStringBrief(controller.getEventsOfDay(currentYear, currentMonth, Integer.parseInt(commandLine[1]), filter)));
-								} else if (clLength == 3){//show [day] [month]
-									System.out.println(controller.EventToStringBrief(controller.getEventsOfDay(currentYear, Integer.parseInt(commandLine[2]), Integer.parseInt(commandLine[1]), filter)));
-								} else if (clLength == 4){//show [day] [month] [year]
-									System.out.println(controller.EventToStringBrief(controller.getEventsOfDay(Integer.parseInt(commandLine[3]), Integer.parseInt(commandLine[2]), Integer.parseInt(commandLine[1]), filter)));
-								} else {
-									System.out.println(prompt + "wrong number of arguments");
+								try {
+									if(clLength == 2){//show [day]
+										System.out.println(controller.EventToStringBrief(controller.getEventsOfDay(currentYear, currentMonth, Integer.parseInt(commandLine[1]), filter)));
+									} else if (clLength == 3){//show [day] [month]
+										System.out.println(controller.EventToStringBrief(controller.getEventsOfDay(currentYear, Integer.parseInt(commandLine[2]), Integer.parseInt(commandLine[1]), filter)));
+									} else if (clLength == 4){//show [day] [month] [year]
+										System.out.println(controller.EventToStringBrief(controller.getEventsOfDay(Integer.parseInt(commandLine[3]), Integer.parseInt(commandLine[2]), Integer.parseInt(commandLine[1]), filter)));
+									} else {
+										System.out.println(prompt + "wrong number of arguments");
+									}
+								} catch(NumberFormatException e){
+									System.out.println("Wrong type of arguments");
 								}
 							}
 						}
@@ -311,49 +311,64 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 						}
 						break;
 					case "create" : 
-						switch(commandLine[1]){
-							case "event" : 
-								System.out.println("Entering event creation protocol");
-								System.out.println("What is the title of your event ?");
-								String t = sc.next().trim();
-								System.out.println("Give a description of your event. Press enter to finish");
-								String d = sc.next().trim();
-								System.out.println("Where will it take part ?");
-								String l = sc.next().trim();
-								System.out.println("When will it start ? as yyyy-mm-dd");
-								LocalDate sD = LocalDate.parse(sc.next().trim());
-								System.out.println("when will it end ? as yyyy-mm-dd");
-								LocalDate eD = LocalDate.parse(sc.next().trim());
-								System.out.println("At which hour will it start ? as hh:mm");
-								String sH = sc.next().trim();
-								System.out.println("At wich hour will it end ? as hh:mm");
-								String eH = sc.next().trim();
-								if (admin){
-									controller.newEvent(t, d, l, sD, eD, sH, eH, workingGroup.toString());
-									System.out.println(prompt + "You have created a group event");
-								}else {
-									controller.newEvent(t, d, l, sD, eD, sH, eH, currentUser);
-									System.out.println(prompt + "You have create a personal event");
-								}
-								break;
-							case "group" :
-								String n = "";
-								if(clLength == 1){
-									System.out.println("Entering group creation protocol");
-									//public Group(String grName, boolean IsPublic, ArrayList<String> Members)
-									System.out.println("What is the name of your group ?");
-									n = sc.next().trim();
-								} else if (clLength == 3){
-									n = commandLine[2].trim();
-								} else {
-									System.out.println("Wrong number of arguments");
-								}
-								controller.newGroup(n, currentUser);
-								System.out.println("You have created a group, you're the sadmin of this group");
-								
-								break;
-							default : 
-								System.out.println("wrong command, try again");
+						if (clLength == 1) {
+							System.out.println("Lack of arguments try with event or group");
+						} else {
+							switch(commandLine[1]){
+								case "event" : 
+									System.out.println("Entering event creation protocol");
+									System.out.println("What is the title of your event ?");
+									String t = sc.next().trim();
+									System.out.println("Give a description of your event. Press enter to finish");
+									String d = sc.next().trim();
+									System.out.println("Where will it take part ?");
+									String l = sc.next().trim();
+									LocalDate sD = null;
+									LocalDate eD = null;
+									String sH = null;
+									String eH = null;
+									boolean good=true;
+									while(good){
+										try{
+											System.out.println("When will it start ? as yyyy-mm-dd");
+											sD = LocalDate.parse(sc.next().trim());
+											System.out.println("when will it end ? as yyyy-mm-dd");
+											eD = LocalDate.parse(sc.next().trim());
+											System.out.println("At which hour will it start ? as hh:mm");
+											sH = sc.next().trim();
+											System.out.println("At wich hour will it end ? as hh:mm");
+											eH = sc.next().trim();
+											if (admin){
+												controller.newEvent(t, d, l, sD, eD, sH, eH, workingGroup.toString());
+												System.out.println(prompt + "You have created a group event");
+											}else {
+												controller.newEvent(t, d, l, sD, eD, sH, eH, currentUser);
+												System.out.println(prompt + "You have create a personal event");
+											}
+											good = false;
+										}catch(Exception e){
+											System.out.println("Wrong format. Try again.");
+										}
+									}
+									break;
+								case "group" :
+									String n = "";
+									if(clLength == 2){
+										System.out.println("Entering group creation protocol");
+										System.out.println("What is the name of your group ?");
+										n = sc.next().trim();
+									} else if (clLength == 3){
+										n = commandLine[2].trim();
+									} else {
+										System.out.println("Wrong number of arguments");
+									}
+									controller.newGroup(n, currentUser);
+									System.out.println("You have created a group, you're the sadmin of this group");
+									
+									break;
+								default : 
+									System.out.println("wrong command, try again");
+						}
 						}
 							break;
 					case "delete" : 
