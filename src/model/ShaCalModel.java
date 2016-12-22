@@ -17,7 +17,7 @@ public class ShaCalModel extends Observable {
 	/**
 	 * The main "list" of all Events.
 	 */
-	public static HashMap<String,ArrayList<Event>> allEvents = new HashMap<String,ArrayList<Event>>();
+	public HashMap<String,ArrayList<Event>> allEvents = new HashMap<String,ArrayList<Event>>();
 
 	
 	//-- GETTERS & SETTERS -------------------------------------------------------------------------------

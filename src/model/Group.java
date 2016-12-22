@@ -28,7 +28,7 @@ public class Group {
 	/**
 	 * The list of members as an ArrayList of String of userName.
 	 */
-	private ArrayList<String> members;
+	private ArrayList<String> members = new ArrayList<String>();
 
 	//-- CONSTRUCTOR -------------------------------------------------------------------------------------
 	
@@ -47,14 +47,13 @@ public class Group {
 		model.addGroupToHashMap(this);
 	}
 	
-	public Group(int grId, String grName, boolean IsPublic, String groups) {
+	public Group(int grId, String grName, boolean IsPublic, String memberString) {
 		this.grId = grId;
 		this.grName = grName;
 		this.isPublic = IsPublic;
-		for(int i=0;i<groups.split(";").length;i++){
-			this.members.add(groups.split(";")[i]);
+		for(int i=0;i<memberString.split(";",0).length;i++){
+			this.members.add(memberString.split(";",0)[i]);
 		}
-		model.addGroupToHashMap(this);
 	}
 	
 	public Group(String grName, String FirstMember){
@@ -161,5 +160,13 @@ public class Group {
 	 */
 	public String getGrIdString(){
 		return String.valueOf(this.getGrId());
+	}
+	
+	public String getMembersString(ArrayList<String> Al){
+		String members = "";
+		for(int i=0;i<Al.size();i++){
+			members += Al.get(i) + ";";
+		}
+		return members;
 	}
 }
