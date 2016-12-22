@@ -61,7 +61,7 @@ public class ShaCalViewConsol extends ShaCalView implements Observer {
 	
 	
 	
-	private class ReadInput implements Runnable{
+	private class ReadInput implements Runnable {
 		public void run() {
 			//temp: simulation de contenu existant
 			Person pe = new Person("Petit", "Martin", "N", LocalDate.of(1994, 9, 28));

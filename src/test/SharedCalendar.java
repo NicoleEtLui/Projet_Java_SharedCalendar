@@ -15,7 +15,6 @@ public class SharedCalendar {
 		//création des controlleurs un pour chaque vue
 		//chaque controlleur doit avoir une référence vers le modèle pour pouvoir le commander
 		ShaCalController shacalcontrolConsol = new ShaCalController(shacalmod);
-		
 		//Création des vues
 		//chaque vue doit avoir une référence a son controleur et avoir une référence vers le modèle pour pouvoir l'observer
 		ShaCalViewConsol console = new ShaCalViewConsol(shacalmod, shacalcontrolConsol);
