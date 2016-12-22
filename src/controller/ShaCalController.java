@@ -102,7 +102,6 @@ public class ShaCalController {
 				grList.add(tempP.getGroup().keySet().toArray()[i] + " " + model.getGroup(tempP.getGroup().keySet().toArray()[i]).getGrName());
 			}
 		} catch (Exception e) {
-			System.out.println("erreur est ici coucou");
 		}
 		return grList;
 		
@@ -153,7 +152,7 @@ public class ShaCalController {
 				eventBrief += e.getCreator() + "\n" + e.getStartHour()+ "\t" + e.getTitle() + " " + e.getDescription() + "\n  " + e.getEndHour() + "\n";
 			}
 		} catch(NullPointerException e){
-			eventBrief += "No event yet.";
+			eventBrief = "No event yet.";
 		}
 		return eventBrief;
 	}
