@@ -2,6 +2,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Observable;
 
@@ -57,6 +58,21 @@ public class ShaCalModel extends Observable {
 		return allEvents.get(creator);
 	}
 	
+	public Event getSingleEvent(String title){
+		Event tempEvent = null;
+		Collection<ArrayList<Event>> listEvent = allEvents.values();
+		for(ArrayList<Event> arrayEvent : listEvent){
+			for(Event e : arrayEvent){
+				if(e.getTitle() == title){
+					tempEvent = e;
+				} else {
+					System.out.println("Pas d'évènements correspondant");
+				}
+			}
+		}
+		return tempEvent;
+	}
+	
 
 	//-- METHODS -----------------------------------------------------------------------------------------
 	//-- GROUPS ------------------------------------------------------------------------------------------
@@ -89,6 +105,7 @@ public class ShaCalModel extends Observable {
 	 */
 	public void addMemberToGroup(String userName, int grId){
 		getGroup(grId).getMembers().add(userName);
+		System.out.println("You succesfully add" + userName + "in group : " + grId);
 		Group g = getGroup(grId);
 		groupDAO.update(g);
 	}
@@ -251,17 +268,16 @@ public class ShaCalModel extends Observable {
 	 * @return <p>true otherwise and replace former permission 
 	 * of the person p for the group grId by userlvl<p>
 	 */
-	public boolean changePermission(String admin, String userName, int grId, int userLvl) {
-		if((getPerson(userName).getGroup().get(grId)==null) || (getPerson(admin).getGroup().get(grId) != 2)){
+	public boolean changePermission(String userName, int grId, int userLvl) {
+		if((getPerson(userName).getGroup().get(grId)==null)){
+			System.out.println("This person doesn't belong to the group");
 			return false;
-		}
-		if(getPerson(userName).getPermission(grId) != 2){
+		} else {
 			getPerson(userName).getGroup().put(grId,userLvl);
 			Person p = getPerson(userName);
 			personDAO.update(p);
 			return true;
 		}
-		return false;
 	}
 	
 	/**
@@ -289,7 +305,7 @@ public class ShaCalModel extends Observable {
 	 * @param creator : The grId/userName to add the Event to.
 	 * @param event : A newly created event to be associated with a creator.
 	 */
-	public void addEvent(String creator, Event event){
+	public void addEvent(String creator, Event event) {
 		allEvents.putIfAbsent(creator, new ArrayList<Event>());
 		allEvents.get(creator).add(event);
 		eventDAO.create(event);
