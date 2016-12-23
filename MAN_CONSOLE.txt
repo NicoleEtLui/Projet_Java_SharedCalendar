@@ -1,0 +1,118 @@
+LOGIN MODE 
+dd/mm/yyyy> -------------------------------------------------------------------
+
+/!\ for now just follow the instruction not all command works
+	
+	login [USERNAME][GRID] - Trigger the login protocol
+			
+		USERNAME 
+			Log directly to the personal account, access PERSONAL MODE
+				
+				GRID 
+					Log directly into GROUP MODE
+	
+	new - Trigger the new User login protocol
+	
+PERSONAL MODE 
+dd/mm/yyyy - currentUser> -----------------------------------------------------
+
+	show [EVENT][DAY][MONTH][YEAR] - display the calendar specified, if no 
+		arguments, show all events of the current day.
+		
+		event [EVENT]
+							display the details of this event, default: current year, 
+							current month, current day
+			day [DAY]
+					specify the day to filter the calendar, default: of the current month
+					of the current year.
+			
+				month [MONTH]
+					specify the month to filter the calendar, default: of the current year.
+					
+					year [YEAR]
+						specify the year to filter the calendar.
+			
+						
+			
+		EXAMPLE: 
+			>show year 2014 
+				will display all the events of 2014 sorted by month. 
+			>show day 28
+				will display all the events of the day 28 of the current month. 
+				of current year.
+			>show month 09
+				will display all the events of september of current year.
+			>show 1994 09 28
+				will display all the events of the day 28 of september 1994.
+				
+				
+	group [GRID] - with no arg, display the list of Group the user belongs to.
+	
+		[GRID] 
+			access the GROUP MODE for the group specified by GRID.
+			
+			
+	create group [GROUPNAME] event [EVENTNAME] - trigger the creation protocol.
+	
+		group [GROUPNAME] - directly access the group protocol creation.
+			
+			[GROUPNAME] 
+				directly name the group to create
+		
+		event [EVENTNAME] - directly access the event protocol creation.
+			
+			[EVENTNAME]
+				directly name the event to create. 
+
+GROUP MODE 
+dd/mm/yyyy - currentUser - workingGroup> --------------------------------------
+
+	show - see show in PERSONAL MODE, it does the same except it display only the
+		events specific to the group. 
+		
+	
+	admin - access the ADMIN MODE for the current Group if user have permission.
+	
+	
+	sadmin - access the SADMIN MODE for the current Group if user have 
+	permission.
+	
+	
+ADMIN MODE 
+dd/mm/yyyy - currentUser - workingGroup$ --------------------------------------
+
+	add [EVENT][PERSON] - add something to the current group
+		
+		[EVENT]
+			add a pre-existing event to the group. 
+		
+		[PERSON]
+			add a person to the group based on his username.
+			
+	create [EVENTNAME] - trigger the creation of event protocol
+		
+		[EVENTNAME] 
+			directly name the event to create.
+			
+	delete event [EVENT] - delete the specified event of the group.
+		
+		event [EVENT] - delete the specified event of the group.
+			
+SADMIN MODE 
+dd/mm/yyyy - currentUser - workingGroup# --------------------------------------
+
+	add - see the ADMIN MODE
+	
+	create - see the ADMIN MODE
+	
+	delete event[EVENT]member[PERSON] - trigger the deleting protocol
+		
+		event [EVENT] - see the ADMIN MODE 
+		
+		member [PERSON] - trigger the deleting member protocol.
+			
+			[PERSON] 
+				the person to delete of the group based on her userName.
+
+	permission [PERSON][PERMISSION] - change the permission of a member. 
+
