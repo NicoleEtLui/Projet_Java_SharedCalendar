@@ -26,6 +26,9 @@ public class Event {
 	
 	// CONSTRUCTORS -----------------------------------------------------------
 	
+	/**
+	 * constructor with a String that represent creator.
+	 */
 	public Event(String title, String description, String location, LocalDate startDate, LocalDate endDate, String startHour, String endHour, String creator){
 		this.title = title;
 		this.description = description;
