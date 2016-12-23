@@ -66,7 +66,7 @@ public class ShaCalModel extends Observable {
 				if(e.getTitle() == title){
 					tempEvent = e;
 				} else {
-					System.out.println("Pas d'évènements correspondant");
+					System.out.println("Pas d'ï¿½vï¿½nements correspondant");
 				}
 			}
 		}
@@ -378,7 +378,7 @@ public class ShaCalModel extends Observable {
 		allGroups.clear();
 		allEvents.clear();
 		Group.setCurrentId(0);
-		System.out.println("Cache vidé.");
+		System.out.println("Cache vidï¿½.");
 	}
 }
 

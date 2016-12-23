@@ -11,7 +11,6 @@ import java.util.HashMap;
  * @author Martin
  */
 public class Person {
-	ShaCalModel model = new ShaCalModel();
 	/**
 	 * The name of the person as it appears on his id.
 	 */
@@ -56,7 +55,7 @@ public class Person {
 		this.userName = userName;
 		this.bDate = bDate;
 		this.group = new HashMap<Integer,Integer>();
-		model.addEvent(userName, 
+		ShaCalModel.allEvents.get(userName).add( 
 				new Event("Joyeux Anniversaire " + userName,
 						"Mon anniversaire",
 						"",

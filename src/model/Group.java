@@ -10,7 +10,6 @@ import DAO.Singleton;
  * @author Nathan
  */
 public class Group {
-	ShaCalModel model = new ShaCalModel();
 	/**
 	 * The value used in the Id creator.
 	 */
